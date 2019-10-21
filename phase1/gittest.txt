@@ -1,4 +1,1 @@
-this is a file for testing that you can successfully push to the repository, feel free to add to or
-edit it however you'd like
-
--- Douglas
+testing changing a file's contents
