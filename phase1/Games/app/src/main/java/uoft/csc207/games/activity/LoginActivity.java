@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void validate(String userName, String passWord){
         if(null == userName || userName.equalsIgnoreCase("")){
-            errorMsg.setText("User Name is required");
+            errorMsg.setText("Username is required");
             return;
         }
         if(null == passWord || passWord.equalsIgnoreCase("")){
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         if(!tmpProfile.getPassword().equals(passWord)){
-            errorMsg.setText("The password of user: " + userName + " is wrong!");
+            errorMsg.setText("The password of user: " + userName + " is incorrect!");
             return;
         }
         profileManager.setCurrentPlayer(tmpProfile);

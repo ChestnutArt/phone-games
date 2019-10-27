@@ -13,20 +13,20 @@ import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
 
 public class GameSelectActivity extends AppCompatActivity {
-    private TextView textView;
-    private Button exit;
+    private TextView welcome;
+    private Button logout;
     private PlayerProfile currentProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_select);
-        textView = findViewById(R.id.txtView);
-        exit = findViewById(R.id.btnExit);
+        welcome = findViewById(R.id.tvWelcome);
+        logout = findViewById(R.id.btnLogout);
         Intent intent = getIntent();
         currentProfile = (PlayerProfile)intent.getSerializableExtra(ProfileManager.CURRENT_PLAYER);
-        textView.setText("Welcome " + currentProfile.getId());
+        welcome.setText("Welcome back " + currentProfile.getId() + "!");
 
-        exit.setOnClickListener(new View.OnClickListener() {
+        logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
