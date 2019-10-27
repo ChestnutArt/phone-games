@@ -43,6 +43,12 @@ public class PlayerProfile implements Serializable {
 
     public void setScore(int newScore) { playerScore = newScore; }
 
+    /**
+     * Gets all the player's current achievements. Originally created this for display purposes when
+     * the user clicks the profile button in GameSelectActivity, might change it to return a collection
+     * of Achievements instead.
+     * @return Returns a String representation of all the achievements
+     */
     private String getAchievements(){
         String result = "";
         for (Achievement a: playerAchievements){
@@ -52,6 +58,11 @@ public class PlayerProfile implements Serializable {
         return result;
     }
 
+    /**
+     * Checks if the PlayerProfile already owns the game
+     * @param gameId The id of the game that is being searched for
+     * @return The game with the given id and null if the PlayerProfile doesn't contain it
+     */
     private Game containsGame(String gameId){
         for (Game g: games){
             if (g.getId().equals(gameId)){
@@ -61,6 +72,21 @@ public class PlayerProfile implements Serializable {
         return null;
     }
 
+    /**
+     *  Adds a game to the PlayerProfile's collection. Each profile should only have one instance of
+     *  each type of game at most.
+     * @param newGame The new instance of the Game to be added
+     */
+    private void addGame(Game newGame){
+        if (containsGame(newGame.getId()) == null){
+            games.add(newGame);
+        }
+    }
+
+    /**
+     *
+     * @param newAchievement The achievement to be added to the PlayerProfile's collection
+     */
     public void addAchievement(Achievement newAchievement){
         playerAchievements.add(newAchievement);
     }

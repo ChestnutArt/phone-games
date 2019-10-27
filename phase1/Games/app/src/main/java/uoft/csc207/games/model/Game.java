@@ -39,4 +39,10 @@ abstract class Game {
      * Clears the game stats
      */
     abstract void restart();
+
+    abstract void chooseCharacter(String character);
+
+    abstract void chooseFont(String font);
+
+    abstract void chooseColor(String color);
 }

@@ -14,7 +14,10 @@ import java.util.TreeMap;
 import uoft.csc207.games.model.PlayerProfile;
 
 public class ProfileManager {
-
+    /*
+        IMPORTANT: PLEASE DON'T CHANGE ANYTHING IN THIS CLASS. IF YOU THINK THERE'S AN ISSUE, CONTACT
+        WILLIAM IN THE GROUP CHAT
+     */
 
     private ProfileManager(){}
     public static String CURRENT_PLAYER = "currentPlayer";

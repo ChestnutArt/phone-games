@@ -48,6 +48,8 @@ public class GameSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // jump to the scroller game activity here
+                // check to see if the PlayerProfile already has an instance of the scroller game
+                // and use that instance's game , otherwise create a new one and add it to the PlayerProfile
             }
         });
 
@@ -55,6 +57,8 @@ public class GameSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // jump to the card game activity here
+                // check to see if the account already has an instance of the card game
+                // and use that instance's game , otherwise create a new one and add it to the PlayerProfile
             }
         });
 
@@ -62,6 +66,8 @@ public class GameSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // jump to the rpg game activity here
+                // check to see if the account alread has an instance of the rpg game
+                // and use that instance's game , otherwise create a new one and add it to the PlayerProfile
             }
         });
     }
