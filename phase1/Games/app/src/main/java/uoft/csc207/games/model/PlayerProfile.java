@@ -7,7 +7,7 @@ import java.util.TreeMap;
 public class PlayerProfile implements Serializable {
     private String id;
     private String password;
-    private TreeMap games;
+    private ArrayList<Game> games;
 
     private int playerCurrency;
     private int playerScore;
@@ -35,20 +35,33 @@ public class PlayerProfile implements Serializable {
         this.password = password;
     }
 
-    public int getCurrency(){
-        return playerCurrency;
-    }
+    public int getCurrency(){ return playerCurrency; }
 
-    public int getScore(){
-        return playerScore;
-    }
+    public void setCurrency(int newCurrency) { playerCurrency = newCurrency; }
 
-    public String getAchievements(){
+    public int getScore(){ return playerScore; }
+
+    public void setScore(int newScore) { playerScore = newScore; }
+
+    private String getAchievements(){
         String result = "";
         for (Achievement a: playerAchievements){
             result += a.getAchiementName() + ":\n";
             result += a.getDescription() + "\n";
         }
         return result;
+    }
+
+    private Game containsGame(String gameId){
+        for (Game g: games){
+            if (g.getId().equals(gameId)){
+                return g;
+            }
+        }
+        return null;
+    }
+
+    public void addAchievement(Achievement newAchievement){
+        playerAchievements.add(newAchievement);
     }
 }
