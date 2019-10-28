@@ -52,7 +52,7 @@ public class PlayerProfile implements Serializable {
     private String getAchievements(){
         String result = "";
         for (Achievement a: playerAchievements){
-            result += a.getAchiementName() + ":\n";
+            result += a.getAchievementName() + ":\n";
             result += a.getDescription() + "\n";
         }
         return result;

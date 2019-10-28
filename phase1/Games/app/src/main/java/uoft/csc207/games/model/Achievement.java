@@ -9,7 +9,7 @@ public class Achievement {
         this.description = description;
     }
 
-    public String getAchiementName(){
+    public String getAchievementName(){
         return achievementName;
     }
     public String getDescription(){

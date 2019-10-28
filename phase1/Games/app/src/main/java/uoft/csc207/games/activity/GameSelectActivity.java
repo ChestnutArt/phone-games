@@ -11,6 +11,7 @@ import android.widget.TextView;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
+import uoft.csc207.games.model.Rpg.RpgActivity;
 
 public class GameSelectActivity extends AppCompatActivity {
     private TextView welcome;
@@ -65,9 +66,8 @@ public class GameSelectActivity extends AppCompatActivity {
         rpgSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // jump to the rpg game activity here
-                // check to see if the account alread has an instance of the rpg game
-                // and use that instance's game , otherwise create a new one and add it to the PlayerProfile
+                Intent myIntent = new Intent(GameSelectActivity.this, RpgActivity.class);
+                startActivity(myIntent);
             }
         });
     }
