@@ -11,6 +11,9 @@ public class PlayerProfile implements Serializable {
 
     private int playerCurrency;
     private int playerScore;
+    /**
+     * Achievements players has gotten across all games. Likewise for currency and score.
+     */
     private ArrayList<Achievement> playerAchievements;
 
     public PlayerProfile(String id, String password) {
