@@ -7,6 +7,7 @@ import java.util.ArrayList;
 abstract class Game {
     protected int gameScore;
     protected int gameCurrency;
+    protected ArrayList<Achievement> gameAchievements;
 
     protected String id;
     protected PlayerProfile owner;
@@ -19,6 +20,7 @@ abstract class Game {
         gameScore = 0;
         gameCurrency = 0;
         owner = p;
+        gameAchievements = new ArrayList<>(); 
     }
 
     abstract String getId();
