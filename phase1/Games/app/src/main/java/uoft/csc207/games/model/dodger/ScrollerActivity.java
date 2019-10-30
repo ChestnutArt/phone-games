@@ -6,7 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class MainActivity extends Activity {
+public class ScrollerActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
