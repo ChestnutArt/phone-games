@@ -26,11 +26,12 @@ public class Achievement {
 
     public boolean isAchieved(int score, int gold){
         boolean achieved = false;
-        if (checkScore){
+        if (checkScore && !checkGold){
             achieved = (score >= scoreThreshold);
-        }
-        if (checkGold){
+        } else if (checkGold && !checkScore){
             achieved = (gold >= goldThreshold);
+        } else if (checkGold && checkScore){
+            achieved = (score >= scoreThreshold) && (gold >= goldThreshold);
         }
         return achieved;
     }
