@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import uoft.csc207.games.R;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
@@ -25,6 +26,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Integer backgroundColor;
     private Integer tSize;
 
+
     public GamePanel(Context context){
        super(context);
        isOver = false;
@@ -35,6 +37,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
        P_y = Constants.SCREEN_HEIGHT/2;
        Obs = new ObsManager(3, Color.MAGENTA, player1.getHeight());
        System.out.println(player1.getHeight());
+       po = new Point();
     }
 
     @Override
@@ -71,7 +74,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 case MotionEvent.ACTION_MOVE: {
                     P_y -= 100;
                     player1.Score++;
-                    po = new Point();
                     po.x = (int)e.getX();
                     po.y = (int)e.getY();
 
