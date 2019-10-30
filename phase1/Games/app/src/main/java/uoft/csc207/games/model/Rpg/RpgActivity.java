@@ -2,11 +2,12 @@ package uoft.csc207.games.model.Rpg;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class RpgActivity extends AppCompatActivity {
+public class RpgActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,5 +19,7 @@ public class RpgActivity extends AppCompatActivity {
 
         // Set No Title
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        this.setContentView(new GameSurface(this));
     }
 }

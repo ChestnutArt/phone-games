@@ -5,6 +5,8 @@ import android.content.Intent;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import uoft.csc207.games.controller.ProfileManager;
+
 abstract class Game {
     protected int gameScore;
     protected int gameCurrency;
@@ -14,6 +16,12 @@ abstract class Game {
     protected ArrayList<Achievement> gameAchievements;
 
     protected String id;
+    /**
+     * Binomial association should be fine here, and Game needs easy access to the current player anyways.
+     * Because the owner will always be the current player when a given Game instance is used to play
+     * the game, and because there's no way to set the owner of a game to something else, there should
+     * be no problem from a design perspective.
+     */
     protected PlayerProfile owner;
 
     protected String color;
