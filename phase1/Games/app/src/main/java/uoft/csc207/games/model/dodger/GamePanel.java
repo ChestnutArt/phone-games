@@ -94,7 +94,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawColor(Color.GREEN);
         canvas.drawText("Big Text", 0, Constants.SCREEN_HEIGHT/3, p1);
         canvas.drawText("Regular Text", 0, 2*Constants.SCREEN_HEIGHT/3, p1);
-        if ( po.y <= Constants.SCREEN_HEIGHT/2){
+        if ( po.y >= 0 && po.y <= Constants.SCREEN_HEIGHT/2){
             tSize = 100;
             po.y = -1;
         }
