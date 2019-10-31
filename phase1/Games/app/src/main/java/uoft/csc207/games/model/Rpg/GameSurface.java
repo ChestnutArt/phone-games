@@ -55,8 +55,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     public void surfaceCreated(SurfaceHolder holder){
         Bitmap pcBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.c1_sprite_sheet);
         Bitmap hoodBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.hooded_npc_sprites);
-        this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 400);
-        this.hoodNpc = new NpcCharacter(this, hoodBitmap, 500, 400);
+        this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 800);
+        this.hoodNpc = new NpcCharacter(this, hoodBitmap, 500, 800);
 
         this.gameThread = new GameThread(this, holder);
         this.gameThread.setRunning(true);

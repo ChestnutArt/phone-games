@@ -17,6 +17,7 @@ public class NpcCharacter extends GameObject {
     private Bitmap left;
     private Bitmap right;
 
+    private String speechText;
 
     private GameSurface gameSurface;
 
