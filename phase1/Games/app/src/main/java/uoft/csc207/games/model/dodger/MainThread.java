@@ -23,55 +23,46 @@ public class MainThread extends Thread{
     }
 
      @Override
-    public void run(){
-        long startTime;
-        long timeMills;
-        long waitTime;
-        int frameCount = 0;
-        long totalTime = 0;
-        long targetTime = 1000/MAX_FPS;
+     public void run(){
+         long startTime;
+         long timeMills;
+         long waitTime;
+         long targetTime = 1000/MAX_FPS;
 
-        while(running){
-            startTime = System.nanoTime();
-            canvas = null;
+         while(running){
+             startTime = System.nanoTime();
+             canvas = null;
 
-            try{
-                canvas = this.surfaceHolder.lockCanvas();
-                synchronized (surfaceHolder){
-                    this.gamePanel.update(); //update objects
-                    this.gamePanel.draw(canvas); //draw to screen
-                    if (gamePanel.isOver){
-                        running = false;
-                    }
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            } finally{
-                if (canvas != null){
-                    try {
-                        surfaceHolder.unlockCanvasAndPost(canvas);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            timeMills = (System.nanoTime() - startTime)/1000000;
-            waitTime = targetTime - timeMills;
-            try{
-                if (waitTime > 0){
-                    sleep(waitTime);
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-            totalTime += System.nanoTime() - startTime;
-            frameCount++;
-            if (frameCount == MAX_FPS){
-                frameCount = 0;
-                totalTime = 0;
-            }
-        }
+             try{
+                 canvas = this.surfaceHolder.lockCanvas();
+                 synchronized (surfaceHolder){
+                     this.gamePanel.update(); //update objects
+                     this.gamePanel.draw(canvas); //draw to screen
+                     if (gamePanel.isOver){
+                         running = false;
+                     }
+                 }
+             } catch (Exception e){
+                 e.printStackTrace();
+             } finally{
+                 if (canvas != null){
+                     try {
+                         surfaceHolder.unlockCanvasAndPost(canvas);
+                     } catch (Exception e){
+                         e.printStackTrace();
+                     }
+                 }
+             }
+             timeMills = (System.nanoTime() - startTime)/1000000;
+             waitTime = targetTime - timeMills;
+             try{
+                 if (waitTime > 0){
+                     sleep(waitTime);
+                 }
+             } catch (Exception e){
+                 e.printStackTrace();
+             }
+         }
      }
 
 }

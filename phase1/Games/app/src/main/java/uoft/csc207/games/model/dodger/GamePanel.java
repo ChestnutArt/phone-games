@@ -26,18 +26,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Integer backgroundColor;
     private Integer tSize;
 
-
     public GamePanel(Context context){
-       super(context);
-       isOver = false;
-       getHolder().addCallback(this);
-       thread = new MainThread(getHolder(), this);
-       player1 = new scrollerCharacter(BitmapFactory.decodeResource(getResources(),R.drawable.goku), true);
-       //this.coins = new Coin(6);
-       P_y = Constants.SCREEN_HEIGHT/2;
-       Obs = new ObsManager(3, Color.MAGENTA, player1.getHeight());
-       System.out.println(player1.getHeight());
-       po = new Point();
+        super(context);
+        isOver = false;
+        getHolder().addCallback(this);
+        thread = new MainThread(getHolder(), this);
+        player1 = new scrollerCharacter(BitmapFactory.decodeResource(getResources(),R.drawable.goku), true);
+        this.coins = new Coin(6);
+        P_y = Constants.SCREEN_HEIGHT/2;
+        Obs = new ObsManager(3, Color.MAGENTA, player1.getHeight());
+        System.out.println(player1.getHeight());
     }
 
     @Override
@@ -47,9 +45,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder){
-         thread = new MainThread(getHolder(), this);
-         thread.setRunning(true);
-         thread.start();
+        thread = new MainThread(getHolder(), this);
+        thread.setRunning(true);
+        thread.start();
     }
 
     @Override
@@ -72,10 +70,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             switch (e.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_MOVE: {
-                    P_y -= 100;
-                    player1.Score++;
-                    po.x = (int)e.getX();
-                    po.y = (int)e.getY();
+                    if (start) {
+                        P_y -= 100;
+                        player1.Score++;
+                    } else {
+                        po = new Point();
+                        po.x = (int) e.getX();
+                        po.y = (int) e.getY();
+                    }
 
                 }
             }
@@ -139,20 +141,23 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (start) {
             super.draw(canvas);
             Paint p = new Paint();
-            p.setColor(Color.BLACK);
-            p.setTextSize(tSize);
-            canvas.drawColor(backgroundColor);
-            Obs.draw(canvas);
-            player1.draw(canvas);
-            canvas.drawText("Score: " + player1.Score, 100, 50 + p.descent() - p.ascent(), p);
-            //coins.draw(canvas);
             if (isOver) {
                 canvas.drawColor(Color.BLACK);
                 p.setColor(Color.YELLOW);
                 p.setStrokeWidth(10);
                 p.setTextSize(100);
-                canvas.drawText("GAME OVER!", Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 4, p);
+                canvas.drawText("GAME OVER!", Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 2, p);
                 canvas.drawText("Score: " + player1.Score, 100, 50 + p.descent() - p.ascent(), p);
+                canvas.drawText("Money: " + player1.Currency, 100, 200 + p.descent() - p.ascent(), p);
+            } else{
+                p.setColor(Color.BLACK);
+                p.setTextSize(tSize);
+                canvas.drawColor(backgroundColor);
+                Obs.draw(canvas);
+                player1.draw(canvas);
+                coins.draw(canvas);
+                canvas.drawText("Score: " + player1.Score, 100, 50 + p.descent() - p.ascent(), p);
+                canvas.drawText("Money: " + player1.Currency, 100, 200 + p.descent() - p.ascent(), p);
             }
         } else {
             if (tSize == null){
@@ -176,7 +181,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 player1.update(P_y);
                 Obs.update();
-                //coins.CollisionCheck(player1);
+                coins.update();
+                coins.CollisionCheck(player1);
             } else {
                 isOver = true;
             }
