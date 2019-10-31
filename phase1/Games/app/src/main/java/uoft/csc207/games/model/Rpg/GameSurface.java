@@ -9,15 +9,20 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.controller.ProfileManager;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     private GameThread gameThread;
     private PlayerCharacter pCharacter;
+    private NpcCharacter hoodNpc;
+    private RpgGameState gameState;
 
     public GameSurface(Context context){
         super(context);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
+
+        gameState = new RpgGameState(ProfileManager.getProfileManager(context).getCurrentPlayer());
     }
 
     public void update(){
@@ -27,8 +32,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     @Override
     public boolean onTouchEvent(MotionEvent event){
         if (event.getAction() == MotionEvent.ACTION_DOWN){
-            gameThread.setMoving(true);
-
             int x = (int) event.getX();
             int y = (int) event.getY();
 
@@ -46,13 +49,17 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     public void draw(Canvas canvas){
         super.draw(canvas);
         pCharacter.draw(canvas);
+        hoodNpc.draw(canvas);
     }
 
     public void surfaceCreated(SurfaceHolder holder){
         Bitmap pcBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.c1_sprite_sheet);
-        this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 200);
+        Bitmap hoodBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.hooded_npc_sprites);
+        this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 800);
+        this.hoodNpc = new NpcCharacter(this, hoodBitmap, 500, 800);
+
         this.gameThread = new GameThread(this, holder);
-        this.gameThread.setMoving(true);
+        this.gameThread.setRunning(true);
         this.gameThread.start();
     }
 
@@ -64,7 +71,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         boolean retry = true;
         while(retry){
             try{
-                this.gameThread.setMoving(false);
+                this.gameThread.setRunning(false);
                 this.gameThread.join();
             } catch(InterruptedException e){
                 e.printStackTrace();
