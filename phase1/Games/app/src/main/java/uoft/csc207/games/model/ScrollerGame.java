@@ -1,10 +1,12 @@
 package uoft.csc207.games.model;
 
 
-public class ScrollerGame extends Game {
+import java.io.Serializable;
+
+public class ScrollerGame extends Game implements Serializable {
 
 
-    public int HighScore;
+    public Integer HighScore;
 
     public ScrollerGame(PlayerProfile p){
         super(p);
@@ -22,13 +24,13 @@ public class ScrollerGame extends Game {
      * Updates score of the Game and the total score of the account
      * @param i The amount to add to the score
      */
-    public void updateScore(int i){this.gameScore = i;}
+    public void updateScore(Integer i){this.gameScore = i;}
 
     /**
      * Updates currency of the Game and the total currency of the account
      * @param i The amount to add to the currency
      */
-    public void updateCurrency(int i){
+    public void updateCurrency(Integer i){
         this.gameCurrency = i;
     }
 

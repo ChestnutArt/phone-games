@@ -15,10 +15,10 @@ public class RpgGameState extends Game {
     public String getId(){
         return id;
     }
-    public void updateScore(int i){
+    public void updateScore(Integer i){
 
     }
-    public void updateCurrency(int i){
+    public void updateCurrency(Integer i){
 
     }
     public void restart(){

@@ -8,8 +8,8 @@ import java.util.Iterator;
 import uoft.csc207.games.controller.ProfileManager;
 
 public abstract class Game {
-    protected int gameScore;
-    protected int gameCurrency;
+    protected Integer gameScore;
+    protected Integer gameCurrency;
     /**
      * Collection of all attainable achievements in this game.
      */
@@ -41,13 +41,13 @@ public abstract class Game {
      * Updates score of the Game and the total score of the account
      * @param i The amount to add to the score
      */
-    public abstract void updateScore(int i);
+    public abstract void updateScore(Integer i);
 
     /**
      * Updates currency of the Game and the total currency of the account
      * @param i The amount to add to the currency
      */
-    public abstract void updateCurrency(int i);
+    public abstract void updateCurrency(Integer i);
 
     /**
      * Clears the game stats
