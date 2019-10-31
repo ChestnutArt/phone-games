@@ -12,6 +12,7 @@ import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
 import uoft.csc207.games.model.Rpg.RpgActivity;
+import uoft.csc207.games.model.dodger.Constants;
 import uoft.csc207.games.model.dodger.ScrollerActivity;
 
 public class GameSelectActivity extends AppCompatActivity {
@@ -50,6 +51,7 @@ public class GameSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent sIntent = new Intent(GameSelectActivity.this, ScrollerActivity.class);
+                Constants.player = currentProfile;
                 startActivity(sIntent);
             }
         });

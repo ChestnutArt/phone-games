@@ -32,16 +32,11 @@ public class ScrollerGame extends Game {
         this.gameCurrency = i;
     }
 
-    public void setHighScore(int h){
-        this.HighScore = h;
-    }
 
     public int getScore(){
         return this.gameScore;
     }
-    public int getCurrency(){
-        return this.gameCurrency;
-    }
+
 
     /**
      * Clears the game stats
@@ -59,7 +54,6 @@ public class ScrollerGame extends Game {
      */
     public void initializeAchievements(){
         for (int i = 50; i < 15000; i = i * 2){
-            i = i - (i % 100); //round down
             String name = "Scored: " + i;
             String description = "Player reached this score.";
             gameAchievements.add(new Achievement(name, description, i, 0, true, false));

@@ -30,11 +30,11 @@ public class RectObj implements  GameObject {
 
     public void update(){
         if (this.x > 0) {
-            this.x -= 1;
-            rect1.left -= 1;
-            rect1.right -= 1;
-            rect2.left -= 1;
-            rect2.right -= 1;
+            this.x -= Constants.SPEED;
+            rect1.left -= Constants.SPEED;
+            rect1.right -= Constants.SPEED;
+            rect2.left -= Constants.SPEED;
+            rect2.right -= Constants.SPEED;
         }
     }
 

@@ -33,8 +33,8 @@ public class Coin implements GameObject{
     public void update(){
         for (Rect r: coins){
             if (r.left > 0) {
-                r.left -= 1;
-                r.right -= 1;
+                r.left -= Constants.SPEED;
+                r.right -= Constants.SPEED;
             } else{
                 coins.remove(r);
             }
