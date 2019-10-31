@@ -59,6 +59,9 @@ public class ProfileManager {
     private void init(Context appContext){
         this.appContext = appContext;
         loadProfiles();
+        if (profileMap == null){
+            profileMap = new TreeMap<>();
+        }
     }
     public PlayerProfile getProfileById(String id){
         return profileMap.get(id);

@@ -22,6 +22,7 @@ public class PlayerProfile implements Serializable {
         playerCurrency = 0;
         playerScore = 0;
         playerAchievements = new ArrayList<>();
+        games = new ArrayList<>();
     }
 
     public String getId() { return id; }
