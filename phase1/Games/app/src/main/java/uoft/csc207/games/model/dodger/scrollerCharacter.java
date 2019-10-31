@@ -48,11 +48,11 @@ public class scrollerCharacter {
         return new Rect(x, y, x + width, y + height);
     }
 
-    public void setScore(int s){
+    public void setScore(Integer s){
         this.Score = s;
     }
 
-    public void setCurrency(int c){
+    public void setCurrency(Integer c){
         this.Currency = c;
     }
 }
