@@ -16,7 +16,7 @@ public class ScrollerGame extends Game {
     }
 
 
-    String getId(){return this.id;}
+    public String getId(){return this.id;}
 
     /**
      * Updates score of the Game and the total score of the account
@@ -46,18 +46,18 @@ public class ScrollerGame extends Game {
     /**
      * Clears the game stats
      */
-    void restart(){gameScore = 0;}
+    public void restart(){gameScore = 0;}
 
-    void chooseCharacter(String character){this.character = character;}
+    public void chooseCharacter(String character){this.character = character;}
 
-    void chooseFont(String font){this.textFont = font;}
+    public void chooseFont(String font){this.textFont = font;}
 
-    void chooseColor(String color){this.color = color;}
+    public void chooseColor(String color){this.color = color;}
 
     /**
      * Initialize all the achievements that can be attained in your game
      */
-    void initializeAchievements(){
+    public void initializeAchievements(){
         for (int i = 50; i < 15000; i = i * 2){
             i = i - (i % 100); //round down
             String name = "Scored: " + i;
