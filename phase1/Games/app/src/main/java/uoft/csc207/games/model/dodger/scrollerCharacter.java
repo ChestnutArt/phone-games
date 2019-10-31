@@ -14,8 +14,8 @@ public class scrollerCharacter {
     private int width;
     private int height;
     private boolean isMale;
-    int Score;
-    int Currency;
+    Integer Score;
+    Integer Currency;
 
     public scrollerCharacter(Bitmap img, boolean isMale){
             x = Constants.SCREEN_WIDTH/2;
@@ -46,5 +46,13 @@ public class scrollerCharacter {
 
     public Rect getRect(){
         return new Rect(x, y, x + width, y + height);
+    }
+
+    public void setScore(int s){
+        this.Score = s;
+    }
+
+    public void setCurrency(int c){
+        this.Currency = c;
     }
 }
