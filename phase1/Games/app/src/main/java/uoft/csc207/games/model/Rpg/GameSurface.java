@@ -13,6 +13,7 @@ import uoft.csc207.games.R;
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     private GameThread gameThread;
     private PlayerCharacter pCharacter;
+    private NpcCharacter hoodNpc;
 
     public GameSurface(Context context){
         super(context);
@@ -27,8 +28,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     @Override
     public boolean onTouchEvent(MotionEvent event){
         if (event.getAction() == MotionEvent.ACTION_DOWN){
-            gameThread.setMoving(true);
-
             int x = (int) event.getX();
             int y = (int) event.getY();
 
@@ -46,13 +45,17 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     public void draw(Canvas canvas){
         super.draw(canvas);
         pCharacter.draw(canvas);
+        hoodNpc.draw(canvas);
     }
 
     public void surfaceCreated(SurfaceHolder holder){
         Bitmap pcBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.c1_sprite_sheet);
-        this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 200);
+        Bitmap hoodBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.hooded_npc_sprites);
+        this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 400);
+        this.hoodNpc = new NpcCharacter(this, hoodBitmap, 300, 400);
+
         this.gameThread = new GameThread(this, holder);
-        this.gameThread.setMoving(true);
+        this.gameThread.setRunning(true);
         this.gameThread.start();
     }
 
@@ -64,7 +67,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         boolean retry = true;
         while(retry){
             try{
-                this.gameThread.setMoving(false);
+                this.gameThread.setRunning(false);
                 this.gameThread.join();
             } catch(InterruptedException e){
                 e.printStackTrace();

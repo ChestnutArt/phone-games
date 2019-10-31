@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 public class GameThread extends Thread{
-    private boolean moving;
+    private boolean running;
     private GameSurface gameSurface;
     private SurfaceHolder surfaceHolder;
 
@@ -16,7 +16,7 @@ public class GameThread extends Thread{
     public void run(){
         long startTime = System.nanoTime();
 
-        while(moving){
+        while(running){
             Canvas canvas = null;
             try{
                 //Gets Canvas from Holder and locks it
@@ -49,7 +49,7 @@ public class GameThread extends Thread{
         }
     }
 
-    public void setMoving(boolean isMoving){
-        moving = isMoving;
+    public void setRunning(boolean isMoving){
+        running = isMoving;
     }
 }
