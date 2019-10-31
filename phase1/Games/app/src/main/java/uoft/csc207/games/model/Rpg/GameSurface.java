@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
+import android.widget.TextView;
 
 import uoft.csc207.games.R;
 
@@ -14,11 +16,15 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     private GameThread gameThread;
     private PlayerCharacter pCharacter;
     private NpcCharacter hoodNpc;
+    private RpgActivity rpgActivity;
+    private TextView resultTextView;
 
     public GameSurface(Context context){
         super(context);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
+        rpgActivity = (RpgActivity)context;
+
     }
 
     public void update(){
@@ -57,6 +63,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         this.gameThread = new GameThread(this, holder);
         this.gameThread.setRunning(true);
         this.gameThread.start();
+        resultTextView = rpgActivity.getTextView();
+        resultTextView.setText(R.string.app_name);
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
