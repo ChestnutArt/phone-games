@@ -42,8 +42,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         P_y = Constants.SCREEN_HEIGHT/2;
         Obs = new ObsManager(3, Color.MAGENTA, player1.getHeight());
         System.out.println(player1.getHeight());
-        this.playerProfile = ProfileManager.getProfileManager(Constants.CURRENT_CONTEXT).getCurrentPlayer();
-        player1.setCurrency(playerProfile.getCurrency());
+        this.playerProfile = Constants.player;
         InitCurrentGame();
     }
 
@@ -80,9 +79,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_MOVE: {
                     if (start) {
-                        P_y -= 100;
+                        P_y -= 50*Constants.SPEED;
                         player1.Score++;
-                        playerProfile.setScore(playerProfile.getScore() + 1);
                         CurrentGame.updateScore(CurrentGame.getScore() + 1);
                     } else {
                         po = new Point();
@@ -147,23 +145,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    private void startScreen4(Canvas canvas){
+        super.draw(canvas);
+        Paint p1 = new Paint();
+        p1.setColor(Color.BLACK);
+        p1.setTextSize(100);
+        canvas.drawColor(Color.GREEN);
+        canvas.drawText("Advanced", 0, Constants.SCREEN_HEIGHT/3, p1);
+        canvas.drawText("Regular", 0, 2*Constants.SCREEN_HEIGHT/3, p1);
+        if ( po.y >= Constants.SCREEN_HEIGHT/2){
+            Constants.SPEED = 1;
+            po.y = -1;
+        }
+        else if (po.y >= 0){
+            Constants.SPEED = 2;
+            po.y = -1;
+        }
+    }
+
     @Override
     public void draw(Canvas canvas){
         if (start) {
             super.draw(canvas);
             Paint p = new Paint();
             if (isOver) {
-                canvas.drawColor(Color.BLACK);
-                p.setColor(Color.YELLOW);
-                p.setStrokeWidth(10);
-                p.setTextSize(100);
-                canvas.drawText("GAME OVER!", 3 *Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 2, p);
-                canvas.drawText("Total Points: " + playerProfile.getScore(), 100, 50 + p.descent() - p.ascent(), p);
-                canvas.drawText("Current Score: " + player1.Score, 50, 200 + p.descent() - p.ascent(), p);
-                canvas.drawText("Money: " + player1.Currency, 100, 350 + p.descent() - p.ascent(), p);
-                if (CurrentGame.HighScore == CurrentGame.getScore()){
-                    canvas.drawText("- Record!" + player1.Currency, 200, 350 + p.descent() - p.ascent(), p);
-                }
+                GameOverScreen(canvas, p);
             } else{
                 p.setColor(Color.BLACK);
                 p.setTextSize(tSize);
@@ -171,7 +177,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 Obs.draw(canvas);
                 player1.draw(canvas);
                 coins.draw(canvas);
-                canvas.drawText("Total Points: " + playerProfile.getScore(), 350, 50 + p.descent() - p.ascent(), p);
                 canvas.drawText("Score: " + player1.Score, 100, 50 + p.descent() - p.ascent(), p);
                 canvas.drawText("Money: " + player1.Currency, 100, 200 + p.descent() - p.ascent(), p);
             }
@@ -182,18 +187,37 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 startScreen2(canvas);
             } else if (backgroundColor == null){
                 startScreen3(canvas);
-            } else {
-                start = true;
+            } else if (Constants.SPEED == 0) {
+                startScreen4(canvas);
+            }
+                else{
+                    start = true;
+                }
             }
         }
 
-    }
+
+        private void GameOverScreen(Canvas canvas, Paint p){
+            canvas.drawColor(Color.BLACK);
+            p.setColor(Color.YELLOW);
+            p.setStrokeWidth(10);
+            p.setTextSize(100);
+            canvas.drawText("GAME OVER!", Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT /2, p);
+            canvas.drawText("Total Points: " + playerProfile.getScore(), 50, 50 + p.descent() - p.ascent(), p);
+            canvas.drawText("Current Score: " + player1.Score, 50, 200 + p.descent() - p.ascent(), p);
+            canvas.drawText("Total Money: " + playerProfile.getCurrency(), 50, 350 + p.descent() - p.ascent(), p);
+            if (CurrentGame.HighScore == CurrentGame.getScore()){
+                canvas.drawText("New HS!", 50, 500 + p.descent() - p.ascent(), p);
+            }
+        }
+
+
 
     public void update() {
         if (!isOver && start) {
             if (!Obs.detectCollision(player1)) {
                 if (P_y + player1.getHeight() < Constants.SCREEN_HEIGHT) {
-                    P_y += 5;
+                    P_y += Constants.SPEED * 5;
                 }
                 player1.update(P_y);
                 Obs.update();
@@ -204,6 +228,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
             } else {
                 isOver = true;
+                Constants.SPEED = 0;
+                playerProfile.setScore(playerProfile.getScore() + player1.getScore());
+                playerProfile.setCurrency(playerProfile.getCurrency() + player1.Currency);
+                CurrentGame.updateScore(player1.getScore());
+                CurrentGame.updateCurrency(playerProfile.getCurrency());
                 if (CurrentGame.getScore() > CurrentGame.HighScore){
                     CurrentGame.HighScore = CurrentGame.getScore();
                 }
