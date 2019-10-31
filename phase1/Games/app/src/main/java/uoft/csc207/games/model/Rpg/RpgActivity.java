@@ -22,8 +22,6 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     RelativeLayout buttonHolder;
     boolean isPaused = false;
 
-
-
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

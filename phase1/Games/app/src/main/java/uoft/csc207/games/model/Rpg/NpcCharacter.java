@@ -3,6 +3,8 @@ package uoft.csc207.games.model.Rpg;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import java.util.ArrayList;
+
 public class NpcCharacter extends GameObject {
     private static final int UP_ROW = 0;
     private static final int LEFT_ROW = 1;
@@ -17,7 +19,7 @@ public class NpcCharacter extends GameObject {
     private Bitmap left;
     private Bitmap right;
 
-    private String speechText;
+    private ArrayList<String> dialogue;
 
     private GameSurface gameSurface;
 

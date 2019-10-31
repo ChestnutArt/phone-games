@@ -8,6 +8,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
 
@@ -16,6 +18,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     private PlayerCharacter pCharacter;
     private NpcCharacter hoodNpc;
     private RpgGameState gameState;
+    private ArrayList<NpcCharacter> nonPlayerCharacters;
 
     public GameSurface(Context context){
         super(context);
@@ -23,6 +26,10 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         this.getHolder().addCallback(this);
 
         gameState = new RpgGameState(ProfileManager.getProfileManager(context).getCurrentPlayer());
+        nonPlayerCharacters = new ArrayList<NpcCharacter>();
+    }
+    public ArrayList<NpcCharacter> getNpcs(){
+        return nonPlayerCharacters;
     }
 
     public void update(){
@@ -49,18 +56,27 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     public void draw(Canvas canvas){
         super.draw(canvas);
         pCharacter.draw(canvas);
-        hoodNpc.draw(canvas);
+        for(NpcCharacter npc: this.nonPlayerCharacters){
+            npc.draw(canvas);
+        }
     }
 
     public void surfaceCreated(SurfaceHolder holder){
         Bitmap pcBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.c1_sprite_sheet);
-        Bitmap hoodBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.hooded_npc_sprites);
+        //Bitmap hoodBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.hooded_npc_sprites);
         this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 800);
-        this.hoodNpc = new NpcCharacter(this, hoodBitmap, 500, 800);
+        //this.hoodNpc = new NpcCharacter(this, hoodBitmap, 500, 800);
+        initializeNPOs();
 
         this.gameThread = new GameThread(this, holder);
         this.gameThread.setRunning(true);
         this.gameThread.start();
+    }
+
+    private void initializeNPOs(){
+        NpcCharacter temp = new NpcCharacter(this,  BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.hooded_npc_sprites), 500, 800);
+        this.nonPlayerCharacters.add(temp);
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){

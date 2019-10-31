@@ -3,6 +3,8 @@ package uoft.csc207.games.model.Rpg;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import java.util.ArrayList;
+
 public class PlayerCharacter extends GameObject{
     private static final int ROW_BOTTOM_TO_TOP = 8;
     private static final int ROW_RIGHT_TO_LEFT = 9;
@@ -128,6 +130,12 @@ public class PlayerCharacter extends GameObject{
                 this.rowUsing = ROW_BOTTOM_TO_TOP;
             }
         }
+        if (isIntercepted()){
+            movingVectorX = 0;
+            movingVectorY = 0;
+            destinationX = x;
+            destinationY = y;
+        }
     }
 
     public void draw(Canvas canvas){
@@ -145,5 +153,17 @@ public class PlayerCharacter extends GameObject{
     public void setDestinationCoordinates(int newX, int newY){
         destinationX = newX;
         destinationY = newY;
+    }
+    private boolean isIntercepted(){
+        boolean intercepted = false;
+        ArrayList<NpcCharacter> npcList = this.gameSurface.getNpcs();
+        for (NpcCharacter npc: npcList){
+            if ((Math.abs(npc.x - this.x) < (npc.singleWidth / 2)) &&
+                    (Math.abs(npc.y - this.y ) < (npc.singleHeight / 2))){
+                intercepted = true;
+            }
+        }
+
+        return intercepted;
     }
 }
