@@ -32,17 +32,17 @@ public class RpgActivity extends Activity {
         gameFrame = new FrameLayout(this);
         buttonHolder = new RelativeLayout(this);
 
-        Button pauseResumeBtn = new Button(this);
-        pauseResumeBtn.setText(R.string.rpg_setting);
-        pauseResumeBtn.setId(123456);
+        Button settingsBtn = new Button(this);
+        settingsBtn.setText(R.string.rpg_setting);
+        settingsBtn.setId(123456);
 
         RelativeLayout.LayoutParams params4Btn = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams params4Layout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         buttonHolder.setLayoutParams(params4Layout);
-        buttonHolder.addView(pauseResumeBtn);
+        buttonHolder.addView(settingsBtn);
         params4Btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         params4Btn.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-        pauseResumeBtn.setLayoutParams(params4Btn);
+        settingsBtn.setLayoutParams(params4Btn);
 
 
         // Set fullscreen
@@ -52,17 +52,15 @@ public class RpgActivity extends Activity {
         // Set No Title
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        gameFrame.addView(gameSurface);
+        gameFrame.addView(gameSurface); 
         gameFrame.addView(buttonHolder);
 
         this.setContentView(gameFrame);
         //this.setContentView(new GameSurface(this));
 
-        pauseResumeBtn.setOnClickListener(new View.OnClickListener() {
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
 
             }
         });

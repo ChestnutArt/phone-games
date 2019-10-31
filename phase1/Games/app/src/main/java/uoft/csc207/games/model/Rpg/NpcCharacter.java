@@ -25,10 +25,10 @@ public class NpcCharacter extends GameObject {
         this.gameSurface = gS;
         rowUsing = LEFT_ROW;    //for now, will be decided by a parameter later
 
-        Bitmap up = this.createSubImageAt(UP_ROW, COL_USING);
-        Bitmap left = this.createSubImageAt(LEFT_ROW, COL_USING);
-        Bitmap down = this.createSubImageAt(DOWN_ROW, COL_USING);
-        Bitmap right = this.createSubImageAt(RIGHT_ROW, COL_USING);
+        this.up = this.createSubImageAt(UP_ROW, COL_USING);
+        this.left = this.createSubImageAt(LEFT_ROW, COL_USING);
+        this.down = this.createSubImageAt(DOWN_ROW, COL_USING);
+        this.right = this.createSubImageAt(RIGHT_ROW, COL_USING);
     }
 
     public Bitmap getCurrentBitmap(){
@@ -57,7 +57,7 @@ public class NpcCharacter extends GameObject {
     }
 
     public void draw(Canvas canvas){
-        Bitmap bitmap = left;
-        canvas.drawBitmap(bitmap, x, y, null);
+        //Bitmap bitmap = left;
+        canvas.drawBitmap(left, x, y, null);
     }
 }
