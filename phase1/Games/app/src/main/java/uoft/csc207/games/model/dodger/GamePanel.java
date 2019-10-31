@@ -11,6 +11,9 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import uoft.csc207.games.R;
+import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.PlayerProfile;
+import uoft.csc207.games.model.ScrollerGame;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
@@ -26,6 +29,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Boolean male;
     private Integer backgroundColor;
     private Integer tSize;
+    private PlayerProfile playerProfile;
+    private ScrollerGame CurrentGame;
 
     public GamePanel(Context context){
         super(context);
@@ -37,6 +42,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         P_y = Constants.SCREEN_HEIGHT/2;
         Obs = new ObsManager(3, Color.MAGENTA, player1.getHeight());
         System.out.println(player1.getHeight());
+        this.playerProfile = ProfileManager.getProfileManager(Constants.CURRENT_CONTEXT).getCurrentPlayer();
+        player1.setCurrency(playerProfile.getCurrency());
+        InitCurrentGame();
     }
 
     @Override
@@ -74,6 +82,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                     if (start) {
                         P_y -= 100;
                         player1.Score++;
+                        playerProfile.setScore(playerProfile.getScore() + 1);
+                        CurrentGame.updateScore(CurrentGame.getScore() + 1);
                     } else {
                         po = new Point();
                         po.x = (int) e.getX();
@@ -147,9 +157,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 p.setColor(Color.YELLOW);
                 p.setStrokeWidth(10);
                 p.setTextSize(100);
-                canvas.drawText("GAME OVER!", Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 2, p);
-                canvas.drawText("Score: " + player1.Score, 100, 50 + p.descent() - p.ascent(), p);
-                canvas.drawText("Money: " + player1.Currency, 100, 200 + p.descent() - p.ascent(), p);
+                canvas.drawText("GAME OVER!", 3 *Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 2, p);
+                canvas.drawText("Total Points: " + playerProfile.getScore(), 100, 50 + p.descent() - p.ascent(), p);
+                canvas.drawText("Current Score: " + player1.Score, 50, 200 + p.descent() - p.ascent(), p);
+                canvas.drawText("Money: " + player1.Currency, 100, 350 + p.descent() - p.ascent(), p);
+                if (CurrentGame.HighScore == CurrentGame.getScore()){
+                    canvas.drawText("- Record!" + player1.Currency, 200, 350 + p.descent() - p.ascent(), p);
+                }
             } else{
                 p.setColor(Color.BLACK);
                 p.setTextSize(tSize);
@@ -157,6 +171,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 Obs.draw(canvas);
                 player1.draw(canvas);
                 coins.draw(canvas);
+                canvas.drawText("Total Points: " + playerProfile.getScore(), 350, 50 + p.descent() - p.ascent(), p);
                 canvas.drawText("Score: " + player1.Score, 100, 50 + p.descent() - p.ascent(), p);
                 canvas.drawText("Money: " + player1.Currency, 100, 200 + p.descent() - p.ascent(), p);
             }
@@ -184,11 +199,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 Obs.update();
                 coins.update();
                 coins.CollisionCheck(player1);
+                if(CurrentGame.getScore() % 100 == 0) {
+                    CurrentGame.checkAchievements();
+                }
             } else {
                 isOver = true;
+                if (CurrentGame.getScore() > CurrentGame.HighScore){
+                    CurrentGame.HighScore = CurrentGame.getScore();
+                }
             }
 
         }
+    }
+
+    private void InitCurrentGame(){
+        ScrollerGame s = (ScrollerGame)playerProfile.containsGame(playerProfile.getId() + ": Scroller");
+        if (s == null){
+            s = new ScrollerGame(playerProfile);
+            playerProfile.addGame(s);
+        }
+        CurrentGame = s;
     }
 
 

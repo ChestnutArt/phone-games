@@ -50,8 +50,8 @@ public class scrollerCharacter {
         return new Rect(x, y, x + width, y + height);
     }
 
-    public void setScore(Integer s){
-        this.Score = s;
+    public Integer getScore(){
+        return Score;
     }
 
     public void setCurrency(Integer c){

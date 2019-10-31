@@ -71,7 +71,7 @@ abstract class Game {
      * again. Ideally would call this method whenever you update the game state (specifically when score
      * and/or gold update)
      */
-    protected void checkAchievements(){
+    public void checkAchievements(){
         Iterator<Achievement> itr = gameAchievements.iterator();
         while(itr.hasNext()){
             Achievement curAchievement = itr.next();
