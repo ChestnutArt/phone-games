@@ -12,6 +12,7 @@ import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
 import uoft.csc207.games.model.Rpg.RpgActivity;
+import uoft.csc207.games.model.dodger.ScrollerActivity;
 
 public class GameSelectActivity extends AppCompatActivity {
     private TextView welcome;
@@ -48,9 +49,8 @@ public class GameSelectActivity extends AppCompatActivity {
         scrollerSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // jump to the scroller game activity here
-                // check to see if the PlayerProfile already has an instance of the scroller game
-                // and use that instance's game , otherwise create a new one and add it to the PlayerProfile
+                Intent sIntent = new Intent(GameSelectActivity.this, ScrollerActivity.class);
+                startActivity(sIntent);
             }
         });
 

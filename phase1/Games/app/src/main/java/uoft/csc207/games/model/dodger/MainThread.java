@@ -63,6 +63,12 @@ public class MainThread extends Thread{
                  e.printStackTrace();
              }
          }
+         try {
+             sleep(6000);
+         } catch (Exception e){
+             e.printStackTrace();
+         }
+         Constants.activity.finish();
      }
 
 }

@@ -19,5 +19,6 @@ public class ScrollerActivity extends Activity {
         Constants.SCREEN_HEIGHT = d.heightPixels;
         Constants.SCREEN_WIDTH = d.widthPixels;
         setContentView(new GamePanel(Constants.CURRENT_CONTEXT));
+        Constants.activity = this;
     }
 }

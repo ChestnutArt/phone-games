@@ -18,6 +18,8 @@ public class scrollerCharacter {
     Integer Currency;
 
     public scrollerCharacter(Bitmap img, boolean isMale){
+            Score = 0;
+            Currency = 0;
             x = Constants.SCREEN_WIDTH/2;
             y = Constants.SCREEN_HEIGHT/2;
             width = Constants.SCREEN_WIDTH/6;

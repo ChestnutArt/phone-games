@@ -1,5 +1,6 @@
 package uoft.csc207.games.model.dodger;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
