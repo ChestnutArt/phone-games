@@ -1,7 +1,6 @@
 package uoft.csc207.games.model.Rpg;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,15 +10,12 @@ import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 
 import uoft.csc207.games.R;
-import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.controller.ProfileManager;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
@@ -33,6 +29,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     private ArrayList<NpcCharacter> nonPlayerCharacters;
     private RpgActivity rpgActivity;
     private TextView resultTextView;    //dialogue box
+    private TextView statsTextView;     //score box
     private NpcCharacter interceptedNpc;
     private boolean gameEnd;
 
@@ -64,6 +61,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void update(){
+
         this.pCharacter.update();
     }
 
@@ -106,10 +104,12 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
             npc.draw(canvas);
         }
         handleCustomization();
+        updateStatistics();
     }
 
-    private void initializeCustomizationOptions(){
+    private void initialize(){
         initializeCharacterMap();
+        gameState.initializeAchievements();
     }
 
     private void initializeCharacterMap(){
@@ -117,7 +117,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         characterMap.put("male", R.drawable.c1_sprite_sheet);
         characterMap.put("female", R.drawable.c2_sprite_sheet);
     }
-
 
     private void handleCustomization(){
         String gameStateCharacter = this.gameState.getCharacter();
@@ -142,11 +141,20 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         } else if (usingColor.equals("sans-serif")){
             resultTextView.setTypeface(Typeface.SANS_SERIF);
         }
+    }
 
+    public void updateStatistics(){
+        if (Math.random() > 0){
+            gameState.updateCurrency(1);
+        }
+        if ((System.currentTimeMillis() / 1000) % 1 == 0){
+            gameState.updateScore(1);
+        }
+        statsTextView.setText("Score: " + gameState.getScore() + "\nGold: " + gameState.getGameCurrency());
     }
 
     public void surfaceCreated(SurfaceHolder holder){
-        initializeCustomizationOptions();
+        initialize();
         //handleCustomization();
         Bitmap pcBitmap = BitmapFactory.decodeResource(this.getResources(), usingCharacter);
         this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 800);
@@ -157,6 +165,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         this.gameThread.start();
         resultTextView = rpgActivity.getTextView();
         resultTextView.setText("");
+        statsTextView = rpgActivity.getStatsView();
     }
 
     private void initializeNPOs(){

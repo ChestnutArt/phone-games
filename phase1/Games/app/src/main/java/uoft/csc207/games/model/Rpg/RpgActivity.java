@@ -29,6 +29,7 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     public TextView getTextView() {
         return textView;
     }
+    public TextView getStatsView() { return statsView; }
 
     private TextView textView;
     private TextView statsView;
