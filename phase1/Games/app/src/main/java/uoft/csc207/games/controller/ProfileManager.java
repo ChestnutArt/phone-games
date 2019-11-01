@@ -78,7 +78,6 @@ public class ProfileManager {
 
     }
     private void loadProfiles(){
-
         File dir2store = getAppContext().getFilesDir();
         String filePath = dir2store.getPath() + File.pathSeparator + NAME_OF_PROFILE_STORE;
         FileInputStream fileInputStream = null;

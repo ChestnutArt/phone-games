@@ -32,8 +32,6 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     private TextView textView;
     private Button settingsBtn;
 
-
-
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +104,7 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         RelativeLayout.LayoutParams params4Layout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         widgetHolder.setLayoutParams(params4Layout);
         widgetHolder.addView(pauseResumeBtn);
-        params4Btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        params4Btn.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         params4Btn.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         pauseResumeBtn.setLayoutParams(params4Btn);
         return pauseResumeBtn;
@@ -122,7 +120,7 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         //RelativeLayout.LayoutParams params4Layout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         //textViewHolder.setLayoutParams(params4Layout);
         widgetHolder.addView(textView);
-        params4Btn.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        params4Btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         params4Btn.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         params4Btn.addRule(RelativeLayout.TEXT_ALIGNMENT_CENTER, RelativeLayout.TRUE);
 
