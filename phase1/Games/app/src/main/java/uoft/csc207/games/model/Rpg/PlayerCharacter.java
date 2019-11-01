@@ -2,6 +2,7 @@ package uoft.csc207.games.model.Rpg;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -130,17 +131,20 @@ public class PlayerCharacter extends GameObject{
                 this.rowUsing = ROW_BOTTOM_TO_TOP;
             }
         }
-        if (isIntercepted()){
+        NpcCharacter interceptedNpc = isIntercepted();
+        if (interceptedNpc != null){
             movingVectorX = 0;
             movingVectorY = 0;
             destinationX = x;
             destinationY = y;
+            gameSurface.getResultTextView().setText("hello");
         }
     }
 
     public void draw(Canvas canvas){
         Bitmap bitmap = this.getCurrentMoveBitmap();
         canvas.drawBitmap(bitmap, x, y, null);
+
         // Updates the last draw time.
         this.lastDrawNanoTime = System.nanoTime();
     }
@@ -154,16 +158,15 @@ public class PlayerCharacter extends GameObject{
         destinationX = newX;
         destinationY = newY;
     }
-    private boolean isIntercepted(){
-        boolean intercepted = false;
+    public NpcCharacter isIntercepted(){
+        NpcCharacter result = null;
         ArrayList<NpcCharacter> npcList = this.gameSurface.getNpcs();
         for (NpcCharacter npc: npcList){
             if ((Math.abs(npc.x - this.x) < (npc.singleWidth / 2)) &&
-                    (Math.abs(npc.y - this.y ) < (npc.singleHeight / 2))){
-                intercepted = true;
+                    (Math.abs(npc.y - this.y ) < (npc.singleHeight / 2)) && result == null){
+                result = npc;
             }
         }
-
-        return intercepted;
+        return result ;
     }
 }

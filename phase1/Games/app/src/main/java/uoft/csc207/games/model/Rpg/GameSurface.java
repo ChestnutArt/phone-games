@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
@@ -18,11 +19,14 @@ import uoft.csc207.games.controller.ProfileManager;
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     private GameThread gameThread;
     private PlayerCharacter pCharacter;
+    private TreeMap<String, Integer> characterMap;
+
     private NpcCharacter hoodNpc;
     private RpgGameState gameState;
     private ArrayList<NpcCharacter> nonPlayerCharacters;
     private RpgActivity rpgActivity;
     private TextView resultTextView;
+
 
     public GameSurface(Context context){
         super(context);
@@ -38,12 +42,19 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         return nonPlayerCharacters;
     }
 
+    public TextView getResultTextView(){
+        return resultTextView;
+    }
+
     public void update(){
         this.pCharacter.update();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
+        if (pCharacter.isIntercepted() != null){
+            resultTextView.setText("hello");
+        }
         if (event.getAction() == MotionEvent.ACTION_DOWN){
             int x = (int) event.getX();
             int y = (int) event.getY();
@@ -60,6 +71,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public void draw(Canvas canvas){
+        handleCustomization();
         super.draw(canvas);
         pCharacter.draw(canvas);
         for(NpcCharacter npc: this.nonPlayerCharacters){
@@ -67,11 +79,19 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         }
     }
 
+    private void initializeCustomizationOptions(){
+        //characterMap.put()
+    }
+
+    private void handleCustomization(){
+       // if (){
+
+        //}
+    }
+
     public void surfaceCreated(SurfaceHolder holder){
         Bitmap pcBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.c1_sprite_sheet);
-        //Bitmap hoodBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.hooded_npc_sprites);
         this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 800);
-        //this.hoodNpc = new NpcCharacter(this, hoodBitmap, 500, 800);
         initializeNPOs();
 
         this.gameThread = new GameThread(this, holder);
@@ -88,7 +108,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
-
     }
 
     public void surfaceDestroyed(SurfaceHolder holder){
