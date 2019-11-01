@@ -31,6 +31,7 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     }
 
     private TextView textView;
+    private TextView statsView;
     private Button settingsBtn;
 
     @SuppressLint("ResourceType")
@@ -43,6 +44,8 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         widgetHolder = new RelativeLayout(this);
         settingsBtn = createButton(widgetHolder);
         textView = createTextView(widgetHolder);
+        statsView = createScoreView(widgetHolder);
+        statsView.setText("\nScore: 0   \nGold: 0");
 
         // Set fullscreen
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -128,10 +131,11 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     private TextView createTextView(RelativeLayout widgetHolder) {
         TextView textView = new TextView(this);
 
-        textView.setTextSize(20);
+        textView.setTextSize(24);
         textView.setTextColor(Color.RED);
 
-        RelativeLayout.LayoutParams params4Btn = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params4Btn = new RelativeLayout.LayoutParams(RelativeLayout.
+                LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         //RelativeLayout.LayoutParams params4Layout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         //textViewHolder.setLayoutParams(params4Layout);
         widgetHolder.addView(textView);
@@ -141,6 +145,19 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
 
         textView.setLayoutParams(params4Btn);
 
+        return textView;
+    }
+
+    private TextView createScoreView(RelativeLayout widgetHolder){
+        TextView textView = new TextView(this);
+        textView.setTextSize(20);
+        textView.setTextColor(Color.WHITE);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.
+                LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        widgetHolder.addView(textView);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        params.addRule(RelativeLayout.TEXT_ALIGNMENT_CENTER, RelativeLayout.TRUE);
         return textView;
     }
 }
