@@ -13,6 +13,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".model.Rpg.RpgActivity"></activity>
         <activity android:name=".model.dodger.ScrollerActivity"></activity>
+        <activity android:name=".model.CardGame.DeckSelection"></activity>
+        <activity android:name=".model.CardGame.CardActivity"></activity>
         <activity android:name=".activity.GameSelectActivity" />
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
