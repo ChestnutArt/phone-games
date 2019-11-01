@@ -25,7 +25,7 @@ public class RpgGameState extends Game {
 
     }
     public void chooseCharacter(String character){
-
+        this.character = character;
     }
     public void chooseFont(String font){
 

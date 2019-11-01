@@ -1,10 +1,10 @@
 package uoft.csc207.games.model.Rpg;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,12 +18,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.activity.GameSelectActivity;
 
 public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 
-   //private GameSurface gameSurface;
-   //private FrameLayout gameFrame;
-   //private RelativeLayout widgetHolder;
+   private GameSurface gameSurface;
+   private FrameLayout gameFrame;
+   private RelativeLayout widgetHolder;
 
     public TextView getTextView() {
         return textView;
@@ -37,9 +38,9 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GameSurface gameSurface = new GameSurface(this);
-        FrameLayout gameFrame = new FrameLayout(this);
-        RelativeLayout widgetHolder = new RelativeLayout(this);
+        gameSurface = new GameSurface(this);
+        gameFrame = new FrameLayout(this);
+        widgetHolder = new RelativeLayout(this);
         settingsBtn = createButton(widgetHolder);
         textView = createTextView(widgetHolder);
 
@@ -72,25 +73,39 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         inflater.inflate(R.menu.game_menu, popup.getMenu());
         popup.show();
     }
+    public void finishGame(){
+        Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
+        startActivity(myIntent);
+    }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.male_item:
+                gameSurface.getGameState().chooseCharacter("male");
                 break;
             case R.id.female_item:
+                gameSurface.getGameState().chooseCharacter("female");
                 break;
             case R.id.black_item:
+                gameSurface.getGameState().chooseColor("black");
+                textView.setBackgroundColor(Color.BLACK);
                 break;
             case R.id.white_item:
+                gameSurface.getGameState().chooseColor("white");
+                textView.setBackgroundColor(Color.WHITE);
                 break;
-            case R.id.droid_sans_item:
+            case R.id.monospace_item:
+                gameSurface.getGameState().chooseFont("monospace");
+                textView.setTypeface(Typeface.MONOSPACE);
                 break;
-            case R.id.droid_serif_item:
+            case R.id.sans_serif_item:
+                gameSurface.getGameState().chooseFont("sans-serif");
+                textView.setTypeface(Typeface.SANS_SERIF);
                 break;
             case R.id.exit_rpg_item:
+                finishGame();
                 break;
-
         }
         return false;
     }
