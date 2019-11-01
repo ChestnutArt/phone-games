@@ -75,7 +75,7 @@ public class ProfileManager {
         }else {
             profileMap.put(profile.getId(), profile);
         }
-
+        saveProfiles();
     }
     private void loadProfiles(){
         File dir2store = getAppContext().getFilesDir();
