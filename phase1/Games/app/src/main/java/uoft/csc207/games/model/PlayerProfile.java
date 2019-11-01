@@ -22,6 +22,7 @@ public class PlayerProfile implements Serializable {
         playerCurrency = 0;
         playerScore = 0;
         playerAchievements = new ArrayList<>();
+        games = new ArrayList<>();
     }
 
     public String getId() { return id; }
@@ -66,7 +67,7 @@ public class PlayerProfile implements Serializable {
      * @param gameId The id of the game that is being searched for
      * @return The game with the given id and null if the PlayerProfile doesn't contain it
      */
-    private Game containsGame(String gameId){
+    public Game containsGame(String gameId){
         for (Game g: games){
             if (g.getId().equals(gameId)){
                 return g;
@@ -80,7 +81,7 @@ public class PlayerProfile implements Serializable {
      *  each type of game at most.
      * @param newGame The new instance of the Game to be added
      */
-    private void addGame(Game newGame){
+    public void addGame(Game newGame){
         if (containsGame(newGame.getId()) == null){
             games.add(newGame);
         }
@@ -93,4 +94,5 @@ public class PlayerProfile implements Serializable {
     public void addAchievement(Achievement newAchievement){
         playerAchievements.add(newAchievement);
     }
+
 }

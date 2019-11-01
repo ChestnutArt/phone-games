@@ -11,11 +11,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.controller.ProfileManager;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     private GameThread gameThread;
     private PlayerCharacter pCharacter;
     private NpcCharacter hoodNpc;
+    private RpgGameState gameState;
     private RpgActivity rpgActivity;
     private TextView resultTextView;
 
@@ -23,6 +25,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         super(context);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
+
+        gameState = new RpgGameState(ProfileManager.getProfileManager(context).getCurrentPlayer());
         rpgActivity = (RpgActivity)context;
 
     }
@@ -57,8 +61,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     public void surfaceCreated(SurfaceHolder holder){
         Bitmap pcBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.c1_sprite_sheet);
         Bitmap hoodBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.hooded_npc_sprites);
-        this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 400);
-        this.hoodNpc = new NpcCharacter(this, hoodBitmap, 300, 400);
+        this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 800);
+        this.hoodNpc = new NpcCharacter(this, hoodBitmap, 500, 800);
 
         this.gameThread = new GameThread(this, holder);
         this.gameThread.setRunning(true);

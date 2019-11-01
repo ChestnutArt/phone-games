@@ -7,9 +7,9 @@ import java.util.Iterator;
 
 import uoft.csc207.games.controller.ProfileManager;
 
-abstract class Game {
-    protected int gameScore;
-    protected int gameCurrency;
+public abstract class Game {
+    protected Integer gameScore;
+    protected Integer gameCurrency;
     /**
      * Collection of all attainable achievements in this game.
      */
@@ -35,35 +35,58 @@ abstract class Game {
         gameAchievements = new ArrayList<>();
     }
 
-    abstract String getId();
+    public abstract String getId();
 
     /**
      * Updates score of the Game and the total score of the account
      * @param i The amount to add to the score
      */
-    abstract void updateScore(int i);
+    public abstract void updateScore(Integer i);
 
     /**
      * Updates currency of the Game and the total currency of the account
      * @param i The amount to add to the currency
      */
-    abstract void updateCurrency(int i);
+    public abstract void updateCurrency(Integer i);
 
     /**
      * Clears the game stats
      */
-    abstract void restart();
+    public abstract void restart();
 
-    abstract void chooseCharacter(String character);
+    public abstract void chooseCharacter(String character);
 
-    abstract void chooseFont(String font);
+    public abstract void chooseFont(String font);
 
-    abstract void chooseColor(String color);
+    public abstract void chooseColor(String color);
 
+    protected int getScore(){
+        return gameScore;
+    }
+
+    protected int getGameCurrency(){
+        return gameCurrency;
+    }
+
+    protected ArrayList<Achievement> getGameAchievements(){
+        return gameAchievements;
+    }
+
+    public String getCharacter(){
+        return character;
+    }
+
+    public String getFont(){
+        return textFont;
+    }
+
+    public String getColor(){
+        return color;
+    }
     /**
      * Initialize all the achievements that can be attained in your game
      */
-    abstract void initializeAchievements();
+    public abstract void initializeAchievements();
 
     /**
      * Checks if any of the achievement conditions are satisfied. Adds them to the PlayerProfile's achievement
@@ -71,7 +94,7 @@ abstract class Game {
      * again. Ideally would call this method whenever you update the game state (specifically when score
      * and/or gold update)
      */
-    protected void checkAchievements(){
+    public void checkAchievements(){
         Iterator<Achievement> itr = gameAchievements.iterator();
         while(itr.hasNext()){
             Achievement curAchievement = itr.next();

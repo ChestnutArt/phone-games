@@ -6,17 +6,20 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import uoft.csc207.games.R;
 
-public class RpgActivity extends Activity {
+public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 
    //private GameSurface gameSurface;
    //private FrameLayout gameFrame;
@@ -27,7 +30,7 @@ public class RpgActivity extends Activity {
     }
 
     private TextView textView;
-    private Button pauseResumeBtn;
+    private Button settingsBtn;
 
 
 
@@ -39,7 +42,7 @@ public class RpgActivity extends Activity {
         GameSurface gameSurface = new GameSurface(this);
         FrameLayout gameFrame = new FrameLayout(this);
         RelativeLayout widgetHolder = new RelativeLayout(this);
-        pauseResumeBtn = createButton(widgetHolder);
+        settingsBtn = createButton(widgetHolder);
         textView = createTextView(widgetHolder);
 
         // Set fullscreen
@@ -56,14 +59,42 @@ public class RpgActivity extends Activity {
         this.setContentView(gameFrame);
         //this.setContentView(new GameSurface(this));
 
-        pauseResumeBtn.setOnClickListener(new View.OnClickListener() {
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
+                showPopup(v);
             }
         });
+    }
+    public void showPopup(View v){
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.setOnMenuItemClickListener(this);
+
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.game_menu, popup.getMenu());
+        popup.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.male_item:
+                break;
+            case R.id.female_item:
+                break;
+            case R.id.black_item:
+                break;
+            case R.id.white_item:
+                break;
+            case R.id.droid_sans_item:
+                break;
+            case R.id.droid_serif_item:
+                break;
+            case R.id.exit_rpg_item:
+                break;
+
+        }
+        return false;
     }
 
     private Button createButton(RelativeLayout widgetHolder) {
