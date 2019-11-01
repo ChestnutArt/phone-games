@@ -1,10 +1,10 @@
 package uoft.csc207.games.model.Rpg;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,18 +18,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.activity.GameSelectActivity;
 
 public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 
-   //private GameSurface gameSurface;
-   //private FrameLayout gameFrame;
-   //private RelativeLayout widgetHolder;
+   private GameSurface gameSurface;
+   private FrameLayout gameFrame;
+   private RelativeLayout widgetHolder;
 
     public TextView getTextView() {
         return textView;
     }
+    public TextView getStatsView() { return statsView; }
 
     private TextView textView;
+    private TextView statsView;
     private Button settingsBtn;
 
     @SuppressLint("ResourceType")
@@ -37,11 +40,13 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GameSurface gameSurface = new GameSurface(this);
-        FrameLayout gameFrame = new FrameLayout(this);
-        RelativeLayout widgetHolder = new RelativeLayout(this);
+        gameSurface = new GameSurface(this);
+        gameFrame = new FrameLayout(this);
+        widgetHolder = new RelativeLayout(this);
         settingsBtn = createButton(widgetHolder);
         textView = createTextView(widgetHolder);
+        statsView = createScoreView(widgetHolder);
+        statsView.setText("\nScore: 0   \nGold: 0");
 
         // Set fullscreen
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -72,25 +77,39 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         inflater.inflate(R.menu.game_menu, popup.getMenu());
         popup.show();
     }
+    public void finishGame(){
+        Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
+        startActivity(myIntent);
+    }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.male_item:
+                gameSurface.getGameState().chooseCharacter("male");
                 break;
             case R.id.female_item:
+                gameSurface.getGameState().chooseCharacter("female");
                 break;
             case R.id.black_item:
+                gameSurface.getGameState().chooseColor("black");
+                textView.setBackgroundColor(Color.BLACK);
                 break;
             case R.id.white_item:
+                gameSurface.getGameState().chooseColor("white");
+                textView.setBackgroundColor(Color.WHITE);
                 break;
-            case R.id.droid_sans_item:
+            case R.id.monospace_item:
+                gameSurface.getGameState().chooseFont("monospace");
+                textView.setTypeface(Typeface.MONOSPACE);
                 break;
-            case R.id.droid_serif_item:
+            case R.id.sans_serif_item:
+                gameSurface.getGameState().chooseFont("sans-serif");
+                textView.setTypeface(Typeface.SANS_SERIF);
                 break;
             case R.id.exit_rpg_item:
+                finishGame();
                 break;
-
         }
         return false;
     }
@@ -113,10 +132,11 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     private TextView createTextView(RelativeLayout widgetHolder) {
         TextView textView = new TextView(this);
 
-        textView.setTextSize(20);
+        textView.setTextSize(24);
         textView.setTextColor(Color.RED);
 
-        RelativeLayout.LayoutParams params4Btn = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params4Btn = new RelativeLayout.LayoutParams(RelativeLayout.
+                LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         //RelativeLayout.LayoutParams params4Layout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         //textViewHolder.setLayoutParams(params4Layout);
         widgetHolder.addView(textView);
@@ -126,6 +146,19 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
 
         textView.setLayoutParams(params4Btn);
 
+        return textView;
+    }
+
+    private TextView createScoreView(RelativeLayout widgetHolder){
+        TextView textView = new TextView(this);
+        textView.setTextSize(20);
+        textView.setTextColor(Color.WHITE);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.
+                LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        widgetHolder.addView(textView);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        params.addRule(RelativeLayout.TEXT_ALIGNMENT_CENTER, RelativeLayout.TRUE);
         return textView;
     }
 }

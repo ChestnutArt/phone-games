@@ -60,15 +60,15 @@ public abstract class Game {
 
     public abstract void chooseColor(String color);
 
-    protected int getScore(){
+    public int getScore(){
         return gameScore;
     }
 
-    protected int getGameCurrency(){
+    public int getGameCurrency(){
         return gameCurrency;
     }
 
-    protected ArrayList<Achievement> getGameAchievements(){
+    public ArrayList<Achievement> getGameAchievements(){
         return gameAchievements;
     }
 

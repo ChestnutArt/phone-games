@@ -16,16 +16,18 @@ public class RpgGameState extends Game {
         return id;
     }
     public void updateScore(Integer i){
-
+        gameScore++;
+        owner.setScore(owner.getScore() + 1);
     }
     public void updateCurrency(Integer i){
-
+        gameCurrency++;
+        owner.setCurrency(owner.getCurrency() + 1);
     }
     public void restart(){
 
     }
     public void chooseCharacter(String character){
-
+        this.character = character;
     }
     public void chooseFont(String font){
 

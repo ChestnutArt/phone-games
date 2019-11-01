@@ -52,12 +52,7 @@ public class PlayerCharacter extends GameObject{
         topToBottomImages = new Bitmap[NUM_MOVEMENTS];
         bottomToTopImages = new Bitmap[NUM_MOVEMENTS];
 
-        for(int col = 0; col < NUM_MOVEMENTS; col++){
-            this.bottomToTopImages[col] = this.createSubImageAt(ROW_BOTTOM_TO_TOP, col);
-            this.rightToLeftImages[col] = this.createSubImageAt(ROW_RIGHT_TO_LEFT, col);
-            this.topToBottomImages[col] = this.createSubImageAt(ROW_TOP_TO_BOTTOM, col);
-            this.leftToRightImages[col] = this.createSubImageAt(ROW_LEFT_TO_RIGHT, col);
-        }
+        setWalkCycleImages(image);
     }
 
     public Bitmap[] getMoveBitmapImages(){
@@ -82,6 +77,16 @@ public class PlayerCharacter extends GameObject{
     public Bitmap getCurrentMoveBitmap(){
         Bitmap[] bitmaps = this.getMoveBitmapImages();
         return bitmaps[colUsing];
+    }
+
+    public void setWalkCycleImages(Bitmap newImage){
+        this.image = newImage;
+        for(int col = 0; col < NUM_MOVEMENTS; col++){
+            this.bottomToTopImages[col] = this.createSubImageAt(ROW_BOTTOM_TO_TOP, col);
+            this.rightToLeftImages[col] = this.createSubImageAt(ROW_RIGHT_TO_LEFT, col);
+            this.topToBottomImages[col] = this.createSubImageAt(ROW_TOP_TO_BOTTOM, col);
+            this.leftToRightImages[col] = this.createSubImageAt(ROW_LEFT_TO_RIGHT, col);
+        }
     }
 
     public void update(){
@@ -137,7 +142,7 @@ public class PlayerCharacter extends GameObject{
             movingVectorY = 0;
             destinationX = x;
             destinationY = y;
-            gameSurface.setIntercepted(true);
+            gameSurface.setInterceptedNpc(interceptedNpc);
         }
     }
 

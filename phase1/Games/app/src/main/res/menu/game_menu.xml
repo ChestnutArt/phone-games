@@ -31,11 +31,11 @@
         android:title="Font">
         <menu>
             <item
-                android:id="@+id/droid_sans_item"
-                android:title="Droid Sans" />
+                android:id="@+id/monospace_item"
+                android:title="Monospace" />
             <item
-                android:id="@+id/droid_serif_item"
-                android:title="Droid Serif" />
+                android:id="@+id/sans_serif_item"
+                android:title="Sans-Serif" />
         </menu>
     </item>
     <item
