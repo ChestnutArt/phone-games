@@ -137,7 +137,7 @@ public class PlayerCharacter extends GameObject{
             movingVectorY = 0;
             destinationX = x;
             destinationY = y;
-            gameSurface.getResultTextView().setText("hello");
+            gameSurface.setIntercepted(true);
         }
     }
 

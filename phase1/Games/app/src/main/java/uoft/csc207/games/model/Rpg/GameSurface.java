@@ -27,6 +27,12 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     private RpgActivity rpgActivity;
     private TextView resultTextView;
 
+    public void setIntercepted(boolean intercepted) {
+        isIntercepted = intercepted;
+    }
+
+    private boolean isIntercepted = false;
+
 
     public GameSurface(Context context){
         super(context);
@@ -52,7 +58,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
-        if (pCharacter.isIntercepted() != null){
+        if (isIntercepted){
             resultTextView.setText("hello");
         }
         if (event.getAction() == MotionEvent.ACTION_DOWN){
