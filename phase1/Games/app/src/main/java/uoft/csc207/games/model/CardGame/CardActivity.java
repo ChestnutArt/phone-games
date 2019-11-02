@@ -12,10 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.Game;
 import uoft.csc207.games.model.PlayerProfile;
 
 
@@ -26,10 +30,11 @@ public class CardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_main);
         Intent intent = getIntent();
-        PlayerProfile currentProfile = (PlayerProfile)intent.getSerializableExtra(ProfileManager.CURRENT_PLAYER);
+        final CardGame gameState = (CardGame) CardGame.getPlayerProfile().containsGame("257846");
+
 
         //Objects positions set up
-        final CardGameState new_game = new CardGameState(currentProfile);
+        final CardGameState new_game = new CardGameState();
         final List<Card> player_deck = new_game.getPlayer_deck();
         final ImageView bottom_left = findViewById(R.id.bleft);
         final ImageView bottom_mid = findViewById(R.id.bmid);
@@ -40,6 +45,7 @@ public class CardActivity extends AppCompatActivity {
         final ImageView uleft = findViewById(R.id.uleft);
         final ImageView umid = findViewById(R.id.umid);
         final ImageView uright = findViewById(R.id.uright);
+        final TextView score = findViewById(R.id.score);
         final View curr_layout = findViewById(R.id.linearLayout);
 
         new_game.empty_slot_set(new_game.getPlayer_hand());
@@ -185,7 +191,15 @@ public class CardActivity extends AppCompatActivity {
                             TextView ai_lp = findViewById(R.id.ai_lp);
                             ai_lp.setText("LP: " + new_game.getAi_health());
                             new_game.getAttacked()[0] = true;
+                            int currentScore = gameState.getCurrentScore();
+                            gameState.setCurrentScore(currentScore + new_game.getPlayer_board().get(0).getAttack());
                             if (new_game.getAi_health() == 0) {
+                                int currScore = gameState.getCurrentScore();
+                                gameState.setCurrentScore(currScore + 3000);
+                                gameState.updateScore(gameState.getCurrentScore());
+                                gameState.setCurrentScore(0);
+                                score.setText("HIGH SCORE: " + gameState.getScore());
+                                ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
                                 Snackbar winner_msg =
                                         Snackbar.make(
                                                 findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
@@ -207,7 +221,15 @@ public class CardActivity extends AppCompatActivity {
                     TextView ai_lp = findViewById(R.id.ai_lp);
                     ai_lp.setText("LP: " + new_game.getAi_health());
                     new_game.getAttacked()[1] = true;
+                    int currentScore = gameState.getCurrentScore();
+                    gameState.setCurrentScore(currentScore + new_game.getPlayer_board().get(0).getAttack());
                     if (new_game.getAi_health() == 0) {
+                        int currScore = gameState.getCurrentScore();
+                        gameState.setCurrentScore(currScore + 3000);
+                        gameState.updateScore(gameState.getCurrentScore());
+                        gameState.setCurrentScore(0);
+                        score.setText("HIGH SCORE: " + gameState.getScore());
+                        ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
                         Snackbar winner_msg =
                                 Snackbar.make(
                                         findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
@@ -229,7 +251,15 @@ public class CardActivity extends AppCompatActivity {
                     TextView ai_lp = findViewById(R.id.ai_lp);
                     ai_lp.setText("LP: " + new_game.getAi_health());
                     new_game.getAttacked()[2] = true;
+                    int currentScore = gameState.getCurrentScore();
+                    gameState.setCurrentScore(currentScore + new_game.getPlayer_board().get(0).getAttack());
                     if (new_game.getAi_health() == 0) {
+                        int currScore = gameState.getCurrentScore();
+                        gameState.setCurrentScore(currScore + 3000);
+                        gameState.updateScore(gameState.getCurrentScore());
+                        gameState.setCurrentScore(0);
+                        score.setText("HIGH SCORE: " + gameState.getScore());
+                        ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
                         Snackbar winner_msg =
                                 Snackbar.make(
                                         findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
@@ -251,6 +281,8 @@ public class CardActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         action.setText("Next Turn");
+                        TextView score = findViewById(R.id.score);
+                        score.setText("HIGH SCORE: " + gameState.getScore());
                         // Determines whether loses
                         int curr_deck_size = new_game.getPlayer_deck().size();
                         int hand_occupancy = 0;
