@@ -6,11 +6,19 @@ import uoft.csc207.games.model.Achievement;
 import uoft.csc207.games.model.Game;
 import uoft.csc207.games.model.PlayerProfile;
 
+/**
+ * Contains the relevant stats of the Rpg game
+ */
 public class RpgGameState extends Game {
 
     public RpgGameState(PlayerProfile p){
         super(p);
         id = "16812";
+        updateCurrency(5);
+        updateScore(5);
+        gameAchievements.add(new Achievement("test", "test description",
+                0, 0, false, false));
+        p.addGame(this);
     }
     public String getId(){
         return id;

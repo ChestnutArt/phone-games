@@ -17,6 +17,7 @@ import java.util.TreeMap;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.PlayerProfile;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     private GameThread gameThread;
@@ -42,7 +43,9 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         this.setFocusable(true);
         this.getHolder().addCallback(this);
 
-        gameState = new RpgGameState(ProfileManager.getProfileManager(context).getCurrentPlayer());
+        PlayerProfile currentPlayer = ProfileManager.getProfileManager(context).getCurrentPlayer();
+        gameState = new RpgGameState(currentPlayer);
+        //(RpgGameState) ProfileManager.getProfileManager(context).getCurrentPlayer().containsGame("16812");
         rpgActivity = (RpgActivity)context;
 
         nonPlayerCharacters = new ArrayList<NpcCharacter>();
@@ -105,7 +108,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         }
         //updateStatistics();
         handleCustomization();
-
     }
 
     private void initialize(){

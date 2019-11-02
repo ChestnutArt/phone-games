@@ -23,7 +23,7 @@ public class ProfileManager {
     public static String CURRENT_PLAYER = "currentPlayer";
     private static String NAME_OF_PROFILE_STORE = "players.profiles";
 
-    private static TreeMap<String, PlayerProfile> profileMap;
+    private TreeMap<String, PlayerProfile> profileMap;
 
     public Context getAppContext() {
         return appContext;
