@@ -102,7 +102,7 @@ public class CardActivity extends AppCompatActivity {
                         if (!new_game.isSummoned()) {
                             if (!new_game.getP_h()[0] == new_game.getP_brd()[0]) {
                                 Card next_card = new_game.getPlayer_hand().get(0);
-                                new_game.getPlayer_board().add(0, next_card);
+                                new_game.getPlayer_board().set(0, next_card);
                                 ImageView player_left = findViewById(R.id.battle_p_left);
                                 player_left.setImageResource(next_card.getCard_art());
                                 bottom_left.setImageResource(R.drawable.square);
@@ -130,7 +130,7 @@ public class CardActivity extends AppCompatActivity {
                         if (!new_game.isSummoned()) {
                             if (!new_game.getP_h()[1] == new_game.getP_brd()[1]) {
                                 Card next_card = new_game.getPlayer_hand().get(1);
-                                new_game.getPlayer_board().add(1, next_card);
+                                new_game.getPlayer_board().set(1, next_card);
                                 ImageView player_mid = findViewById(R.id.battle_p_mid);
                                 player_mid.setImageResource(next_card.getCard_art());
                                 bottom_mid.setImageResource(R.drawable.square);
@@ -158,7 +158,7 @@ public class CardActivity extends AppCompatActivity {
                         if (!new_game.isSummoned()) {
                             if (!new_game.getP_h()[2] == new_game.getP_brd()[2]) {
                                 Card next_card = new_game.getPlayer_hand().get(2);
-                                new_game.getPlayer_board().add(2, next_card);
+                                new_game.getPlayer_board().set(2, next_card);
                                 ImageView player_right = findViewById(R.id.battle_p_right);
                                 player_right.setImageResource(next_card.getCard_art());
                                 bottom_right.setImageResource(R.drawable.square);
@@ -311,17 +311,17 @@ public class CardActivity extends AppCompatActivity {
                                 if (empty) {
                                     Card next_card = player_deck.get(0);
                                     if (i == 0) {
-                                        new_game.getPlayer_hand().add(0, next_card);
+                                        new_game.getPlayer_hand().set(0, next_card);
                                         bottom_left.setImageResource(next_card.getCard_art());
                                         player_deck.remove(0);
                                         new_game.getP_h()[0] = false;
                                     } else if (i == 1) {
-                                        new_game.getPlayer_hand().add(1, next_card);
+                                        new_game.getPlayer_hand().set(1, next_card);
                                         bottom_mid.setImageResource(next_card.getCard_art());
                                         player_deck.remove(0);
                                         new_game.getP_h()[1] = false;
                                     } else if (i == 2) {
-                                        new_game.getPlayer_hand().add(2, next_card);
+                                        new_game.getPlayer_hand().set(2, next_card);
                                         bottom_right.setImageResource(next_card.getCard_art());
                                         player_deck.remove(0);
                                         new_game.getP_h()[2] = false;
