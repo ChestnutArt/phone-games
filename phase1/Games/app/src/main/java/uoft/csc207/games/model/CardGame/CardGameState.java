@@ -81,7 +81,7 @@ public class CardGameState {
     private boolean[] p_h, p_brd, ai_brd, ai_h, attacked; //The occupancy of the slots
     private boolean summoned;
 
-    public CardGameState(PlayerProfile player) {
+    public CardGameState() {
 //        super(player);
         player_deck = new ArrayList<>(20);
         ai_deck = new ArrayList<>(20);

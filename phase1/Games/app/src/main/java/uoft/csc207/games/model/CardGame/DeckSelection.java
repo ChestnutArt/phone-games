@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.PlayerProfile;
 
 public class DeckSelection extends AppCompatActivity {
 
@@ -15,7 +17,6 @@ public class DeckSelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deck_selection);
-
         ImageView ash = findViewById(R.id.imageView);
         ImageView g_ogre = findViewById(R.id.imageView2);
 
