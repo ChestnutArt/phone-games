@@ -46,7 +46,7 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         settingsBtn = createButton(widgetHolder);
         textView = createTextView(widgetHolder);
         statsView = createScoreView(widgetHolder);
-        statsView.setText("\nScore: 0   \nGold: 0");
+        //statsView.setText("\nScore: 0   \nGold: 0");
 
         // Set fullscreen
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -160,5 +160,8 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.TEXT_ALIGNMENT_CENTER, RelativeLayout.TRUE);
         return textView;
+    }
+    public void setStatsView(String s){
+        statsView.setText(s);
     }
 }

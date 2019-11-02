@@ -61,7 +61,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void update(){
-
         this.pCharacter.update();
     }
 
@@ -98,13 +97,15 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public void draw(Canvas canvas){
+
         super.draw(canvas);
         pCharacter.draw(canvas);
         for(NpcCharacter npc: this.nonPlayerCharacters){
             npc.draw(canvas);
         }
+        //updateStatistics();
         handleCustomization();
-        updateStatistics();
+
     }
 
     private void initialize(){
@@ -133,6 +134,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
             resultTextView.setBackgroundColor(Color.BLACK);
         } else if (usingColor.equals("white")){
             resultTextView.setBackgroundColor(Color.WHITE);
+            //rpgActivity.getStatsView().setBackgroundColor(Color.WHITE);
         }
 
         usingFont = gameState.getFont();
@@ -144,18 +146,19 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void updateStatistics(){
-        if (Math.random() > 0){
+        if (true){//Math.random() > 0.9){
             gameState.updateCurrency(1);
         }
-        if ((System.currentTimeMillis() / 1000) % 1 == 0){
+        if (true){//(System.currentTimeMillis() / 1000) % 10 == 0){
             gameState.updateScore(1);
         }
+        gameState.checkAchievements();
         statsTextView.setText("Score: " + gameState.getScore() + "\nGold: " + gameState.getGameCurrency());
+
     }
 
     public void surfaceCreated(SurfaceHolder holder){
         initialize();
-        //handleCustomization();
         Bitmap pcBitmap = BitmapFactory.decodeResource(this.getResources(), usingCharacter);
         this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 800);
         initializeNPOs();
@@ -166,13 +169,14 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         resultTextView = rpgActivity.getTextView();
         resultTextView.setText("");
         statsTextView = rpgActivity.getStatsView();
+        statsTextView.setText("\nScore: 0   \nGold: 0");
     }
 
     private void initializeNPOs(){
         ArrayList<String> tempList = new ArrayList<>();
         tempList.add("Thank you brave hero for coming to save our village. Fortunately the devs " +
-                "haven't created anything" + " we need saving from yet but we'll need your help in phase 2. " +
-                "We do appreciate the effort though. Please take this gold and score for your trouble.");
+                "haven't created anything" + " we need saving from yet but come back after phase 2. " +
+                "I'm sure we'll be able to find something for you to do then.");
         NpcCharacter temp = new NpcCharacter(this,  BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.hooded_npc_sprites), 500, 800, tempList);
         this.nonPlayerCharacters.add(temp);

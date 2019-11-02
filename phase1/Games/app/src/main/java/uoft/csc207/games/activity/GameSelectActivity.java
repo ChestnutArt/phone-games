@@ -24,6 +24,7 @@ public class GameSelectActivity extends AppCompatActivity {
     private Button scrollerSelect;
     private Button cardSelect;
     private Button rpgSelect;
+    private Button profileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class GameSelectActivity extends AppCompatActivity {
         scrollerSelect = findViewById(R.id.btnScroller);
         cardSelect = findViewById(R.id.btnCard);
         rpgSelect = findViewById(R.id.btnRPG);
+        profileButton = findViewById(R.id.profileBtn);
 
         Intent intent = getIntent();
         currentProfile = (PlayerProfile)intent.getSerializableExtra(ProfileManager.CURRENT_PLAYER);
@@ -75,6 +77,17 @@ public class GameSelectActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
+
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(GameSelectActivity.this, ProfileActivity.class);
+                myIntent.putExtra(ProfileManager.CURRENT_PLAYER, currentProfile);
+                startActivity(myIntent);
+            }
+        });
+
+
     }
 
     private void moveToLoginActivity(){

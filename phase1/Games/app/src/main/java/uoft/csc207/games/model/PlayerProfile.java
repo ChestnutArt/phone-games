@@ -53,7 +53,7 @@ public class PlayerProfile implements Serializable {
      * of Achievements instead.
      * @return Returns a String representation of all the achievements
      */
-    private String getAchievements(){
+    public String getAchievements(){
         String result = "";
         for (Achievement a: playerAchievements){
             result += a.getAchievementName() + ":\n";
