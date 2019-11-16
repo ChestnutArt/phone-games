@@ -27,6 +27,7 @@ public class GameThread extends Thread{
                     this.gameSurface.draw(canvas);
                 }
             } catch(Exception e){
+                e.printStackTrace();
 
             } finally {
                 if(canvas != null){
@@ -41,7 +42,8 @@ public class GameThread extends Thread{
             }
 
             try{
-                this.sleep(waitTime);
+                //this.sleep(waitTime);
+                this.sleep(10);
             } catch(InterruptedException e){
 
             }

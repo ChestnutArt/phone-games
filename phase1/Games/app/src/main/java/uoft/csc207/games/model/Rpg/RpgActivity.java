@@ -26,13 +26,13 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
    private FrameLayout gameFrame;
    private RelativeLayout widgetHolder;
 
-    public TextView getTextView() {
+    /*public TextView getTextView() {
         return textView;
-    }
-    public TextView getStatsView() { return statsView; }
+    }*/
+    //public TextView getStatsView() { return statsView; }
 
-    private TextView textView;
-    private TextView statsView;
+    //private TextView textView;
+    //private TextView statsView;
     private Button settingsBtn;
 
     @SuppressLint("ResourceType")
@@ -44,8 +44,8 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         gameFrame = new FrameLayout(this);
         widgetHolder = new RelativeLayout(this);
         settingsBtn = createButton(widgetHolder);
-        textView = createTextView(widgetHolder);
-        statsView = createScoreView(widgetHolder);
+        //textView = createTextView(widgetHolder);
+        //statsView = createScoreView(widgetHolder);
         //statsView.setText("\nScore: 0   \nGold: 0");
 
         // Set fullscreen
@@ -93,19 +93,19 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
                 break;
             case R.id.black_item:
                 gameSurface.getGameState().chooseColor("black");
-                textView.setBackgroundColor(Color.BLACK);
+                //textView.setBackgroundColor(Color.BLACK);
                 break;
             case R.id.white_item:
                 gameSurface.getGameState().chooseColor("white");
-                textView.setBackgroundColor(Color.WHITE);
+                //textView.setBackgroundColor(Color.WHITE);
                 break;
             case R.id.monospace_item:
                 gameSurface.getGameState().chooseFont("monospace");
-                textView.setTypeface(Typeface.MONOSPACE);
+                //textView.setTypeface(Typeface.MONOSPACE);
                 break;
             case R.id.sans_serif_item:
                 gameSurface.getGameState().chooseFont("sans-serif");
-                textView.setTypeface(Typeface.SANS_SERIF);
+                //textView.setTypeface(Typeface.SANS_SERIF);
                 break;
             case R.id.exit_rpg_item:
                 finishGame();
@@ -129,7 +129,7 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         return pauseResumeBtn;
     }
 
-    private TextView createTextView(RelativeLayout widgetHolder) {
+/*    private TextView createTextView(RelativeLayout widgetHolder) {
         TextView textView = new TextView(this);
 
         textView.setTextSize(24);
@@ -147,9 +147,9 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         textView.setLayoutParams(params4Btn);
 
         return textView;
-    }
+    }*/
 
-    private TextView createScoreView(RelativeLayout widgetHolder){
+/*    private TextView createScoreView(RelativeLayout widgetHolder){
         TextView textView = new TextView(this);
         textView.setTextSize(20);
         textView.setTextColor(Color.WHITE);
@@ -163,5 +163,5 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     }
     public void setStatsView(String s){
         statsView.setText(s);
-    }
+    }*/
 }

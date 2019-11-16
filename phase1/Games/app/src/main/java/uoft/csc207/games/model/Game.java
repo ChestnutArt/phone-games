@@ -1,11 +1,7 @@
 package uoft.csc207.games.model;
 
-import android.content.Intent;
-
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import uoft.csc207.games.controller.ProfileManager;
 
 public abstract class Game {
     protected Integer gameScore;

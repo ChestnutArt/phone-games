@@ -5,12 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -20,19 +21,29 @@ import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.model.PlayerProfile;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
-    private GameThread gameThread;
+
     private PlayerCharacter pCharacter;     //the character the player controls
     private TreeMap<String, Integer> characterMap;     //map of character strings to their sprite sheet
     private int usingCharacter = R.drawable.c1_sprite_sheet;    //current character being used
+/*
     private String usingColor;
     public String usingFont;
+*/
     private RpgGameState gameState;     //class that stores all statistics and customizations
     private ArrayList<NpcCharacter> nonPlayerCharacters;
     private RpgActivity rpgActivity;
-    private TextView resultTextView;    //dialogue box
-    private TextView statsTextView;     //score box
+    //private TextView resultTextView;    //dialogue box
+    //private TextView statsTextView;     //score box
     private NpcCharacter interceptedNpc;
     private boolean gameEnd;
+
+    /*
+        Following attributes are required after refactoring
+     */
+    private GameThread gameThread;
+    private PlayerProfile currentPlayer;
+    private Paint scorePaint = new Paint();
+    private Paint resultPaint = new Paint();
 
     public void setInterceptedNpc(NpcCharacter interceptedNpc) {
         this.interceptedNpc = interceptedNpc;
@@ -40,30 +51,46 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
     public GameSurface(Context context){
         super(context);
-        this.setFocusable(true);
-        this.getHolder().addCallback(this);
+        getHolder().addCallback(this);
+        gameThread = new GameThread(this, getHolder());
 
-        PlayerProfile currentPlayer = ProfileManager.getProfileManager(context).getCurrentPlayer();
+        //configure scorePaint
+        scorePaint.setColor(Color.WHITE);
+        scorePaint.setTextSize(50);
+        scorePaint.setTypeface(Typeface.DEFAULT_BOLD);
+        scorePaint.setAntiAlias(true);
+
+        //configure resultPaint
+        resultPaint.setColor(Color.WHITE);
+        resultPaint.setTextSize(60);
+        resultPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        resultPaint.setAntiAlias(true);
+        resultPaint.setTextAlign(Paint.Align.CENTER);
+
+        currentPlayer = ProfileManager.getProfileManager(context).getCurrentPlayer();
         gameState = new RpgGameState(currentPlayer);
         //(RpgGameState) ProfileManager.getProfileManager(context).getCurrentPlayer().containsGame("16812");
         rpgActivity = (RpgActivity)context;
 
         nonPlayerCharacters = new ArrayList<NpcCharacter>();
         gameEnd = false;
+
+        setFocusable(true);
     }
     public ArrayList<NpcCharacter> getNpcs(){
         return nonPlayerCharacters;
     }
 
-    public TextView getResultTextView(){
+/*    public TextView getResultTextView(){
         return resultTextView;
-    }
+    }*/
 
     public RpgGameState getGameState(){
         return this.gameState;
     }
 
     public void update(){
+
         this.pCharacter.update();
     }
 
@@ -78,12 +105,12 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
                 }
             }.start();
         }
-        if (interceptedNpc != null){
+        /*if (interceptedNpc != null){
             for (String s: interceptedNpc.getDialogue()){
                 resultTextView.setText(s);
             }
             gameEnd = true;     //for phase 1, will just end when you talk to the one npc
-        }
+        }*/
         if (event.getAction() == MotionEvent.ACTION_DOWN){
             int x = (int) event.getX();
             int y = (int) event.getY();
@@ -106,7 +133,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         for(NpcCharacter npc: this.nonPlayerCharacters){
             npc.draw(canvas);
         }
-        //updateStatistics();
+        updateStatistics(canvas);
         handleCustomization();
     }
 
@@ -123,7 +150,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
     private void handleCustomization(){
         String gameStateCharacter = this.gameState.getCharacter();
-        if(gameStateCharacter.equalsIgnoreCase("male") || gameStateCharacter == null){
+        if(gameStateCharacter == null || gameStateCharacter.equalsIgnoreCase("male") ){
             usingCharacter = characterMap.get("male");
         } else if (gameStateCharacter.equalsIgnoreCase("female") ){
             usingCharacter = characterMap.get("female");
@@ -131,31 +158,60 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         Bitmap currentBitmap = BitmapFactory.decodeResource(this.getResources(), usingCharacter);
         pCharacter.setWalkCycleImages(currentBitmap) ;
 
-        usingColor = gameState.getColor();
-        if(usingColor.equals("black") || usingColor == null){
+        /*usingColor = gameState.getColor();
+        if(usingColor == null || usingColor.equals("black") ){
             resultTextView.setBackgroundColor(Color.BLACK);
         } else if (usingColor.equals("white")){
             resultTextView.setBackgroundColor(Color.WHITE);
-            //rpgActivity.getStatsView().setBackgroundColor(Color.WHITE);
+            rpgActivity.getStatsView().setBackgroundColor(Color.WHITE);
         }
 
         usingFont = gameState.getFont();
-        if(usingFont.equals("monospace") || usingColor == null){
+        if(usingColor == null || usingFont.equals("monospace") ){
             resultTextView.setTypeface(Typeface.MONOSPACE);
         } else if (usingColor.equals("sans-serif")){
             resultTextView.setTypeface(Typeface.SANS_SERIF);
-        }
+        }*/
     }
 
-    public void updateStatistics(){
-        if (true){//Math.random() > 0.9){
+    public void updateStatistics(Canvas canvas){
+        /*if (true){//Math.random() > 0.9){
             gameState.updateCurrency(1);
         }
         if (true){//(System.currentTimeMillis() / 1000) % 10 == 0){
             gameState.updateScore(1);
         }
         gameState.checkAchievements();
-        statsTextView.setText("Score: " + gameState.getScore() + "\nGold: " + gameState.getGameCurrency());
+        String score = "Score: " + gameState.getScore();
+        String gold = "Gold: " + gameState.getGameCurrency();
+        canvas.drawText(score, 40, 40, scorePaint);
+        canvas.drawText(gold, 40, 80, scorePaint);*/
+
+        //statsTextView.setText("Score: " + gameState.getScore() + "\nGold: " + gameState.getGameCurrency());
+        if (interceptedNpc != null){
+            //update score
+            gameState.updateScore(1);
+            gameState.checkAchievements();
+            String score = "Score: " + gameState.getScore();
+            String gold = "Gold: " + gameState.getGameCurrency();
+            canvas.drawText(score, 40, 40, scorePaint);
+            canvas.drawText(gold, 40, 80, scorePaint);
+            interceptedNpc = null;
+
+
+            String win = "You Won!";
+            Rect bounds = new Rect();
+            resultPaint.getTextBounds(win, 0, win.length(), bounds);
+            int x = canvas.getWidth() - bounds.width();
+            int y = canvas.getHeight()-bounds.height();
+            canvas.drawText(win, x, y, resultPaint);
+            gameEnd = true;     //for phase 1, will just end when you talk to the one npc
+        }else {
+            String score = "Score: " + gameState.getScore();
+            String gold = "Gold: " + gameState.getGameCurrency();
+            canvas.drawText(score, 40, 40, scorePaint);
+            canvas.drawText(gold, 40, 80, scorePaint);
+        }
 
     }
 
@@ -165,13 +221,13 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         this.pCharacter = new PlayerCharacter(this, pcBitmap, 200, 800);
         initializeNPOs();
 
-        this.gameThread = new GameThread(this, holder);
+
         this.gameThread.setRunning(true);
         this.gameThread.start();
-        resultTextView = rpgActivity.getTextView();
-        resultTextView.setText("");
-        statsTextView = rpgActivity.getStatsView();
-        statsTextView.setText("\nScore: 0   \nGold: 0");
+        /*resultTextView = rpgActivity.getTextView();
+        resultTextView.setText("");*/
+        //statsTextView = rpgActivity.getStatsView();
+        //statsTextView.setText("\nScore: 0   \nGold: 0");
     }
 
     private void initializeNPOs(){
