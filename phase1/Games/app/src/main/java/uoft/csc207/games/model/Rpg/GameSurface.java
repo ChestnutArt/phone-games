@@ -11,9 +11,7 @@ import android.view.SurfaceView;
 import uoft.csc207.games.controller.rpg.RPGGameManager;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
-
     private RpgActivity rpgActivity;
-
     private GameThread gameThread;
 
     public RPGGameManager getRpgGameManager() {
@@ -22,40 +20,35 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
     private RPGGameManager rpgGameManager;
 
-
     public GameSurface(Context context){
         super(context);
         getHolder().addCallback(this);
         gameThread = new GameThread(this, getHolder());
-
         rpgActivity = (RpgActivity)context;
-
         rpgGameManager = new RPGGameManager(context);
         setFocusable(true);
     }
 
+    public GameThread getGameThread(){
+        return gameThread;
+    }
 
     public void update(){
-
-       rpgGameManager.update();
+        rpgGameManager.update();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
+        /*
+            If game has ended, exit after a delay of 10 seconds
+         */
         if (rpgGameManager.isGameEnded()){
-            new CountDownTimer(10000, 1000) {
-                public void onFinish() {
-                    rpgActivity.finishGame();
-                }
-                public void onTick(long millisUntilFinished) {
-                }
-            }.start();
+            rpgActivity.finishGame(10000);
         }
 
         if (event.getAction() == MotionEvent.ACTION_DOWN){
             int x = (int) event.getX();
             int y = (int) event.getY();
-
             rpgGameManager.setPlayerCharacterDestination(x, y);
             return true;
         }
@@ -64,21 +57,15 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public void draw(Canvas canvas){
-
         super.draw(canvas);
         rpgGameManager.draw(canvas);
-
     }
-
-
 
     public void surfaceCreated(SurfaceHolder holder){
         rpgGameManager.initialize();
-
         this.gameThread.setRunning(true);
         this.gameThread.start();
     }
-
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
     }

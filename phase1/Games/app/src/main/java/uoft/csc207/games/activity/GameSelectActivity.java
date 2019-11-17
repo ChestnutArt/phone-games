@@ -77,7 +77,9 @@ public class GameSelectActivity extends AppCompatActivity {
                 startActivity(cardIntent);
             }
         });
-
+        /**
+         * Button that transfers to RPG game
+         */
         rpgSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
