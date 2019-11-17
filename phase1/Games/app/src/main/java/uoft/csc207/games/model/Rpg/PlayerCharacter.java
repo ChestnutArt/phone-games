@@ -55,6 +55,26 @@ public class PlayerCharacter extends GameObject{
         setWalkCycleImages(image);
     }
 
+    public PlayerCharacter(Bitmap image, int x, int y){
+        super(image,21, 13, x, y);
+        //this.gameSurface = gS;
+
+        movingVectorX = 0;
+        movingVectorY = 0;
+        destinationX = x;
+        destinationY = y;
+        rowUsing = ROW_TOP_TO_BOTTOM;
+        colUsing = 0;
+        lastDrawNanoTime = -1;
+
+        leftToRightImages = new Bitmap[NUM_MOVEMENTS];
+        rightToLeftImages = new Bitmap[NUM_MOVEMENTS];
+        topToBottomImages = new Bitmap[NUM_MOVEMENTS];
+        bottomToTopImages = new Bitmap[NUM_MOVEMENTS];
+
+        setWalkCycleImages(image);
+    }
+
     public Bitmap[] getMoveBitmapImages(){
         Bitmap[] result = null;
         switch (rowUsing){
@@ -136,14 +156,21 @@ public class PlayerCharacter extends GameObject{
                 this.rowUsing = ROW_BOTTOM_TO_TOP;
             }
         }
-        NpcCharacter interceptedNpc = isIntercepted();
+        /*NpcCharacter interceptedNpc = isIntercepted();
         if (interceptedNpc != null){
             movingVectorX = 0;
             movingVectorY = 0;
             destinationX = x;
             destinationY = y;
             gameSurface.setInterceptedNpc(interceptedNpc);
-        }
+        }*/
+    }
+
+    public void resetCoordinates(){
+        movingVectorX = 0;
+        movingVectorY = 0;
+        destinationX = x;
+        destinationY = y;
     }
 
     public void draw(Canvas canvas){
@@ -163,7 +190,7 @@ public class PlayerCharacter extends GameObject{
         destinationX = newX;
         destinationY = newY;
     }
-    public NpcCharacter isIntercepted(){
+ /*   public NpcCharacter isIntercepted(){
         NpcCharacter result = null;
         ArrayList<NpcCharacter> npcList = this.gameSurface.getNpcs();
         for (NpcCharacter npc: npcList){
@@ -173,5 +200,5 @@ public class PlayerCharacter extends GameObject{
             }
         }
         return result ;
-    }
+    }*/
 }

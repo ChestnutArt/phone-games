@@ -35,6 +35,19 @@ public class NpcCharacter extends GameObject {
 
         this.dialogue = dialogue;
     }
+
+    public NpcCharacter(Bitmap image, int x, int y){
+        super(image, 21, 13, x, y);
+        //this.gameSurface = gS;
+        rowUsing = LEFT_ROW;    //for now, will be decided by a parameter later
+
+        this.up = this.createSubImageAt(UP_ROW, COL_USING);
+        this.left = this.createSubImageAt(LEFT_ROW, COL_USING);
+        this.down = this.createSubImageAt(DOWN_ROW, COL_USING);
+        this.right = this.createSubImageAt(RIGHT_ROW, COL_USING);
+
+        //this.dialogue = dialogue;
+    }
     public ArrayList<String> getDialogue(){
         return dialogue;
     }

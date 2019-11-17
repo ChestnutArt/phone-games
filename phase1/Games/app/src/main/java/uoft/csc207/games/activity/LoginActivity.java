@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void moveToNextActivity(){
         Intent intent = new Intent(LoginActivity.this, GameSelectActivity.class);
-        intent.putExtra(ProfileManager.CURRENT_PLAYER, profileManager.getCurrentPlayer());
+        //intent.putExtra(ProfileManager.CURRENT_PLAYER, profileManager.getCurrentPlayer());
         startActivity(intent);
     }
 }

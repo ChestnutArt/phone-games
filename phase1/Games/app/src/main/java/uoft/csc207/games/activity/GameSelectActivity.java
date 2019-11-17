@@ -41,8 +41,9 @@ public class GameSelectActivity extends AppCompatActivity {
         rpgSelect = findViewById(R.id.btnRPG);
         profileButton = findViewById(R.id.profileBtn);
 
-        Intent intent = getIntent();
-        currentProfile = (PlayerProfile)intent.getSerializableExtra(ProfileManager.CURRENT_PLAYER);
+        /*Intent intent = getIntent();
+        currentProfile = (PlayerProfile)intent.getSerializableExtra(ProfileManager.CURRENT_PLAYER);*/
+        currentProfile = ProfileManager.getProfileManager(this).getCurrentPlayer();
         welcome.setText("Welcome back " + currentProfile.getId() + "!");
 
         logout.setOnClickListener(new View.OnClickListener() {

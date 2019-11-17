@@ -86,25 +86,25 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.male_item:
-                gameSurface.getGameState().chooseCharacter("male");
+                gameSurface.getRpgGameManager().getCurrentGameState().chooseCharacter("male");
                 break;
             case R.id.female_item:
-                gameSurface.getGameState().chooseCharacter("female");
+                gameSurface.getRpgGameManager().getCurrentGameState().chooseCharacter("female");
                 break;
             case R.id.black_item:
-                gameSurface.getGameState().chooseColor("black");
+                gameSurface.getRpgGameManager().getCurrentGameState().chooseColor("black");
                 //textView.setBackgroundColor(Color.BLACK);
                 break;
             case R.id.white_item:
-                gameSurface.getGameState().chooseColor("white");
+                gameSurface.getRpgGameManager().getCurrentGameState().chooseColor("white");
                 //textView.setBackgroundColor(Color.WHITE);
                 break;
             case R.id.monospace_item:
-                gameSurface.getGameState().chooseFont("monospace");
+                gameSurface.getRpgGameManager().getCurrentGameState().chooseFont("monospace");
                 //textView.setTypeface(Typeface.MONOSPACE);
                 break;
             case R.id.sans_serif_item:
-                gameSurface.getGameState().chooseFont("sans-serif");
+                gameSurface.getRpgGameManager().getCurrentGameState().chooseFont("sans-serif");
                 //textView.setTypeface(Typeface.SANS_SERIF);
                 break;
             case R.id.exit_rpg_item:
