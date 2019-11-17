@@ -16,6 +16,7 @@ import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.model.Rpg.NpcCharacter;
 import uoft.csc207.games.model.Rpg.PlayerCharacter;
+import uoft.csc207.games.model.Rpg.RpgActivity;
 import uoft.csc207.games.model.Rpg.RpgGameState;
 
 /**
@@ -24,7 +25,6 @@ import uoft.csc207.games.model.Rpg.RpgGameState;
  * updated information
  */
 public class RPGGameManager {
-
     public PlayerCharacter getPlayerCharacter() {
         return playerCharacter;
     }
@@ -51,6 +51,10 @@ public class RPGGameManager {
 
     private boolean isGameEnded = false;
 
+    public PlayerProfile getCurrentPlayer() {
+        return currentPlayer;
+    }
+
     /**
      * A constructor of RPGGameManager class
      * @param currentContext a <class>Context</class> object for RPGGameManager retrieve system resource
@@ -58,11 +62,10 @@ public class RPGGameManager {
     public RPGGameManager(Context currentContext) {
         this.currentContext = currentContext;
         playerCharacter = new PlayerCharacter(BitmapFactory.decodeResource(currentContext.getResources(), usingCharacter), 200, 800);
-        nonPlayerCharacters = new ArrayList<NpcCharacter>();
+        nonPlayerCharacters = new ArrayList<>();
         nonPlayerCharacters.add( new NpcCharacter(BitmapFactory.decodeResource(currentContext.getResources(), hoodedNPCSprites), 500, 800));
         currentPlayer = ProfileManager.getProfileManager(currentContext).getCurrentPlayer();
-        currentGameState = new RpgGameState(currentPlayer);
-
+        currentGameState = (RpgGameState) currentPlayer.containsGame("16812");//new RpgGameState(currentPlayer);
     }
 
     /**
@@ -87,7 +90,6 @@ public class RPGGameManager {
         resultPaint.setTypeface(Typeface.DEFAULT_BOLD);
         resultPaint.setAntiAlias(true);
         resultPaint.setTextAlign(Paint.Align.CENTER);
-
     }
 
     private void initializeCharacterMap(){
@@ -104,7 +106,6 @@ public class RPGGameManager {
     public void setPlayerCharacterDestination(int x, int y){
         int movementVectorX = x - playerCharacter.getX();
         int movementVectorY = y - playerCharacter.getY();
-
 
         playerCharacter.setMovementVector(movementVectorX, movementVectorY);
         playerCharacter.setDestinationCoordinates(x, y);
@@ -129,17 +130,17 @@ public class RPGGameManager {
             Rect bounds = new Rect();
             resultPaint.getTextBounds(win, 0, win.length(), bounds);
             int x = canvas.getWidth() - bounds.width();
-            int y = canvas.getHeight()-bounds.height();
+            int y = canvas.getHeight() - bounds.height();
             canvas.drawText(win, x, y, resultPaint);
             isGameEnded = true;     //for phase 1, will just end when you talk to the one npc
             playerCharacter.resetCoordinates();
+            ((RpgActivity) currentContext).finishGame(0);
         }else {
             String score = "Score: " + currentGameState.getScore();
             String gold = "Gold: " + currentGameState.getGameCurrency();
             canvas.drawText(score, 40, 40, scorePaint);
             canvas.drawText(gold, 40, 80, scorePaint);
         }
-
         handleCustomization();
     }
 
@@ -152,11 +153,10 @@ public class RPGGameManager {
         }
         Bitmap currentBitmap = BitmapFactory.decodeResource(currentContext.getResources(), usingCharacter);
         playerCharacter.setWalkCycleImages(currentBitmap) ;
-
     }
+
     private boolean isIntercepted(){
         boolean isMet = false;
-
         for (NpcCharacter npc: nonPlayerCharacters){
             if ((Math.abs(npc.getX() - playerCharacter.getX()) < (npc.getWidth() / 2)) &&
                     (Math.abs(npc.getY() - playerCharacter.getY() ) < (npc.getHeight() / 2)) ){

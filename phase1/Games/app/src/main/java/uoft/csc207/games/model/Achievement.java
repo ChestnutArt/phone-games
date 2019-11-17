@@ -1,6 +1,8 @@
 package uoft.csc207.games.model;
 
-public class Achievement {
+import java.io.Serializable;
+
+public class Achievement implements Serializable {
     private String achievementName;
     private String description;
     private int scoreThreshold;

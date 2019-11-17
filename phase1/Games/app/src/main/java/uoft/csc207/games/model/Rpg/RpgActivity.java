@@ -19,12 +19,13 @@ import android.widget.TextView;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.activity.GameSelectActivity;
+import uoft.csc207.games.controller.ProfileManager;
 
 public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 
-   private GameSurface gameSurface;
-   private FrameLayout gameFrame;
-   private RelativeLayout widgetHolder;
+    private GameSurface gameSurface;
+    private FrameLayout gameFrame;
+    private RelativeLayout widgetHolder;
 
     /*public TextView getTextView() {
         return textView;
@@ -77,9 +78,18 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         inflater.inflate(R.menu.game_menu, popup.getMenu());
         popup.show();
     }
-    public void finishGame(){
+    public void finishGame(int delay){
+        //new CountDownTimer(delay, 1000) {
+        //      public void onFinish() {
+        //gameSurface.getRpgGameManager().getCurrentPlayer()
+        ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
+        gameSurface.getGameThread().setRunning(false);
         Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
         startActivity(myIntent);
+        // }
+        //  public void onTick(long millisUntilFinished) {
+        //}
+        //}.start();
     }
 
     @Override
@@ -108,7 +118,7 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
                 //textView.setTypeface(Typeface.SANS_SERIF);
                 break;
             case R.id.exit_rpg_item:
-                finishGame();
+                finishGame(0);
                 break;
         }
         return false;
@@ -165,3 +175,4 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         statsView.setText(s);
     }*/
 }
+
