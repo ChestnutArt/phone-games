@@ -84,7 +84,7 @@ public class RPGGameManager {
         initializeGameState();
         intializePaints();
         initializeCharacterMap();
-
+        //currentGameState.initializeAchievements();
     }
 
     /*
@@ -92,11 +92,11 @@ public class RPGGameManager {
      */
     private void initializeGameState(){
         currentGameState = (RpgGameState)currentPlayer.containsGame(IGameID.RPG);
-        if(currentGameState==null){
-            currentGameState= new RpgGameState(currentPlayer);
+        if(currentGameState == null){
+            currentGameState = new RpgGameState(currentPlayer);
             currentPlayer.addGame(currentGameState);
         }
-        currentGameState.initializeAchievements();
+        //currentGameState.initializeAchievements();
     }
 
     private void intializePaints(){
@@ -151,7 +151,6 @@ public class RPGGameManager {
     public void setPlayerCharacterDestination(int x, int y){
         int movementVectorX = x - playerCharacter.getX();
         int movementVectorY = y - playerCharacter.getY();
-
 
         playerCharacter.setMovementVector(movementVectorX, movementVectorY);
         playerCharacter.setDestinationCoordinates(x, y);

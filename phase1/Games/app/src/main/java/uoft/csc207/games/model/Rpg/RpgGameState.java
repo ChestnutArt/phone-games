@@ -16,14 +16,12 @@ public class RpgGameState extends Game {
     public final static String FONT_COLOR_BLACK = "black";
     public final static String FONT_COLOR_WHITE = "white";
     public final static String FONT_COLOR_RED = "red";
+
     public RpgGameState(PlayerProfile p){
         super(p);
         id = IGameID.RPG;
-        updateCurrency(5);
-        updateScore(5);
-        gameAchievements.add(new Achievement("test", "test description",
-                0, 0, false, false));
-        p.addGame(this);
+        updateCurrency(1);
+        initializeAchievements();
     }
 
     public RpgGameState() {
@@ -34,11 +32,9 @@ public class RpgGameState extends Game {
     }
     public void updateScore(Integer i){
         gameScore++;
-        owner.setScore(owner.getScore() + 1);
     }
     public void updateCurrency(Integer i){
         gameCurrency++;
-        owner.setCurrency(owner.getCurrency() + 1);
     }
     public void restart(){
 
@@ -57,9 +53,9 @@ public class RpgGameState extends Game {
         Achievement temp;
         temp = new Achievement("Adventurer", "Achieved score of 100 in the Rpg",
                 100, 0, true, false);
-        gameAchievements.add(temp);
-        temp = new Achievement("Opportunist", "Increased your money above 0",
+        availableAchievements.add(temp);
+        temp = new Achievement("Moving up in the world", "Increased your money above 0",
                 0, 1, false, true);
-        gameAchievements.add(temp);
+        availableAchievements.add(temp);
     }
 }

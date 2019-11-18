@@ -58,7 +58,7 @@ public class ScrollerGame extends Game implements Serializable {
         for (int i = 50; i < 15000; i = i * 2){
             String name = "Scored: " + i;
             String description = "Player reached this score.";
-            gameAchievements.add(new Achievement(name, description, i, 0, true, false));
+            availableAchievements.add(new Achievement(name, description, i, 0, true, false));
         }
     }
 }

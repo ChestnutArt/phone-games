@@ -37,4 +37,8 @@ public class Achievement implements Serializable {
         }
         return achieved;
     }
+
+    public String toString(){
+        return achievementName + ":\n" + description;
+    }
 }

@@ -8,16 +8,15 @@ public abstract class Game implements Serializable {
     protected Integer gameScore;
     protected Integer gameCurrency;
     /**
-     * Collection of all attainable achievements in this game.
+     * Collection of all achievements that are still available to be achieved in this game.
      */
-    protected ArrayList<Achievement> gameAchievements;
+    protected ArrayList<Achievement> availableAchievements;
+
+    protected ArrayList<Achievement> completedAchievements;
 
     protected String id;
     /**
-     * Binomial association should be fine here, and Game needs easy access to the current player anyways.
-     * Because the owner will always be the current player when a given Game instance is used to play
-     * the game, and because there's no way to set the owner of a game to something else, there should
-     * be no problem from a design perspective.
+     * Will be removing the PlayerProfile variable in a future push
      */
     protected PlayerProfile owner;
 
@@ -25,14 +24,20 @@ public abstract class Game implements Serializable {
     protected String character;
     protected String textFont;
 
+    //PlayerProfile parameter is obsolete, will remove soon -William
     public Game(PlayerProfile p){
         gameScore = 0;
         gameCurrency = 0;
         owner = p;
-        gameAchievements = new ArrayList<>();
+        availableAchievements = new ArrayList<>();
+        completedAchievements = new ArrayList<>();
     }
 
     public Game() {
+    }
+
+    public ArrayList<Achievement> getCompletedAchievements() {
+        return completedAchievements;
     }
 
     public abstract String getId();
@@ -68,8 +73,8 @@ public abstract class Game implements Serializable {
         return gameCurrency;
     }
 
-    public ArrayList<Achievement> getGameAchievements(){
-        return gameAchievements;
+    public ArrayList<Achievement> getAvailableAchievements(){
+        return availableAchievements;
     }
 
     public String getCharacter(){
@@ -95,11 +100,11 @@ public abstract class Game implements Serializable {
      * and/or gold update)
      */
     public void checkAchievements(){
-        Iterator<Achievement> itr = gameAchievements.iterator();
+        Iterator<Achievement> itr = availableAchievements.iterator();
         while(itr.hasNext()){
             Achievement curAchievement = itr.next();
             if (curAchievement.isAchieved(gameScore, gameCurrency)){
-                owner.addAchievement(curAchievement);
+                completedAchievements.add(curAchievement);
                 itr.remove();
             }
         }

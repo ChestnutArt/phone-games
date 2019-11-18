@@ -71,9 +71,9 @@ public class CardGame extends Game {
         Achievement achieve;
         achieve = new Achievement("Game's On", "Damage the opponent",
                 1, 0, true, false);
-        this.gameAchievements.add(achieve);
+        this.availableAchievements.add(achieve);
         achieve = new Achievement("Body Count", "Deal at least 3000 damage or win a duel",
                 7000, 0, true, false);
-        this.gameAchievements.add(achieve);
+        this.availableAchievements.add(achieve);
     }
 }

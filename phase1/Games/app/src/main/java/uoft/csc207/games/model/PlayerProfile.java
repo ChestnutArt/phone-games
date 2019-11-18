@@ -9,19 +9,16 @@ public class PlayerProfile implements Serializable {
     private String password;
     private ArrayList<Game> games;
 
-    private Integer playerCurrency;
+    /*private Integer playerCurrency;
     private Integer playerScore;
-    /**
-     * Achievements players has gotten across all games. Likewise for currency and score.
-     */
-    private ArrayList<Achievement> playerAchievements;
+    private ArrayList<Achievement> playerAchievements;*/
 
     public PlayerProfile(String id, String password) {
         this.id = id;
         this.password = password;
-        playerCurrency = 0;
+        /*playerCurrency = 0;
         playerScore = 0;
-        playerAchievements = new ArrayList<>();
+        playerAchievements = new ArrayList<>();*/
         games = new ArrayList<>();
     }
 
@@ -39,13 +36,21 @@ public class PlayerProfile implements Serializable {
         this.password = password;
     }
 
-    public int getCurrency(){ return playerCurrency; }
+    public int getCurrency(){
+        int totalCurrency = 0;
+        for (Game g: games){
+            totalCurrency += g.getGameCurrency();
+        }
+        return totalCurrency;
+    }
 
-    public void setCurrency(int newCurrency) { playerCurrency = newCurrency; }
-
-    public int getScore(){ return playerScore; }
-
-    public void setScore(int newScore) { playerScore = newScore; }
+    public int getScore(){
+        int totalScore = 0;
+        for (Game g: games){
+            totalScore += g.getScore();
+        }
+        return totalScore;
+    }
 
     /**
      * Gets all the player's current achievements. Originally created this for display purposes when
@@ -55,9 +60,11 @@ public class PlayerProfile implements Serializable {
      */
     public String getAchievements(){
         String result = "";
-        for (Achievement a: playerAchievements){
-            result += a.getAchievementName() + ":\n";
-            result += a.getDescription() + "\n";
+        for (Game g: games){
+            ArrayList<Achievement> achievements = g.getCompletedAchievements();
+            for (Achievement a: achievements){
+                result += a + "\n";
+            }
         }
         return result;
     }
@@ -86,13 +93,4 @@ public class PlayerProfile implements Serializable {
             games.add(newGame);
         }
     }
-
-    /**
-     *
-     * @param newAchievement The achievement to be added to the PlayerProfile's collection
-     */
-    public void addAchievement(Achievement newAchievement){
-        playerAchievements.add(newAchievement);
-    }
-
 }

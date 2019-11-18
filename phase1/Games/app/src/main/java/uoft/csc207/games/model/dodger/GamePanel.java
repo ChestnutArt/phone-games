@@ -229,8 +229,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             } else {
                 isOver = true;
                 Constants.SPEED = 0;
-                playerProfile.setScore(playerProfile.getScore() + player1.getScore());
-                playerProfile.setCurrency(playerProfile.getCurrency() + player1.Currency);
+                //William: Changing implementation of PlayerProfile, rather than storing a separate playerScore and playerCurrency
+                //it calculates these values by iterating through all its owned games. No longer a need
+                //to manually set them.
+                //playerProfile.setScore(playerProfile.getScore() + player1.getScore());
+                //playerProfile.setCurrency(playerProfile.getCurrency() + player1.Currency);
                 CurrentGame.updateScore(player1.getScore());
                 CurrentGame.updateCurrency(playerProfile.getCurrency());
                 if (CurrentGame.getScore() > CurrentGame.HighScore){
