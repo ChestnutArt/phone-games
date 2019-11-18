@@ -11,6 +11,7 @@ import android.widget.TextView;
 import uoft.csc207.games.model.CardGame.CardGame;
 import uoft.csc207.games.model.CardGame.DeckSelection;
 import uoft.csc207.games.model.Game;
+import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
@@ -85,7 +86,7 @@ public class GameSelectActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //save doesn't work for the game
                 Intent myIntent = new Intent(GameSelectActivity.this, RpgActivity.class);
-                Game game = currentProfile.containsGame("16812");
+                Game game = currentProfile.containsGame(IGameID.RPG);
                 if (game == null){
                     Game newRpgGame = new RpgGameState(currentProfile);
                     currentProfile.addGame(newRpgGame);

@@ -23,9 +23,9 @@ import uoft.csc207.games.controller.ProfileManager;
 
 public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 
-    private GameSurface gameSurface;
-    private FrameLayout gameFrame;
-    private RelativeLayout widgetHolder;
+   private GameSurface gameSurface;
+   private FrameLayout gameFrame;
+   private RelativeLayout widgetHolder;
 
     /*public TextView getTextView() {
         return textView;
@@ -105,16 +105,20 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseColor("black");
                 //textView.setBackgroundColor(Color.BLACK);
                 break;
+            case R.id.red_item:
+                gameSurface.getRpgGameManager().getCurrentGameState().chooseColor(RpgGameState.FONT_COLOR_RED);
+                gameSurface.getRpgGameManager().getScorePaint().setColor(Color.RED);
+                break;
             case R.id.white_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseColor("white");
                 //textView.setBackgroundColor(Color.WHITE);
                 break;
             case R.id.monospace_item:
-                gameSurface.getRpgGameManager().getCurrentGameState().chooseFont("monospace");
-                //textView.setTypeface(Typeface.MONOSPACE);
+                gameSurface.getRpgGameManager().getCurrentGameState().chooseFont(RpgGameState.FONT_TYPE_MONOSPACE);
+                gameSurface.getRpgGameManager().getResultPaint().setTypeface(Typeface.MONOSPACE);
                 break;
             case R.id.sans_serif_item:
-                gameSurface.getRpgGameManager().getCurrentGameState().chooseFont("sans-serif");
+                gameSurface.getRpgGameManager().getCurrentGameState().chooseFont(RpgGameState.FONT_TYPE_SANS_SERIF);
                 //textView.setTypeface(Typeface.SANS_SERIF);
                 break;
             case R.id.exit_rpg_item:
@@ -175,4 +179,3 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         statsView.setText(s);
     }*/
 }
-

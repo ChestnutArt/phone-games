@@ -13,6 +13,7 @@ import java.util.TreeMap;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.model.Rpg.NpcCharacter;
 import uoft.csc207.games.model.Rpg.PlayerCharacter;
@@ -25,6 +26,7 @@ import uoft.csc207.games.model.Rpg.RpgGameState;
  * updated information
  */
 public class RPGGameManager {
+
     public PlayerCharacter getPlayerCharacter() {
         return playerCharacter;
     }
@@ -55,6 +57,12 @@ public class RPGGameManager {
         return currentPlayer;
     }
 
+    public Paint getResultPaint() {
+        return resultPaint;
+    }
+    public Paint getScorePaint() {
+        return scorePaint;
+    }
     /**
      * A constructor of RPGGameManager class
      * @param currentContext a <class>Context</class> object for RPGGameManager retrieve system resource
@@ -65,23 +73,60 @@ public class RPGGameManager {
         nonPlayerCharacters = new ArrayList<>();
         nonPlayerCharacters.add( new NpcCharacter(BitmapFactory.decodeResource(currentContext.getResources(), hoodedNPCSprites), 500, 800));
         currentPlayer = ProfileManager.getProfileManager(currentContext).getCurrentPlayer();
-        currentGameState = (RpgGameState) currentPlayer.containsGame("16812");//new RpgGameState(currentPlayer);
+        currentGameState = new RpgGameState(currentPlayer);
+
     }
 
     /**
      * Initialize all required resource for RPGGame to start up
      */
     public void initialize(){
+        initializeGameState();
         intializePaints();
         initializeCharacterMap();
+
+    }
+
+    /*
+     * If PlayerProfile contains a GameState for this game,
+     */
+    private void initializeGameState(){
+        currentGameState = (RpgGameState)currentPlayer.containsGame(IGameID.RPG);
+        if(currentGameState==null){
+            currentGameState= new RpgGameState(currentPlayer);
+            currentPlayer.addGame(currentGameState);
+        }
         currentGameState.initializeAchievements();
     }
 
     private void intializePaints(){
         //configure scorePaint
-        scorePaint.setColor(Color.WHITE);
+
+        if(currentGameState.getColor() != null){
+            if(currentGameState.getColor().equals(RpgGameState.FONT_COLOR_RED)){
+                scorePaint.setColor(Color.RED);
+            }else if (currentGameState.getColor().equals(RpgGameState.FONT_COLOR_BLACK)){
+                scorePaint.setColor(Color.BLACK);
+            }else {
+                scorePaint.setColor(Color.WHITE);
+            }
+        }else {
+            scorePaint.setColor(Color.WHITE);
+        }
         scorePaint.setTextSize(50);
-        scorePaint.setTypeface(Typeface.DEFAULT_BOLD);
+        if(currentGameState.getFont() != null){
+            if(currentGameState.getFont().equals(RpgGameState.FONT_TYPE_MONOSPACE)){
+                scorePaint.setTypeface(Typeface.MONOSPACE);
+            }else if (currentGameState.getFont().equals(RpgGameState.FONT_TYPE_SANS_SERIF)){
+                scorePaint.setTypeface(Typeface.SANS_SERIF);
+            }else {
+                scorePaint.setTypeface(Typeface.DEFAULT_BOLD);
+            }
+
+        }else{
+            scorePaint.setTypeface(Typeface.DEFAULT_BOLD);
+        }
+
         scorePaint.setAntiAlias(true);
 
         //configure resultPaint
@@ -107,6 +152,7 @@ public class RPGGameManager {
         int movementVectorX = x - playerCharacter.getX();
         int movementVectorY = y - playerCharacter.getY();
 
+
         playerCharacter.setMovementVector(movementVectorX, movementVectorY);
         playerCharacter.setDestinationCoordinates(x, y);
     }
@@ -122,9 +168,9 @@ public class RPGGameManager {
             currentGameState.updateScore(1);
             currentGameState.checkAchievements();
             String score = "Score: " + currentGameState.getScore();
-            String gold = "Gold: " + currentGameState.getGameCurrency();
+            String gold = "Gold:  " + currentGameState.getGameCurrency();
             canvas.drawText(score, 40, 40, scorePaint);
-            canvas.drawText(gold, 40, 80, scorePaint);
+            canvas.drawText(gold, 40, 120, scorePaint);
 
             String win = "You Won!";
             Rect bounds = new Rect();
@@ -137,10 +183,11 @@ public class RPGGameManager {
             ((RpgActivity) currentContext).finishGame(0);
         }else {
             String score = "Score: " + currentGameState.getScore();
-            String gold = "Gold: " + currentGameState.getGameCurrency();
+            String gold = "Gold:  " + currentGameState.getGameCurrency();
             canvas.drawText(score, 40, 40, scorePaint);
-            canvas.drawText(gold, 40, 80, scorePaint);
+            canvas.drawText(gold, 40, 120, scorePaint);
         }
+
         handleCustomization();
     }
 
@@ -153,10 +200,11 @@ public class RPGGameManager {
         }
         Bitmap currentBitmap = BitmapFactory.decodeResource(currentContext.getResources(), usingCharacter);
         playerCharacter.setWalkCycleImages(currentBitmap) ;
-    }
 
+    }
     private boolean isIntercepted(){
         boolean isMet = false;
+
         for (NpcCharacter npc: nonPlayerCharacters){
             if ((Math.abs(npc.getX() - playerCharacter.getX()) < (npc.getWidth() / 2)) &&
                     (Math.abs(npc.getY() - playerCharacter.getY() ) < (npc.getHeight() / 2)) ){

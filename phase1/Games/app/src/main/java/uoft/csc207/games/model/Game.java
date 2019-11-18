@@ -1,9 +1,10 @@
 package uoft.csc207.games.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public abstract class Game {
+public abstract class Game implements Serializable {
     protected Integer gameScore;
     protected Integer gameCurrency;
     /**
@@ -29,6 +30,9 @@ public abstract class Game {
         gameCurrency = 0;
         owner = p;
         gameAchievements = new ArrayList<>();
+    }
+
+    public Game() {
     }
 
     public abstract String getId();
