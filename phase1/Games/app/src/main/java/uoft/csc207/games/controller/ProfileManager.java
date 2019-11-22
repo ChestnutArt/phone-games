@@ -13,6 +13,25 @@ import java.util.TreeMap;
 
 import uoft.csc207.games.model.PlayerProfile;
 
+/**
+ * This class manages game players' profile, such as login name, password and the like. It also stores
+ * status of each game that a player plaid. The current version of this game app is designed for
+ * off-line play. All profiles are stored on a player's device.
+ * It provides functions to create and save a player's profile. To avoid a profile has multiple
+ * copies, this class is implemented as a singleton pattern. that has following advantages:
+ * 1) Guarantee a single copy of a player profile is referenced, updated within the app; implicates
+ *    a better data integrity
+ * 2) Provide reliable login function
+ * 3) Save run-time memory, because of single object. it's important for an app running on portable
+ *    device that has limited amount of memory
+ * This class also hides profile storage location from the rest of app. In the current version,
+ * profiles are stored locally; In a future version, profiles can be stored on a remote location,
+ * such as database server in cloud. The complexity of retrieving/storing profiles from/to a remote
+ * location is transparent to other components, that use functions of this class.
+ *
+ * @author group 0630
+ * @version 1.0
+ */
 public class ProfileManager {
     /*
         IMPORTANT: PLEASE DON'T CHANGE ANYTHING IN THIS CLASS. IF YOU THINK THERE'S AN ISSUE, CONTACT
@@ -29,9 +48,11 @@ public class ProfileManager {
         return appContext;
     }
 
+/*
     public void setAppContext(Context appContext) {
         this.appContext = appContext;
     }
+*/
 
     private Context appContext;
 
@@ -46,6 +67,14 @@ public class ProfileManager {
     private PlayerProfile currentPlayer;
 
     private static ProfileManager singletonProfileManager;
+
+    /**
+     * Retrieve a singleton ProfileManager object for a caller
+     * @param appContext a Context object to provide system resource for the app
+     * @return a singleton ProfileManager object
+     *
+     * @since 1.0
+     */
     public static ProfileManager getProfileManager(Context appContext){
         if(singletonProfileManager == null){
             singletonProfileManager = new ProfileManager();
@@ -68,8 +97,12 @@ public class ProfileManager {
     }
 
 
+    /**
+     * Add a new profile to the profile list
+     * @param profile a PlayerProfile object
+     */
     public void createProfile(PlayerProfile profile){
-        boolean profileExist = false;
+        //boolean profileExist = false;
         if(profileMap.get(profile.getId()) != null){
             profileMap.replace(profile.getId(), profile);
         }else {
@@ -77,6 +110,8 @@ public class ProfileManager {
         }
         saveProfiles();
     }
+
+
     private void loadProfiles(){
         File dir2store = getAppContext().getFilesDir();
         String filePath = dir2store.getPath() + File.pathSeparator + NAME_OF_PROFILE_STORE;
@@ -101,6 +136,9 @@ public class ProfileManager {
         }
     }
 
+    /**
+     * Serialize all profiles to a system file
+     */
     public void saveProfiles(){
         File dir2store = getAppContext().getFilesDir();
         String filePath = dir2store.getPath() + File.pathSeparator + NAME_OF_PROFILE_STORE;
