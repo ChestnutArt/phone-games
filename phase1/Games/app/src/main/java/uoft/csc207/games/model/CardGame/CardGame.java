@@ -9,8 +9,8 @@ public class CardGame extends Game {
     private int currentScore = 0;
     private static PlayerProfile playerProfile;
 
-    public CardGame(PlayerProfile curr_player) {
-        super(curr_player);
+    public CardGame() {
+        super();
         this.id = "257846";
     }
 

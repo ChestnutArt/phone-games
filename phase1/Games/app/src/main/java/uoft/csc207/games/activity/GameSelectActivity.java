@@ -67,11 +67,8 @@ public class GameSelectActivity extends AppCompatActivity {
         cardSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // jump to the card game activity here
-                // check to see if the account already has an instance of the card game
-                // and use that instance's game , otherwise create a new one and add it to the PlayerProfile
                 if (!(currentProfile.containsGame("257846") instanceof CardGame)) {
-                    currentProfile.addGame(new CardGame(currentProfile));
+                    currentProfile.addGame(new CardGame());
                 }
                 CardGame.setPlayerProfile(currentProfile);
                 Intent cardIntent = new Intent(GameSelectActivity.this, DeckSelection.class);
@@ -84,11 +81,11 @@ public class GameSelectActivity extends AppCompatActivity {
         rpgSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //save doesn't work for the game
                 Intent myIntent = new Intent(GameSelectActivity.this, RpgActivity.class);
                 Game game = currentProfile.containsGame(IGameID.RPG);
                 if (game == null){
-                    Game newRpgGame = new RpgGameState(currentProfile);
+                    //dependency injection design
+                    Game newRpgGame = new RpgGameState();
                     currentProfile.addGame(newRpgGame);
                 }
                 startActivity(myIntent);

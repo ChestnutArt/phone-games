@@ -11,29 +11,25 @@ public abstract class Game implements Serializable {
      * Collection of all achievements that are still available to be achieved in this game.
      */
     protected ArrayList<Achievement> availableAchievements;
-
     protected ArrayList<Achievement> completedAchievements;
 
     protected String id;
     /**
      * Will be removing the PlayerProfile variable in a future push
      */
-    protected PlayerProfile owner;
+    //protected PlayerProfile owner;
 
     protected String color;
     protected String character;
     protected String textFont;
 
     //PlayerProfile parameter is obsolete, will remove soon -William
-    public Game(PlayerProfile p){
+    public Game(){
         gameScore = 0;
         gameCurrency = 0;
-        owner = p;
+        //owner = p;
         availableAchievements = new ArrayList<>();
         completedAchievements = new ArrayList<>();
-    }
-
-    public Game() {
     }
 
     public ArrayList<Achievement> getCompletedAchievements() {
@@ -73,9 +69,7 @@ public abstract class Game implements Serializable {
         return gameCurrency;
     }
 
-    public ArrayList<Achievement> getAvailableAchievements(){
-        return availableAchievements;
-    }
+
 
     public String getCharacter(){
         return character;
@@ -94,10 +88,8 @@ public abstract class Game implements Serializable {
     public abstract void initializeAchievements();
 
     /**
-     * Checks if any of the achievement conditions are satisfied. Adds them to the PlayerProfile's achievement
-     * ArrayList and removes it from the gameAchievements ArrayList so it doesn't need to be checked
-     * again. Ideally would call this method whenever you update the game state (specifically when score
-     * and/or gold update)
+     * Checks if any of the availableAchievements are satisfied, and moves any that are to the
+     * completedAchievements array list so it's no longer checked.
      */
     public void checkAchievements(){
         Iterator<Achievement> itr = availableAchievements.iterator();

@@ -247,7 +247,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private void InitCurrentGame(){
         ScrollerGame s = (ScrollerGame)playerProfile.containsGame(playerProfile.getId() + ": Scroller");
         if (s == null){
-            s = new ScrollerGame(playerProfile);
+            s = new ScrollerGame();
             playerProfile.addGame(s);
         }
         CurrentGame = s;

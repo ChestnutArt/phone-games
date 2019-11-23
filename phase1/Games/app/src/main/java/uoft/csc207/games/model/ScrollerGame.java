@@ -3,17 +3,17 @@ package uoft.csc207.games.model;
 
 import java.io.Serializable;
 
-public class ScrollerGame extends Game implements Serializable {
+public class ScrollerGame extends Game implements Serializable{
 
 
     public Integer HighScore;
 
-    public ScrollerGame(PlayerProfile p){
-        super(p);
+    public ScrollerGame(){
+        super();
         initializeAchievements();
-        this.id = p.getId() + ": Scroller";
-        this.owner = p;
-        gameCurrency = p.getCurrency();
+        this.id = IGameID.DODGER;
+        //this.owner = p;
+        //gameCurrency = p.getCurrency();
         HighScore = 0;
     }
 

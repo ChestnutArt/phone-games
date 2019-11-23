@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.TreeMap;
 
+import uoft.csc207.games.model.Game;
 import uoft.csc207.games.model.PlayerProfile;
 
 /**
@@ -95,7 +96,6 @@ public class ProfileManager {
     public PlayerProfile getProfileById(String id){
         return profileMap.get(id);
     }
-
 
     /**
      * Add a new profile to the profile list

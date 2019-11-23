@@ -17,14 +17,11 @@ public class RpgGameState extends Game {
     public final static String FONT_COLOR_WHITE = "white";
     public final static String FONT_COLOR_RED = "red";
 
-    public RpgGameState(PlayerProfile p){
-        super(p);
+    public RpgGameState(){
+        super();
         id = IGameID.RPG;
         updateCurrency(1);
         initializeAchievements();
-    }
-
-    public RpgGameState() {
     }
 
     public String getId(){

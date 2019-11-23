@@ -132,7 +132,6 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     }
 
     private Button createButton(RelativeLayout widgetHolder) {
-
         Button pauseResumeBtn = new Button(this);
         pauseResumeBtn.setText(R.string.rpg_setting);
 

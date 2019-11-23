@@ -26,11 +26,6 @@ import uoft.csc207.games.model.Rpg.RpgGameState;
  * updated information
  */
 public class RPGGameManager {
-
-    public PlayerCharacter getPlayerCharacter() {
-        return playerCharacter;
-    }
-
     private PlayerCharacter playerCharacter;
     private ArrayList<NpcCharacter> nonPlayerCharacters;
 
@@ -73,8 +68,11 @@ public class RPGGameManager {
         nonPlayerCharacters = new ArrayList<>();
         nonPlayerCharacters.add( new NpcCharacter(BitmapFactory.decodeResource(currentContext.getResources(), hoodedNPCSprites), 500, 800));
         currentPlayer = ProfileManager.getProfileManager(currentContext).getCurrentPlayer();
-        currentGameState = new RpgGameState(currentPlayer);
+        currentGameState = new RpgGameState();
+    }
 
+    public PlayerCharacter getPlayerCharacter() {
+        return playerCharacter;
     }
 
     /**
@@ -82,9 +80,8 @@ public class RPGGameManager {
      */
     public void initialize(){
         initializeGameState();
-        intializePaints();
+        initializePaints();
         initializeCharacterMap();
-        //currentGameState.initializeAchievements();
     }
 
     /*
@@ -93,13 +90,12 @@ public class RPGGameManager {
     private void initializeGameState(){
         currentGameState = (RpgGameState)currentPlayer.containsGame(IGameID.RPG);
         if(currentGameState == null){
-            currentGameState = new RpgGameState(currentPlayer);
+            currentGameState = new RpgGameState();
             currentPlayer.addGame(currentGameState);
         }
-        //currentGameState.initializeAchievements();
     }
 
-    private void intializePaints(){
+    private void initializePaints(){
         //configure scorePaint
 
         if(currentGameState.getColor() != null){
