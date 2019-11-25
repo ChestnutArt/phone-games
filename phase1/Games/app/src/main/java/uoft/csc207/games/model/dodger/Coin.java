@@ -7,6 +7,9 @@ import android.graphics.Rect;
 
 import java.util.ArrayList;
 
+import uoft.csc207.games.model.Game;
+import uoft.csc207.games.model.ScrollerGame;
+
 public class Coin implements GameObject{
 
     private ArrayList<Rect> coins;
@@ -50,12 +53,12 @@ public class Coin implements GameObject{
     }
 
 
-    public void CollisionCheck(scrollerCharacter s){
+    public void CollisionCheck(scrollerCharacter s, ScrollerGame g){
         Rect pRect = s.getRect();
         for (Rect r: coins) {
             if (r.intersect(pRect)) {
                 coins.remove(r);
-                s.Currency += 2;
+                g.updateCurrency(g.getGameCurrency() + 2);
             }
         }
     }

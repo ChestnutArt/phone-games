@@ -6,15 +6,15 @@ import java.io.Serializable;
 public class ScrollerGame extends Game implements Serializable{
 
 
-    public Integer HighScore;
 
     public ScrollerGame(){
         super();
         initializeAchievements();
         this.id = IGameID.DODGER;
-        //this.owner = p;
-        //gameCurrency = p.getCurrency();
-        HighScore = 0;
+        color = null;
+        character = null;
+        textFont = null;
+
     }
 
 
@@ -34,6 +34,10 @@ public class ScrollerGame extends Game implements Serializable{
         this.gameCurrency = i;
     }
 
+    public Integer getCurrency(){
+        return this.gameCurrency;
+    }
+
 
     public int getScore(){
         return this.gameScore;
@@ -48,6 +52,7 @@ public class ScrollerGame extends Game implements Serializable{
     public void chooseCharacter(String character){this.character = character;}
 
     public void chooseFont(String font){this.textFont = font;}
+
 
     public void chooseColor(String color){this.color = color;}
 

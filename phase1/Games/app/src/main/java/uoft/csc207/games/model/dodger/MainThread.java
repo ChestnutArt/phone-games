@@ -10,16 +10,12 @@ public class MainThread extends Thread{
     private boolean running;
     public static Canvas canvas;
 
-    public void setRunning(boolean running){
-        this.running = running;
-    }
-
-
 
     public MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel){
         super();
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;
+        this.running = true;
     }
 
      @Override
@@ -64,11 +60,15 @@ public class MainThread extends Thread{
              }
          }
          try {
-             sleep(6000);
+             sleep(3500);
          } catch (Exception e){
              e.printStackTrace();
          }
-         Constants.activity.finish();
+         gamePanel.getScrollerActivity().finishGame();
      }
+    public void setRunning(boolean running){
+        this.running = running;
+    }
+
 
 }

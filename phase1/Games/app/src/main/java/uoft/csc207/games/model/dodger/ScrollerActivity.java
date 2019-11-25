@@ -1,12 +1,18 @@
 package uoft.csc207.games.model.dodger;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
 
+import uoft.csc207.games.activity.GameSelectActivity;
+import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.Rpg.RpgActivity;
+
 public class ScrollerActivity extends Activity {
+    private GamePanel scrollerPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +24,16 @@ public class ScrollerActivity extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(d);
         Constants.SCREEN_HEIGHT = d.heightPixels;
         Constants.SCREEN_WIDTH = d.widthPixels;
-        setContentView(new GamePanel(Constants.CURRENT_CONTEXT));
+        scrollerPanel = new GamePanel(this);
+        setContentView(scrollerPanel);
         Constants.activity = this;
+    }
+
+    public void finishGame() {
+        ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
+        MainThread t = (MainThread)scrollerPanel.getMainThread();
+        t.setRunning(false);
+        Intent myIntent = new Intent(ScrollerActivity.this, GameSelectActivity.class);
+        startActivity(myIntent);
     }
 }
