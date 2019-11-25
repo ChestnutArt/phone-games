@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class NpcCharacter extends GameObject {
     private static final int UP_ROW = 0;
@@ -19,13 +21,18 @@ public class NpcCharacter extends GameObject {
     private Bitmap left;
     private Bitmap right;
 
-    private ArrayList<String> dialogue;
+    /**
+     *
+     */
+    private boolean talkedToAlready = false;
+    private List<String> dialogue;
+    private String afterTalkedToText;
+    private Iterator<String> dialogueIterator;
 
     private GameSurface gameSurface;
 
-    public NpcCharacter(GameSurface gS, Bitmap image, int x, int y, ArrayList<String> dialogue){
+    public NpcCharacter(Bitmap image, int x, int y, List<String> dialogue, String talkedToText){
         super(image, 21, 13, x, y);
-        this.gameSurface = gS;
         rowUsing = LEFT_ROW;    //for now, will be decided by a parameter later
 
         this.up = this.createSubImageAt(UP_ROW, COL_USING);
@@ -34,21 +41,23 @@ public class NpcCharacter extends GameObject {
         this.right = this.createSubImageAt(RIGHT_ROW, COL_USING);
 
         this.dialogue = dialogue;
+        afterTalkedToText = talkedToText;
+        dialogueIterator = dialogue.iterator();
     }
 
-    public NpcCharacter(Bitmap image, int x, int y){
-        super(image, 21, 13, x, y);
-        //this.gameSurface = gS;
-        rowUsing = LEFT_ROW;    //for now, will be decided by a parameter later
-
-        this.up = this.createSubImageAt(UP_ROW, COL_USING);
-        this.left = this.createSubImageAt(LEFT_ROW, COL_USING);
-        this.down = this.createSubImageAt(DOWN_ROW, COL_USING);
-        this.right = this.createSubImageAt(RIGHT_ROW, COL_USING);
-
-        //this.dialogue = dialogue;
+    public boolean hasTalkedToAlready(){
+        return talkedToAlready;
     }
-    public ArrayList<String> getDialogue(){
+
+    public void setTalkedToAlready(boolean b){
+        talkedToAlready = b;
+    }
+
+    public String getAfterTalkedToText(){
+        return afterTalkedToText;
+    }
+
+    public List<String> getDialogue(){
         return dialogue;
     }
 
@@ -75,6 +84,16 @@ public class NpcCharacter extends GameObject {
         /*
             For future implementation where NPC turns to face the character
          */
+    }
+    public boolean hasNextDialogue(){
+        return dialogueIterator.hasNext();
+    }
+    public String getNextDialogue(){
+        String result = null;
+        if (dialogueIterator.hasNext()){
+            result = dialogueIterator.next();
+        }
+        return result;
     }
 
     public void draw(Canvas canvas){

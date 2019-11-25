@@ -1,6 +1,7 @@
 package uoft.csc207.games.model.Rpg;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 
 public abstract class GameObject {
     protected Bitmap image;         //image of the entire sprite sheet
@@ -37,11 +38,29 @@ public abstract class GameObject {
         return subImage;
     }
 
+    /**
+     *
+     * @return x coordinate
+     */
     public int getX(){ return this.x; }
 
+    /**
+     *
+     * @return y coordinate
+     */
     public int getY(){ return this.y; }
 
+    /**
+     *
+     * @return image height
+     */
     public int getHeight(){ return singleHeight; }
 
+    /**
+     *
+     * @return image width
+     */
     public int getWidth(){ return singleWidth; }
+
+    public abstract void draw(Canvas canvas);
 }

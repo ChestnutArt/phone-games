@@ -1,12 +1,15 @@
 package uoft.csc207.games.model.Rpg;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+
+import java.util.Iterator;
 
 import uoft.csc207.games.controller.rpg.RPGGameManager;
 
@@ -25,7 +28,9 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         getHolder().addCallback(this);
         gameThread = new GameThread(this, getHolder());
         rpgActivity = (RpgActivity)context;
-        rpgGameManager = new RPGGameManager(context);
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        rpgGameManager = new RPGGameManager(context, width, height);
         setFocusable(true);
     }
 
@@ -34,7 +39,9 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void update(){
-        rpgGameManager.update();
+        if (!rpgGameManager.isProcessingText()){
+            rpgGameManager.update();
+        }
     }
 
     @Override
@@ -46,11 +53,20 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
             rpgActivity.finishGame(10000);
         }
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN){
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-            rpgGameManager.setPlayerCharacterDestination(x, y);
-            return true;
+        if (rpgGameManager.isProcessingText()){
+            if(event.getAction() == MotionEvent.ACTION_DOWN){
+                rpgGameManager.update();
+            }
+        } else {
+            if (event.getAction() == MotionEvent.ACTION_DOWN){
+                int x = (int) event.getX() - (rpgGameManager.getPlayerCharacter().getWidth() / 2);
+                int y = (int) event.getY() - (rpgGameManager.getPlayerCharacter().getHeight() / 2);
+                //if the attempted movement is within bounds, allow the PlayerCharacter to move there
+                if (rpgGameManager.isInGameSpace(y)){
+                    rpgGameManager.setPlayerCharacterDestination(x, y);
+                }
+                return true;
+            }
         }
         return false;
     }
