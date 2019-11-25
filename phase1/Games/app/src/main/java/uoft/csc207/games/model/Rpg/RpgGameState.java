@@ -20,7 +20,7 @@ public class RpgGameState extends Game {
     public RpgGameState(){
         super();
         id = IGameID.RPG;
-        updateCurrency(1);
+        //updateCurrency(1);
         initializeAchievements();
     }
 
@@ -28,7 +28,7 @@ public class RpgGameState extends Game {
         return id;
     }
     public void updateScore(Integer i){
-        gameScore++;
+        gameScore += 50;
     }
     public void updateCurrency(Integer i){
         gameCurrency++;

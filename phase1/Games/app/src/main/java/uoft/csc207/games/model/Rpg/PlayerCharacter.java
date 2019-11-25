@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import uoft.csc207.games.controller.rpg.RPGGameManager;
+
 public class PlayerCharacter extends GameObject{
     private static final int ROW_BOTTOM_TO_TOP = 8;
     private static final int ROW_RIGHT_TO_LEFT = 9;
@@ -156,17 +158,9 @@ public class PlayerCharacter extends GameObject{
                 this.rowUsing = ROW_BOTTOM_TO_TOP;
             }
         }
-        /*NpcCharacter interceptedNpc = isIntercepted();
-        if (interceptedNpc != null){
-            movingVectorX = 0;
-            movingVectorY = 0;
-            destinationX = x;
-            destinationY = y;
-            gameSurface.setInterceptedNpc(interceptedNpc);
-        }*/
     }
 
-    public void resetCoordinates(){
+    public void stopMoving(){
         movingVectorX = 0;
         movingVectorY = 0;
         destinationX = x;
@@ -190,15 +184,18 @@ public class PlayerCharacter extends GameObject{
         destinationX = newX;
         destinationY = newY;
     }
- /*   public NpcCharacter isIntercepted(){
-        NpcCharacter result = null;
-        ArrayList<NpcCharacter> npcList = this.gameSurface.getNpcs();
-        for (NpcCharacter npc: npcList){
-            if ((Math.abs(npc.x - this.x) < (npc.singleWidth / 2)) &&
-                    (Math.abs(npc.y - this.y ) < (npc.singleHeight / 2)) && result == null){
-                result = npc;
+
+    /*public GameObject isIntercepted(){
+        GameObject result = null;
+        boolean found = false;
+        ArrayList<GameObject> gameObjects = this.gameSurface.getRpgGameManager().getGameObjects();
+        for (GameObject gameObject: gameObjects){
+            if (!found && (Math.abs(gameObject.x - this.x) < (gameObject.singleWidth / 2)) &&
+                    (Math.abs(gameObject.y - this.y ) < (gameObject.singleHeight / 2)) && result == null){
+                result = gameObject;
+                found = true;
             }
         }
-        return result ;
-    }*/
+        return result;
+    } */
 }
