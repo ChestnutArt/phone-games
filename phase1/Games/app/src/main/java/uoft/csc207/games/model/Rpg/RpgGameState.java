@@ -48,10 +48,10 @@ public class RpgGameState extends Game {
 
     public void initializeAchievements(){
         Achievement temp;
-        temp = new Achievement("Adventurer", "Achieved score of 100 in the Rpg",
+        temp = new Achievement("Adventurer", "\tAchieved score of 100 in the Rpg",
                 100, 0, true, false);
         availableAchievements.add(temp);
-        temp = new Achievement("Moving up in the world", "Increased your money above 0",
+        temp = new Achievement("Moving up in the world", "\tIncreased your money above 0",
                 0, 1, false, true);
         availableAchievements.add(temp);
     }

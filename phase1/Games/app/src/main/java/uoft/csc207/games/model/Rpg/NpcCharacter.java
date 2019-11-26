@@ -8,10 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class NpcCharacter extends GameObject {
-    private static final int UP_ROW = 0;
-    private static final int LEFT_ROW = 1;
-    private static final int DOWN_ROW = 2;
-    private static final int RIGHT_ROW = 3;
+    public static final int UP_ROW = 0;
+    public static final int LEFT_ROW = 1;
+    public static final int DOWN_ROW = 2;
+    public static final int RIGHT_ROW = 3;
 
     private static int COL_USING = 0;
     private int rowUsing;
@@ -31,9 +31,10 @@ public class NpcCharacter extends GameObject {
 
     private GameSurface gameSurface;
 
-    public NpcCharacter(Bitmap image, int x, int y, List<String> dialogue, String talkedToText){
+    public NpcCharacter(Bitmap image, int x, int y, List<String> dialogue, String talkedToText, int direction){
         super(image, 21, 13, x, y);
-        rowUsing = LEFT_ROW;    //for now, will be decided by a parameter later
+        //rowUsing = LEFT_ROW;    //for now, will be decided by a parameter later
+        rowUsing = direction;
 
         this.up = this.createSubImageAt(UP_ROW, COL_USING);
         this.left = this.createSubImageAt(LEFT_ROW, COL_USING);
@@ -92,12 +93,13 @@ public class NpcCharacter extends GameObject {
         String result = null;
         if (dialogueIterator.hasNext()){
             result = dialogueIterator.next();
+
         }
         return result;
     }
 
     public void draw(Canvas canvas){
         //Bitmap bitmap = left;
-        canvas.drawBitmap(left, x, y, null);
+        canvas.drawBitmap(getCurrentBitmap(), x - (singleWidth / 2), y - (singleWidth / 2), null);
     }
 }

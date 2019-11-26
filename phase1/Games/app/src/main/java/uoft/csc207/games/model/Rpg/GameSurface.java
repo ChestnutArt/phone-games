@@ -46,21 +46,14 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
-        /*
-            If game has ended, exit after a delay of 10 seconds
-         */
-        if (rpgGameManager.isGameEnded()){
-            rpgActivity.finishGame(10000);
-        }
-
         if (rpgGameManager.isProcessingText()){
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 rpgGameManager.update();
             }
         } else {
             if (event.getAction() == MotionEvent.ACTION_DOWN){
-                int x = (int) event.getX() - (rpgGameManager.getPlayerCharacter().getWidth() / 2);
-                int y = (int) event.getY() - (rpgGameManager.getPlayerCharacter().getHeight() / 2);
+                int x = (int) event.getX(); //- (rpgGameManager.getPlayerCharacter().getWidth() / 2);
+                int y = (int) event.getY(); //- (rpgGameManager.getPlayerCharacter().getHeight() / 2);
                 //if the attempted movement is within bounds, allow the PlayerCharacter to move there
                 if (rpgGameManager.isInGameSpace(y)){
                     rpgGameManager.setPlayerCharacterDestination(x, y);

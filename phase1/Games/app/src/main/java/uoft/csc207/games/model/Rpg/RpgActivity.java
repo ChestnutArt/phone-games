@@ -45,9 +45,6 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         gameFrame = new FrameLayout(this);
         widgetHolder = new RelativeLayout(this);
         settingsBtn = createButton(widgetHolder);
-        //textView = createTextView(widgetHolder);
-        //statsView = createScoreView(widgetHolder);
-        //statsView.setText("\nScore: 0   \nGold: 0");
 
         // Set fullscreen
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -78,18 +75,11 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         inflater.inflate(R.menu.game_menu, popup.getMenu());
         popup.show();
     }
-    public void finishGame(int delay){
-        //new CountDownTimer(delay, 1000) {
-        //      public void onFinish() {
-        //gameSurface.getRpgGameManager().getCurrentPlayer()
+    public void finishGame(){
         ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
         gameSurface.getGameThread().setRunning(false);
         Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
         startActivity(myIntent);
-        // }
-        //  public void onTick(long millisUntilFinished) {
-        //}
-        //}.start();
     }
 
     @Override
@@ -125,7 +115,7 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
                 //textView.setTypeface(Typeface.SANS_SERIF);
                 break;
             case R.id.exit_rpg_item:
-                finishGame(0);
+                finishGame();
                 break;
         }
         return false;

@@ -30,36 +30,22 @@ public class PlayerCharacter extends GameObject{
     private int destinationX;
     private int destinationY;
 
+    private boolean isLeftBlocked = false;
+    private boolean isRightBlocked = false;
+    private boolean isTopBlocked = false;
+    private boolean isBotBlocked = false;
+    private boolean movingRight = false;
+    private boolean movingLeft = false;
+    private boolean movingTop = false;
+    private boolean movingBot = false;
+
     private int rowUsing;   //sprite sheet row
     private int colUsing;      //sprite sheet column
 
     private long lastDrawNanoTime;
 
-    private GameSurface gameSurface;
-
-    public PlayerCharacter(GameSurface gS, Bitmap image, int x, int y){
-        super(image,21, 13, x, y);
-        this.gameSurface = gS;
-
-        movingVectorX = 0;
-        movingVectorY = 0;
-        destinationX = x;
-        destinationY = y;
-        rowUsing = ROW_TOP_TO_BOTTOM;
-        colUsing = 0;
-        lastDrawNanoTime = -1;
-
-        leftToRightImages = new Bitmap[NUM_MOVEMENTS];
-        rightToLeftImages = new Bitmap[NUM_MOVEMENTS];
-        topToBottomImages = new Bitmap[NUM_MOVEMENTS];
-        bottomToTopImages = new Bitmap[NUM_MOVEMENTS];
-
-        setWalkCycleImages(image);
-    }
-
     public PlayerCharacter(Bitmap image, int x, int y){
         super(image,21, 13, x, y);
-        //this.gameSurface = gS;
 
         movingVectorX = 0;
         movingVectorY = 0;
@@ -76,6 +62,32 @@ public class PlayerCharacter extends GameObject{
 
         setWalkCycleImages(image);
     }
+    public boolean isLeftBlocked() {
+        return isLeftBlocked;
+    }
+    public void setLeftBlocked(boolean leftBlocked) {
+        isLeftBlocked = leftBlocked;
+    }
+    public boolean isRightBlocked() {
+        return isRightBlocked;
+    }
+    public void setRightBlocked(boolean rightBlocked) {
+        isRightBlocked = rightBlocked;
+    }
+    public boolean isTopBlocked() {
+        return isTopBlocked;
+    }
+    public void setTopBlocked(boolean topBlocked) {
+        isTopBlocked = topBlocked;
+    }
+    public boolean isBotBlocked() {
+        return isBotBlocked;
+    }
+    public void setBotBlocked(boolean botBlocked) {
+        isBotBlocked = botBlocked;
+    }
+    public int getMovingVectorX() { return movingVectorX; }
+    public int getMovingVectorY() { return movingVectorY; }
 
     public Bitmap[] getMoveBitmapImages(){
         Bitmap[] result = null;
@@ -169,7 +181,7 @@ public class PlayerCharacter extends GameObject{
 
     public void draw(Canvas canvas){
         Bitmap bitmap = this.getCurrentMoveBitmap();
-        canvas.drawBitmap(bitmap, x, y, null);
+        canvas.drawBitmap(bitmap, x - (singleWidth / 2), y - (singleWidth / 2), null);
 
         // Updates the last draw time.
         this.lastDrawNanoTime = System.nanoTime();
@@ -180,22 +192,36 @@ public class PlayerCharacter extends GameObject{
         this.movingVectorY = movingVectorY;
     }
 
+    /**
+     * Sets the destination coordinates of the PlayerCharacter
+     * @param newX The destination x value
+     * @param newY The destination y value
+     */
     public void setDestinationCoordinates(int newX, int newY){
         destinationX = newX;
         destinationY = newY;
     }
 
-    /*public GameObject isIntercepted(){
-        GameObject result = null;
-        boolean found = false;
-        ArrayList<GameObject> gameObjects = this.gameSurface.getRpgGameManager().getGameObjects();
-        for (GameObject gameObject: gameObjects){
-            if (!found && (Math.abs(gameObject.x - this.x) < (gameObject.singleWidth / 2)) &&
-                    (Math.abs(gameObject.y - this.y ) < (gameObject.singleHeight / 2)) && result == null){
-                result = gameObject;
-                found = true;
-            }
-        }
-        return result;
-    } */
+    /**
+     * Manually sets the coordinate values of the PlayerCharacter object
+     * @param x The new x value
+     * @param y The new y value
+     */
+    public void setCoordinates(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
+    public void unblockAllDirections(){
+        isLeftBlocked = false;
+        isRightBlocked = false;
+        isTopBlocked = false;
+        isBotBlocked = false;
+    }
+    public void setNotMoving(){
+        movingLeft = false;
+        movingRight = false;
+        movingTop = false;
+        movingBot = false;
+    }
 }

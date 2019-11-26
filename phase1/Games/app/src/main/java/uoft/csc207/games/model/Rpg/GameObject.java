@@ -3,7 +3,7 @@ package uoft.csc207.games.model.Rpg;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-public abstract class GameObject {
+public abstract class GameObject implements Comparable<GameObject>{
     protected Bitmap image;         //image of the entire sprite sheet
 
     protected final int rowCount;       //rows of single images
@@ -51,16 +51,32 @@ public abstract class GameObject {
     public int getY(){ return this.y; }
 
     /**
-     *
+     * Gets the height of the individual walk cycle Bitmap images
      * @return image height
      */
     public int getHeight(){ return singleHeight; }
 
     /**
-     *
+     * Gets the width of the individual walk cycle Bitmap images
      * @return image width
      */
     public int getWidth(){ return singleWidth; }
 
     public abstract void draw(Canvas canvas);
+
+    /**
+     * Compares GameObjects by Y coordinate
+     * @param other The GameObject to compare with
+     * @return -1, 0, 1, if the GameObject's Y coordinate is less than, equal to, or greater than
+     * the other GameObject
+     */
+    public int compareTo(GameObject other){
+        int result = 0;
+        if (y > other.y){
+            result = 1;
+        } else if (y < other.y){
+            result = -1;
+        }
+        return result;
+    }
 }
