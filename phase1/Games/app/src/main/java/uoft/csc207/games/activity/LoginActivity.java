@@ -18,8 +18,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password;
     private Button login;
     private Button create;
+    private Button doubleLogin;
     private TextView errorMsg;
     private ProfileManager profileManager;
+    private boolean isFirst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +33,14 @@ public class LoginActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.etPassword);
         login = (Button) findViewById(R.id.btnLogin);
         create = (Button) findViewById(R.id.btnCreate);
+        doubleLogin = (Button) findViewById(R.id.btnDoubleLogin);
         errorMsg = (TextView) findViewById(R.id.txtErrorMsg);
+        isFirst = true;
 
         login.setOnClickListener(new View.OnClickListener(){
            public void onClick(View view){
                validate(username.getText().toString(), password.getText().toString());
+               moveToGameSelectActivity();
            }
         });
 
@@ -43,6 +48,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createProfile(username.getText().toString(), password.getText().toString());
+            }
+        });
+
+        doubleLogin.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                validate(username.getText().toString(), password.getText().toString());
+                username.setText("");
+                password.setText("");
+                doubleLogin.setText("2 Player Login (2 of 2)");
+                isFirst = false;
             }
         });
     }
@@ -65,8 +80,17 @@ public class LoginActivity extends AppCompatActivity {
             errorMsg.setText("The password of user: " + userName + " is incorrect!");
             return;
         }
-        profileManager.setCurrentPlayer(tmpProfile);
-        moveToNextActivity();
+        if(isFirst){
+            profileManager.setCurrentPlayer(tmpProfile);
+            errorMsg.setText("User " + tmpProfile.getId() + " has been logged in");
+        } else {
+            if(profileManager.getCurrentPlayer() == tmpProfile){
+                errorMsg.setText("User " + tmpProfile.getId() + " has already been logged in");
+            } else {
+                profileManager.setSecondPlayer(tmpProfile);
+                moveToGameSelectActivity();
+            }
+        }
     }
 
     private void createProfile(String userName, String passWord){
@@ -76,12 +100,12 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         profileManager.createProfile(newProfile);
-        profileManager.setCurrentPlayer(newProfile);
-        moveToNextActivity();
-
+        //profileManager.setCurrentPlayer(newProfile);
+        errorMsg.setText("User has been created.");
+       // moveToGameSelectActivity();
     }
 
-    private void moveToNextActivity(){
+    private void moveToGameSelectActivity(){
         Intent intent = new Intent(LoginActivity.this, GameSelectActivity.class);
         //intent.putExtra(ProfileManager.CURRENT_PLAYER, profileManager.getCurrentPlayer());
         startActivity(intent);

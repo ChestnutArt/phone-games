@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import uoft.csc207.games.controller.rpg.RPGGameManager;
 
@@ -223,5 +224,34 @@ public class PlayerCharacter extends GameObject{
         movingRight = false;
         movingTop = false;
         movingBot = false;
+    }
+    public String getMovingDirection(){
+        if(movingVectorX != 0){
+            if (movingVectorX > 0){
+                return "right";
+            } else {
+                return "left";
+            }
+        } else {
+            if (movingVectorY > 0){
+                return "down";
+            } else {
+                return "up";
+            }
+        }
+    }
+
+    public List<String> getBlockedDirections(){
+        List<String> blockedDirections = new ArrayList<>();
+        if (isRightBlocked){
+            blockedDirections.add("right");
+        } else if (isLeftBlocked){
+            blockedDirections.add("left");
+        } else if (isTopBlocked){
+            blockedDirections.add("up");
+        } else if (isBotBlocked){
+            blockedDirections.add("down");
+        }
+        return blockedDirections;
     }
 }
