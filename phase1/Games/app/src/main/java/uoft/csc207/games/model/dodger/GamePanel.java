@@ -35,7 +35,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         isOver = false;
         getHolder().addCallback(this);
         thread = new MainThread(getHolder(), this);
-        player1 = new scrollerCharacter(BitmapFactory.decodeResource(getResources(),R.drawable.goku), true);
+        player1 = new scrollerCharacter(BitmapFactory.decodeResource(getResources(),R.drawable.goku));
         this.coins = new Coin(6);
         P_y = Constants.SCREEN_HEIGHT/2;
         Obs = new ObsManager(3, Color.MAGENTA, player1.getHeight());
@@ -130,7 +130,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             po.y = -1;
         }
         if (!male){
-            player1 = new scrollerCharacter(BitmapFactory.decodeResource(getResources(),R.drawable.fem), false);
+            player1 = new scrollerCharacter(BitmapFactory.decodeResource(getResources(),R.drawable.fem));
             CurrentGame.chooseCharacter("Female");
         }
     }

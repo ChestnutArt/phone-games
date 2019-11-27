@@ -67,6 +67,9 @@ public class ProfileManager {
     public void setSecondPlayer(PlayerProfile secondPlayer){
         this.secondPlayer = secondPlayer;
     }
+    public TreeMap getMap(){
+        return profileMap;
+    }
 
     private PlayerProfile currentPlayer;
     private PlayerProfile secondPlayer;
