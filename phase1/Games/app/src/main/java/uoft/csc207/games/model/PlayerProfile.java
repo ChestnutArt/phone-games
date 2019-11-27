@@ -69,6 +69,17 @@ public class PlayerProfile implements Serializable {
         return result;
     }
 
+    public int getNumAchievements(){
+        int i = 0;
+        for (Game g: games){
+            ArrayList<Achievement> achievements = g.getCompletedAchievements();
+            for (Achievement a: achievements){
+                i++;
+            }
+        }
+        return i;
+    }
+
     /**
      * Checks if the PlayerProfile already owns the game
      * @param gameId The id of the game that is being searched for

@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 
-public class scrollerCharacter {
+public class scrollerCharacter implements GameObject {
     private Bitmap img;
     private int x;
     private int y;
@@ -16,7 +16,7 @@ public class scrollerCharacter {
     private boolean isMale;
 
 
-    public scrollerCharacter(Bitmap img, boolean isMale){
+    public scrollerCharacter(Bitmap img){
             x = Constants.SCREEN_WIDTH/2;
             y = Constants.SCREEN_HEIGHT/2;
             width = Constants.SCREEN_WIDTH/6;
@@ -24,6 +24,14 @@ public class scrollerCharacter {
             height = img.getHeight()/scale;
             this.img = Bitmap.createScaledBitmap(img, width,
                     height, true);
+    }
+
+    public void update(){}
+
+    public void update(int y){
+        if (y < Constants.SCREEN_HEIGHT - height) {
+            this.y = y;
+        }
     }
 
     public void draw(Canvas canvas) {
@@ -36,12 +44,6 @@ public class scrollerCharacter {
 
 
 
-
-    public void update(int y){
-        if (y < Constants.SCREEN_HEIGHT - height) {
-            this.y = y;
-        }
-    }
 
     public Rect getRect(){
         return new Rect(x, y, x + width, y + height);

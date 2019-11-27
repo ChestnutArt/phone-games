@@ -64,6 +64,9 @@ public class ProfileManager {
     public void setCurrentPlayer(PlayerProfile currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
+    public TreeMap getMap(){
+        return profileMap;
+    }
 
     private PlayerProfile currentPlayer;
 
