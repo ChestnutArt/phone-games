@@ -2,35 +2,35 @@ package uoft.csc207.games.model.CardGame;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import uoft.csc207.games.R;
-import uoft.csc207.games.model.Achievement;
-import uoft.csc207.games.model.Game;
-import uoft.csc207.games.model.PlayerProfile;
 
 
 public class CardGameState {
 
     private CardDeck player_deck, ai_deck; // the cards in the deck
     private int player_health, ai_health;
-    private List<Card> ai_hand, player_hand, ai_board, player_board;// the cards in the slots
-    private boolean[] p_h, p_brd, ai_brd, ai_h, attacked; //The occupancy of the slots
-    private boolean summoned;
+    private List<Card> ai_hand, ai_board, player_hand, player_board; // the cards in the slots
+    private boolean[] p_h, p_brd, ai_brd, ai_h; // the occupancy of the slots
+    private boolean[] attacked; // track whether each card has attacked this turn
+    private boolean summoned; // track whether the player has summoned this turn
 
-    public CardGameState() {
-//        super(player);
+    CardGameState() {
+        int handCap = 3;
+        int boardCap = 3;
         player_deck = new CardDeck();
         ai_deck = new CardDeck();
         player_health = 4000;
         ai_health = 4000;
-        ai_hand = new ArrayList<>(3);
-        ai_board = new ArrayList<>(3);
-        player_hand = new ArrayList<>(3);
-        player_board = new ArrayList<>();
-        p_h = new boolean[3];
-        p_brd = new boolean[3];
-        ai_h = new boolean[3];
-        ai_brd = new boolean[3];
-        attacked = new boolean[3];
+        ai_hand = new ArrayList<>(handCap);
+        ai_board = new ArrayList<>(boardCap);
+        player_hand = new ArrayList<>(handCap);
+        player_board = new ArrayList<>(boardCap);
+        p_h = new boolean[handCap];
+        p_brd = new boolean[boardCap];
+        ai_h = new boolean[handCap];
+        ai_brd = new boolean[boardCap];
+        attacked = new boolean[boardCap];
         summoned = false;
         for (int i = 2; i >= 0; i--) {
             p_h[i] = true;
@@ -40,63 +40,47 @@ public class CardGameState {
             attacked[i] = false;
         }
     }
-//
-//    @Override
-//    public String getId() {
-//        return this.owner.getId();
-//    }
-//
-//    @Override
-//    public void updateScore(Integer i) {
-//        this.owner.setScore(this.owner.getScore() + i);
-//    }
-//
-//    @Override
-//    public void updateCurrency(Integer i) {
-//        this.owner.setCurrency(this.owner.getScore());
-//    }
 
     public List<Card> getAi_board() {
         return this.ai_board;
     }
 
-    public List<Card> getPlayer_hand() {
+    List<Card> getPlayer_hand() {
         return this.player_hand;
     }
 
-    public List<Card> getAi_hand() {
+    List<Card> getAi_hand() {
         return ai_hand;
     }
 
-    public void direct_attack(MonsterCard card, String target) {
+    /**
+     * Directly attack target using card, reducing their health by the card's attack
+     *
+     * @param card   the card that should do the attacking
+     * @param target who should be attacked - assumed to be the player unless "ai" is given
+     */
+    void direct_attack(MonsterCard card, String target) {
         if (target.equals("ai")) {
-            if (this.ai_health - card.getAttack() >= 0) {
-                this.ai_health = this.ai_health - card.getAttack();
-            } else {
-                this.ai_health = 0;
-            }
+            // don't let anyone's health go below 0
+            this.ai_health = Math.max(this.ai_health - card.getAttack(), 0);
         } else {
-            if (this.player_health - card.getAttack() >= 0) {
-                this.player_health = this.player_health - card.getAttack();
-            } else {
-                this.player_health = 0;
-            }
+            this.player_health = Math.max(this.player_health - card.getAttack(), 0);
         }
     }
 
-    public void setSummoned(boolean summoned) {
+    void setSummoned(boolean summoned) {
         this.summoned = summoned;
     }
 
-    public boolean isSummoned() {
+    boolean isSummoned() {
         return summoned;
     }
 
-    public boolean[] getAttacked() {
+    boolean[] getAttacked() {
         return attacked;
     }
 
-    public int getAi_health() {
+    int getAi_health() {
         return this.ai_health;
     }
 
@@ -104,7 +88,7 @@ public class CardGameState {
         return player_health;
     }
 
-    public boolean[] getP_h() {
+    boolean[] getP_h() {
         return p_h;
     }
 
@@ -112,25 +96,25 @@ public class CardGameState {
         return ai_h;
     }
 
-    public boolean[] getP_brd() {
+    boolean[] getP_brd() {
         return p_brd;
     }
 
-    public CardDeck getPlayer_deck() {
+    CardDeck getPlayer_deck() {
         return player_deck;
     }
 
-    public List<Card> getPlayer_board() {
+    List<Card> getPlayer_board() {
         return player_board;
     }
 
-    public void restoreAttack() {
+    void restoreAttack() {
         this.attacked[0] = false;
         this.attacked[1] = false;
         this.attacked[2] = false;
     }
 
-    public void empty_slot_set(List<Card> slots) {
+    void empty_slot_set(List<Card> slots) {
         Card empty_card = new MonsterCard(0, 0, "Empty Slot", R.drawable.square);
         slots.add(empty_card);
         slots.add(empty_card);
