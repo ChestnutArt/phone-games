@@ -35,6 +35,13 @@ public class AddScoreActivity extends AppCompatActivity {
 
     public void sumbitScore(){
         ScoreBoard scoreBoard = new ScoreBoard(this);
+        scoreBoard.submitScore(score);
+        moveToNextActivity();
+    }
+
+    private void moveToNextActivity(){
+        Intent intent = new Intent(AddScoreActivity.this, GameSelectActivity.class);
+        startActivity(intent);
     }
 
 }
