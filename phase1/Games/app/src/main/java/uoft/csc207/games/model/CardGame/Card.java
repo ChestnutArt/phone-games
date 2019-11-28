@@ -65,23 +65,20 @@ import java.util.Random;
 
 public class Card {
 
-    private int attack, defence;
     private String name;
     private int card_art;
 
-    public Card(int attack, int defence, String name, int card_art) {
-        this.attack = attack;
-        this.defence = defence;
+    public Card(String name, int card_art) {
         this.name = name;
         this.card_art = card_art;
     }
 
-    public int getAttack() {
-        return attack;
-    }
-
     public int getCard_art() {
         return card_art;
+    }
+
+    public String getName() {
+        return name;
     }
 }
 

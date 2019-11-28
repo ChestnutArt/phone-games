@@ -24,6 +24,9 @@ public class GameSelectActivity extends AppCompatActivity {
     private TextView welcome;
     private Button logout;
     private PlayerProfile currentProfile;
+    private PlayerProfile secondProfile;
+    private boolean isTwoPlayer;
+    private boolean isFirstPlayerTurn = true;
 
     private Button scrollerSelect;
     private Button cardSelect;

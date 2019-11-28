@@ -64,12 +64,15 @@ public class ProfileManager {
     public void setCurrentPlayer(PlayerProfile currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
+    public void setSecondPlayer(PlayerProfile secondPlayer){
+        this.secondPlayer = secondPlayer;
+    }
     public TreeMap getMap(){
         return profileMap;
     }
 
     private PlayerProfile currentPlayer;
-
+    private PlayerProfile secondPlayer;
     private static ProfileManager singletonProfileManager;
 
     /**
@@ -95,6 +98,15 @@ public class ProfileManager {
         if (profileMap == null){
             profileMap = new TreeMap<>();
         }
+    }
+
+    /**
+     * Swaps which PlayerProfile is the current player
+     */
+    public void changeCurrentPlayer(){
+        PlayerProfile temp = currentPlayer;
+        currentPlayer = secondPlayer;
+        secondPlayer = temp;
     }
     public PlayerProfile getProfileById(String id){
         return profileMap.get(id);
@@ -157,7 +169,6 @@ public class ProfileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 }

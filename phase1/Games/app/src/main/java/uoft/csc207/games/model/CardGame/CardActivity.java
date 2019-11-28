@@ -12,54 +12,65 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import org.w3c.dom.Text;
-
-import java.util.List;
+import java.util.Random;
 
 import uoft.csc207.games.R;
-import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.controller.ProfileManager;
-import uoft.csc207.games.model.Game;
-import uoft.csc207.games.model.PlayerProfile;
 
 
-public class CardActivity extends AppCompatActivity {
+public class CardActivity extends AppCompatActivity implements CardClicker, SpellEffect {
+
+    private CardGameState newGame;
+    private CardGame gameState;
+    private ImageView bottomLeft, bottomMid, bottomRight;
+    private ImageView battlePosLeft, battlePosMid, battlePosRight;
+    private ImageView upperLeft, upperMid, upperRight;
+    private TextView score;
+    private View curr_layout;
+    private CardPool cardPool;
+    private CardDeck playerDeck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_main);
         Intent intent = getIntent();
-        final CardGame gameState = (CardGame) CardGame.getPlayerProfile().containsGame("257846");
-
 
         //Objects positions set up
-        final CardGameState new_game = new CardGameState();
-        final List<Card> player_deck = new_game.getPlayer_deck();
-        final ImageView bottom_left = findViewById(R.id.bleft);
-        final ImageView bottom_mid = findViewById(R.id.bmid);
-        final ImageView bottom_right = findViewById(R.id.bright);
-        final ImageView battle_p_left = findViewById(R.id.battle_p_left);
-        final ImageView battle_p_mid = findViewById(R.id.battle_p_mid);
-        final ImageView battle_p_right = findViewById(R.id.battle_p_right);
-        final ImageView uleft = findViewById(R.id.uleft);
-        final ImageView umid = findViewById(R.id.umid);
-        final ImageView uright = findViewById(R.id.uright);
-        final TextView score = findViewById(R.id.score);
-        final View curr_layout = findViewById(R.id.linearLayout);
+        gameState = (CardGame) CardGame.getPlayerProfile().containsGame("257846");
+        newGame = new CardGameState();
+        playerDeck = newGame.getPlayer_deck();
+        bottomLeft = findViewById(R.id.bleft);
+        bottomMid = findViewById(R.id.bmid);
+        bottomRight = findViewById(R.id.bright);
+        battlePosLeft = findViewById(R.id.battle_p_left);
+        battlePosMid = findViewById(R.id.battle_p_mid);
+        battlePosRight = findViewById(R.id.battle_p_right);
+        upperLeft = findViewById(R.id.uleft);
+        upperMid = findViewById(R.id.umid);
+        upperRight = findViewById(R.id.uright);
+        score = findViewById(R.id.score);
+        curr_layout = findViewById(R.id.linearLayout);
+        cardPool = new CardPool();
 
-        new_game.empty_slot_set(new_game.getPlayer_hand());
-        new_game.empty_slot_set(new_game.getPlayer_board());
-        new_game.empty_slot_set(new_game.getAi_hand());
+        newGame.empty_slot_set(newGame.getPlayer_hand());
+        newGame.empty_slot_set(newGame.getPlayer_board());
+        newGame.empty_slot_set(newGame.getAi_hand());
+
+        //Sets the CardPool
+
+        cardPool.addNewCard(new MonsterCard(100, 2000, "Ghost Ogre", R.drawable.ghost_ogre));
+        cardPool.addNewCard(new MonsterCard(1800, 0, "Ash", R.drawable.ashblossom));
+
 
         //Sets the deck of the player
         String deck_name = intent.getStringExtra("Deck Type");
         if (deck_name.equals("Ash")) {
-            new_game.add_three(new Card(1800, 0, "Ash", R.drawable.ashblossom));
-            new_game.add_three(new Card(100, 2000, "Ghost Ogre", R.drawable.ghost_ogre));
+            playerDeck.addThree("Ghost Ogre", cardPool);
+            playerDeck.addThree("Ash", cardPool);
         } else {
-            new_game.add_three(new Card(100, 2000, "Ghost Ogre", R.drawable.ghost_ogre));
-            new_game.add_three(new Card(1800, 0, "Ash", R.drawable.ashblossom));
+            playerDeck.addThree("Ash", cardPool);
+            playerDeck.addThree("Ghost Ogre", cardPool);
         }
 
         //Day mode and night mode changes
@@ -95,181 +106,48 @@ public class CardActivity extends AppCompatActivity {
         });
 
         // Card summoning
-        bottom_left.setOnClickListener(
+        bottomLeft.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!new_game.isSummoned()) {
-                            if (!new_game.getP_h()[0] == new_game.getP_brd()[0]) {
-                                Card next_card = new_game.getPlayer_hand().get(0);
-                                new_game.getPlayer_board().set(0, next_card);
-                                ImageView player_left = findViewById(R.id.battle_p_left);
-                                player_left.setImageResource(next_card.getCard_art());
-                                bottom_left.setImageResource(R.drawable.square);
-                                new_game.getP_h()[0] = true;
-                                new_game.getP_brd()[0] = false;
-                                new_game.setSummoned(true);
-                            } else if (!(new_game.getPlayer_hand().get(0).getCard_art() == R.drawable.square)) {
-                                Snackbar cannot_summon =
-                                        Snackbar.make(
-                                                findViewById(R.id.toolbar), R.string.slot_occupied, Snackbar.LENGTH_SHORT);
-                                cannot_summon.show();
-                            }
-                        } else {
-                            Snackbar already_summoned = Snackbar.make(findViewById(R.id.toolbar), R.string.summoned,
-                                    Snackbar.LENGTH_SHORT);
-                            already_summoned.show();
-                        }
+                        clickSummon(newGame, 0);
                     }
                 });
 
-        bottom_mid.setOnClickListener(
-                new View.OnClickListener() {
+        bottomMid.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!new_game.isSummoned()) {
-                            if (!new_game.getP_h()[1] == new_game.getP_brd()[1]) {
-                                Card next_card = new_game.getPlayer_hand().get(1);
-                                new_game.getPlayer_board().set(1, next_card);
-                                ImageView player_mid = findViewById(R.id.battle_p_mid);
-                                player_mid.setImageResource(next_card.getCard_art());
-                                bottom_mid.setImageResource(R.drawable.square);
-                                new_game.getP_h()[1] = true;
-                                new_game.getP_brd()[1] = false;
-                                new_game.setSummoned(true);
-                            } else if (!(new_game.getPlayer_hand().get(1).getCard_art() == R.drawable.square)) {
-                                Snackbar cannot_summon =
-                                        Snackbar.make(
-                                                findViewById(R.id.toolbar), R.string.slot_occupied, Snackbar.LENGTH_SHORT);
-                                cannot_summon.show();
-                            }
-                        } else {
-                            Snackbar already_summoned = Snackbar.make(findViewById(R.id.toolbar), R.string.summoned,
-                                    Snackbar.LENGTH_SHORT);
-                            already_summoned.show();
-                        }
+                        clickSummon(newGame, 1);
                     }
                 });
 
-        bottom_right.setOnClickListener(
-                new View.OnClickListener() {
+        bottomRight.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!new_game.isSummoned()) {
-                            if (!new_game.getP_h()[2] == new_game.getP_brd()[2]) {
-                                Card next_card = new_game.getPlayer_hand().get(2);
-                                new_game.getPlayer_board().set(2, next_card);
-                                ImageView player_right = findViewById(R.id.battle_p_right);
-                                player_right.setImageResource(next_card.getCard_art());
-                                bottom_right.setImageResource(R.drawable.square);
-                                new_game.getP_h()[2] = true;
-                                new_game.getP_brd()[2] = false;
-                                new_game.setSummoned(true);
-                            } else if (!(new_game.getPlayer_hand().get(2).getCard_art() == R.drawable.square)) {
-                                Snackbar cannot_summon =
-                                        Snackbar.make(
-                                                findViewById(R.id.toolbar), R.string.slot_occupied, Snackbar.LENGTH_SHORT);
-                                cannot_summon.show();
-                            }
-                        } else {
-                            Snackbar already_summoned = Snackbar.make(findViewById(R.id.toolbar), R.string.summoned,
-                                    Snackbar.LENGTH_SHORT);
-                            already_summoned.show();
-                        }
+                        clickSummon(newGame, 2);
                     }
                 });
 
 
         // Card attack to another card or direct attack, also checks whether win or not
-        // TODO Bug concerning attack orders, sometimes the attacks will not register
-        battle_p_left.setOnClickListener(
-                new View.OnClickListener() {
+        battlePosLeft.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!new_game.getAttacked()[0]) {
-                            new_game.direct_attack(new_game.getPlayer_board().get(0), "ai");
-                            TextView ai_lp = findViewById(R.id.ai_lp);
-                            ai_lp.setText("LP: " + new_game.getAi_health());
-                            new_game.getAttacked()[0] = true;
-                            int currentScore = gameState.getCurrentScore();
-                            gameState.setCurrentScore(currentScore + new_game.getPlayer_board().get(0).getAttack());
-                            if (new_game.getAi_health() == 0) {
-                                int currScore = gameState.getCurrentScore();
-                                gameState.setCurrentScore(currScore + 3000);
-                                gameState.updateScore(gameState.getCurrentScore());
-                                gameState.setCurrentScore(0);
-                                score.setText("HIGH SCORE: " + gameState.getScore());
-                                ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
-                                Snackbar winner_msg =
-                                        Snackbar.make(
-                                                findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
-                                winner_msg.show();
-                            }
-                        } else {
-                            Snackbar attacked =
-                                    Snackbar.make(findViewById(R.id.toolbar), R.string.attacked, Snackbar.LENGTH_SHORT);
-                            attacked.show();
-                        }
+                        clickAttack(newGame, 0);
                     }
                 });
 
-        battle_p_mid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!new_game.getAttacked()[1]) {
-                    new_game.direct_attack(new_game.getPlayer_board().get(1), "ai");
-                    TextView ai_lp = findViewById(R.id.ai_lp);
-                    ai_lp.setText("LP: " + new_game.getAi_health());
-                    new_game.getAttacked()[1] = true;
-                    int currentScore = gameState.getCurrentScore();
-                    gameState.setCurrentScore(currentScore + new_game.getPlayer_board().get(0).getAttack());
-                    if (new_game.getAi_health() == 0) {
-                        int currScore = gameState.getCurrentScore();
-                        gameState.setCurrentScore(currScore + 3000);
-                        gameState.updateScore(gameState.getCurrentScore());
-                        gameState.setCurrentScore(0);
-                        score.setText("HIGH SCORE: " + gameState.getScore());
-                        ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
-                        Snackbar winner_msg =
-                                Snackbar.make(
-                                        findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
-                        winner_msg.show();
+        battlePosMid.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clickAttack(newGame, 1);
                     }
-                } else {
-                    Snackbar attacked =
-                            Snackbar.make(findViewById(R.id.toolbar), R.string.attacked, Snackbar.LENGTH_SHORT);
-                    attacked.show();
-                }
-            }
-        });
+                });
 
-        battle_p_right.setOnClickListener(new View.OnClickListener() {
+        battlePosRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!new_game.getAttacked()[2]) {
-                    new_game.direct_attack(new_game.getPlayer_board().get(2), "ai");
-                    TextView ai_lp = findViewById(R.id.ai_lp);
-                    ai_lp.setText("LP: " + new_game.getAi_health());
-                    new_game.getAttacked()[2] = true;
-                    int currentScore = gameState.getCurrentScore();
-                    gameState.setCurrentScore(currentScore + new_game.getPlayer_board().get(0).getAttack());
-                    if (new_game.getAi_health() == 0) {
-                        int currScore = gameState.getCurrentScore();
-                        gameState.setCurrentScore(currScore + 3000);
-                        gameState.updateScore(gameState.getCurrentScore());
-                        gameState.setCurrentScore(0);
-                        score.setText("HIGH SCORE: " + gameState.getScore());
-                        ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
-                        Snackbar winner_msg =
-                                Snackbar.make(
-                                        findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
-                        winner_msg.show();
-                    }
-                } else {
-                    Snackbar attacked =
-                            Snackbar.make(findViewById(R.id.toolbar), R.string.attacked, Snackbar.LENGTH_SHORT);
-                    attacked.show();
-                }
+                clickAttack(newGame, 2);
             }
         });
 
@@ -284,9 +162,9 @@ public class CardActivity extends AppCompatActivity {
                         TextView score = findViewById(R.id.score);
                         score.setText("HIGH SCORE: " + gameState.getScore());
                         // Determines whether loses
-                        int curr_deck_size = new_game.getPlayer_deck().size();
+                        int curr_deck_size = newGame.getPlayer_deck().getDeckSize();
                         int hand_occupancy = 0;
-                        for (boolean empty: new_game.getP_h()) {
+                        for (boolean empty: newGame.getP_h()) {
                             if (empty) {
                                 hand_occupancy++;
                             }
@@ -301,38 +179,122 @@ public class CardActivity extends AppCompatActivity {
 
 
                             // The ai makes its moves
-                            uleft.setImageResource(R.drawable.card_back);
-                            umid.setImageResource(R.drawable.card_back);
-                            uright.setImageResource(R.drawable.card_back);
+                            upperLeft.setImageResource(R.drawable.card_back);
+                            upperMid.setImageResource(R.drawable.card_back);
+                            upperRight.setImageResource(R.drawable.card_back);
 
                             // Replenish cards in hand
                             int i = 0;
-                            for (boolean empty : new_game.getP_h()) {
+                            for (boolean empty : newGame.getP_h()) {
                                 if (empty) {
-                                    Card next_card = player_deck.get(0);
+                                    Card next_card = playerDeck.getNextCard();
                                     if (i == 0) {
-                                        new_game.getPlayer_hand().set(0, next_card);
-                                        bottom_left.setImageResource(next_card.getCard_art());
-                                        player_deck.remove(0);
-                                        new_game.getP_h()[0] = false;
+                                        newGame.getPlayer_hand().set(0, next_card);
+                                        bottomLeft.setImageResource(next_card.getCard_art());
+                                        playerDeck.removeNextCard();
+                                        newGame.getP_h()[0] = false;
                                     } else if (i == 1) {
-                                        new_game.getPlayer_hand().set(1, next_card);
-                                        bottom_mid.setImageResource(next_card.getCard_art());
-                                        player_deck.remove(0);
-                                        new_game.getP_h()[1] = false;
+                                        newGame.getPlayer_hand().set(1, next_card);
+                                        bottomMid.setImageResource(next_card.getCard_art());
+                                        playerDeck.removeNextCard();
+                                        newGame.getP_h()[1] = false;
                                     } else if (i == 2) {
-                                        new_game.getPlayer_hand().set(2, next_card);
-                                        bottom_right.setImageResource(next_card.getCard_art());
-                                        player_deck.remove(0);
-                                        new_game.getP_h()[2] = false;
+                                        newGame.getPlayer_hand().set(2, next_card);
+                                        bottomRight.setImageResource(next_card.getCard_art());
+                                        playerDeck.removeNextCard();
+                                        newGame.getP_h()[2] = false;
                                     }
                                 }
                                 i++;
                             }
                         }
-                        new_game.setSummoned(false);
-                        new_game.restoreAttack();
+                        newGame.setSummoned(false);
+                        newGame.restoreAttack();
                     }
                 });
+    }
+
+    public void clickSummon(CardGameState cardGameState, int posIndex) {
+        if (!cardGameState.isSummoned()) {
+            if (!cardGameState.getP_h()[posIndex] == cardGameState.getP_brd()[posIndex]) {
+                MonsterCard next_card = (MonsterCard) cardGameState.getPlayer_hand().get(posIndex);
+                cardGameState.getPlayer_board().set(posIndex, next_card);
+                if (posIndex == 0) {
+                    battlePosLeft.setImageResource(next_card.getCard_art());
+                    bottomLeft.setImageResource(R.drawable.square);
+                } else if (posIndex == 1) {
+                    battlePosMid.setImageResource(next_card.getCard_art());
+                    bottomMid.setImageResource(R.drawable.square);
+                } else {
+                    battlePosRight.setImageResource(next_card.getCard_art());
+                    bottomRight.setImageResource(R.drawable.square);
+                }
+                cardGameState.getP_h()[posIndex] = true;
+                cardGameState.getP_brd()[posIndex] = false;
+                cardGameState.setSummoned(true);
+            } else if (!(cardGameState.getPlayer_hand().get(posIndex).getCard_art() == R.drawable.square)) {
+                Snackbar cannot_summon =
+                        Snackbar.make(
+                                findViewById(R.id.toolbar), R.string.slot_occupied, Snackbar.LENGTH_SHORT);
+                cannot_summon.show();
+            }
+        } else {
+            Snackbar already_summoned = Snackbar.make(findViewById(R.id.toolbar), R.string.summoned,
+                    Snackbar.LENGTH_SHORT);
+            already_summoned.show();
+        }
+    }
+
+    public void clickAttack(CardGameState cardGameState, int posIndex) {
+        if (!cardGameState.getAttacked()[posIndex]) {
+            cardGameState.direct_attack(((MonsterCard) cardGameState.getPlayer_board().get(posIndex)), "ai");
+            TextView ai_lp = findViewById(R.id.ai_lp);
+            ai_lp.setText("LP: " + cardGameState.getAi_health());
+            cardGameState.getAttacked()[posIndex] = true;
+            int currentScore = gameState.getCurrentScore();
+            gameState.setCurrentScore(currentScore + ((MonsterCard)cardGameState.getPlayer_board().get(posIndex)).getAttack());
+            if (cardGameState.getAi_health() == 0) {
+                int currScore = gameState.getCurrentScore();
+                gameState.setCurrentScore(currScore + 3000);
+                gameState.updateScore(gameState.getCurrentScore());
+                gameState.setCurrentScore(0);
+                score.setText("HIGH SCORE: " + gameState.getScore());
+                ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
+                Snackbar winner_msg =
+                        Snackbar.make(
+                                findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
+                winner_msg.show();
+            }
+        } else {
+            Snackbar attacked =
+                    Snackbar.make(findViewById(R.id.toolbar), R.string.attacked, Snackbar.LENGTH_SHORT);
+            attacked.show();
+        }
+    }
+
+    @Override
+    public void destroyOneRandom() {
+        Random randCard = new Random();
+
+    }
+
+    @Override
+    public void destroyAll() {
+
+    }
+
+    @Override
+    public void increaseHP(int healthPoint) {
+
+    }
+
+    @Override
+    public void decreaseHP(int healthPoint) {
+
+    }
+
+    @Override
+    public void attackAgain() {
+
     }
 }

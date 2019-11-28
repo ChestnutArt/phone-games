@@ -20,6 +20,7 @@ import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.model.Rpg.GameObject;
 import uoft.csc207.games.model.Rpg.NpcCharacter;
+import uoft.csc207.games.model.Rpg.Obstructable;
 import uoft.csc207.games.model.Rpg.PlayerCharacter;
 import uoft.csc207.games.model.Rpg.RpgActivity;
 import uoft.csc207.games.model.Rpg.RpgGameState;
@@ -301,23 +302,21 @@ public class RPGGameManager {
     public void setPlayerCharacterDestination(int x, int y){
         int movementVectorX = x - playerCharacter.getX();
         int movementVectorY = y - playerCharacter.getY();
-        /*if(!playerCharacter.isBotBlocked() && !playerCharacter.isTopBlocked() && !playerCharacter.isRightBlocked()
+        if(!playerCharacter.isBotBlocked() && !playerCharacter.isTopBlocked() && !playerCharacter.isRightBlocked()
                 && !playerCharacter.isLeftBlocked()){
             playerCharacter.setMovementVector(movementVectorX, movementVectorY);
             playerCharacter.setDestinationCoordinates(x, y);
-        } */
-        /*if ((playerCharacter.isRightBlocked() && movementVectorX < 0) || (playerCharacter.isLeftBlocked() &&
+        } else if ((playerCharacter.isRightBlocked() && movementVectorX < 0) || (playerCharacter.isLeftBlocked() &&
                 movementVectorX > 0) || (!playerCharacter.isRightBlocked() && !playerCharacter.isLeftBlocked())){
             playerCharacter.setMovementVector(movementVectorX, playerCharacter.getMovingVectorY());
             playerCharacter.setDestinationCoordinates(x, playerCharacter.getY());
-        }
-        if ((playerCharacter.isTopBlocked() && movementVectorY > 0) || (playerCharacter.isBotBlocked() &&
+        } else if ((playerCharacter.isTopBlocked() && movementVectorY > 0) || (playerCharacter.isBotBlocked() &&
                 movementVectorY < 0) || (!playerCharacter.isTopBlocked() && !playerCharacter.isBotBlocked())){
             playerCharacter.setMovementVector(playerCharacter.getMovingVectorX(), movementVectorY);
             playerCharacter.setDestinationCoordinates(playerCharacter.getX(), y);
-        }*/
-        playerCharacter.setMovementVector(movementVectorX, movementVectorY);
-        playerCharacter.setDestinationCoordinates(x, y);
+        }
+        //playerCharacter.setMovementVector(movementVectorX, movementVectorY);
+        //playerCharacter.setDestinationCoordinates(x, y);
     }
 
     public void update(){
@@ -349,7 +348,13 @@ public class RPGGameManager {
         }
         GameObject interceptor = this.findInterceptor();
         if (interceptor != null){
-            playerCharacter.stopMoving();
+            for(String s: playerCharacter.getBlockedDirections()){
+                if (playerCharacter.getMovingDirection().equals(s)){
+                    playerCharacter.stopMoving();
+                    break;
+                }
+            }
+            //playerCharacter.stopMoving();
             //update score
             if (interceptor instanceof NpcCharacter){
                 NpcCharacter npcInterceptor = (NpcCharacter) interceptor;
@@ -372,6 +377,7 @@ public class RPGGameManager {
             //next time you talk to them it will always be the repeat text
             if(lastTalkedToNpc != null){
                 lastTalkedToNpc.setTalkedToAlready(true);
+                lastTalkedToNpc.setFirstObstruction(true);
             }
             playerCharacter.unblockAllDirections();
             currentText = "" + canvasWidth + " || " + playerCharacter.getX() + " || " + playerCharacter.getY();
@@ -438,39 +444,47 @@ public class RPGGameManager {
      */
     public GameObject findInterceptor(){
         GameObject interceptor = null;
-        for (GameObject gameObject: currentScreen){
-            if (!(gameObject instanceof PlayerCharacter)){
+        for (GameObject gameObject: currentScreen)
+            if (gameObject instanceof Obstructable){//!(gameObject instanceof PlayerCharacter)){ //
                 if ((Math.abs(gameObject.getX() - playerCharacter.getX()) < (gameObject.getWidth() / 2)) &&
-                        (Math.abs(gameObject.getY() - playerCharacter.getY() ) < (gameObject.getHeight() / 2)) &&
-                        interceptor == null){
+                        (Math.abs(gameObject.getY() - playerCharacter.getY()) < (gameObject.getHeight() / 2)) &&
+                        interceptor == null) {
                     interceptor = gameObject;
-                    //blockCurrentMovingDirection();
+
+                    Obstructable o = (Obstructable) gameObject;
+                    if (o.isFirstObstruction()) {
+                        blockCurrentMovingDirection();
+                        o.setFirstObstruction(false);
+                    }
                 }
             }
-        }
         return interceptor;
     }
 
     /**
-     * Sets the direction the player is blocked in
+     * Blocks the direction the player is currently moving in
      */
-   /* public void blockCurrentMovingDirection(){
+    public void blockCurrentMovingDirection(){
         boolean left = playerCharacter.getMovingVectorX() < 0;
-        boolean right = playerCharacter.getMovingVectorY() > 0;
+        boolean right = playerCharacter.getMovingVectorX() > 0;
         boolean top = playerCharacter.getMovingVectorY() < 0;
         boolean bot = playerCharacter.getMovingVectorY() > 0;
-       if(left){
-            playerCharacter.setRightBlocked(true);
-       } else if (right){
-           playerCharacter.setLeftBlocked(true);
-       } else{
-           if(bot){
+        //because of how PlayerCharacter handles movement in the x direction first, if the x vector
+        //isn't 0, playerCharacter is moving in the x direction
+        if(playerCharacter.getMovingVectorX() != 0){
+            if (left){
+                playerCharacter.setLeftBlocked(true);
+            } else if (right) {
+                playerCharacter.setRightBlocked(true);
+            }
+        } else {
+            if(bot){
                playerCharacter.setBotBlocked(true);
-           } else if (top){
+            } else if (top){
                playerCharacter.setTopBlocked(true);
            }
        }
-    } */
+    }
 
     /**
      * Checks if a given yCoordinate is within the game space allocated for player movement

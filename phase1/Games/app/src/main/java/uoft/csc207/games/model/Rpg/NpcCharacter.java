@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class NpcCharacter extends GameObject {
+public class NpcCharacter extends GameObject implements Obstructable {
     public static final int UP_ROW = 0;
     public static final int LEFT_ROW = 1;
     public static final int DOWN_ROW = 2;
@@ -25,6 +25,7 @@ public class NpcCharacter extends GameObject {
      *
      */
     private boolean talkedToAlready = false;
+    private boolean isFirstObstruction = true;
     private List<String> dialogue;
     private String afterTalkedToText;
     private Iterator<String> dialogueIterator;
@@ -53,6 +54,10 @@ public class NpcCharacter extends GameObject {
     public void setTalkedToAlready(boolean b){
         talkedToAlready = b;
     }
+
+    public boolean isFirstObstruction(){ return isFirstObstruction; }
+
+    public void setFirstObstruction(boolean b){ isFirstObstruction = b; }
 
     public String getAfterTalkedToText(){
         return afterTalkedToText;
