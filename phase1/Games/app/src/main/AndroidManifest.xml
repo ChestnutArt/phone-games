@@ -10,7 +10,8 @@
         android:screenOrientation="landscape"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ProfileActivity"></activity>
+        <activity android:name=".activity.TurnDisplayActivity"></activity>
+        <activity android:name=".activity.ProfileActivity" />
         <activity android:name=".model.Rpg.RpgActivity" />
         <activity android:name=".model.dodger.ScrollerActivity" />
         <activity android:name=".model.CardGame.DeckSelection" />

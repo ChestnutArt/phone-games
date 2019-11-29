@@ -14,7 +14,6 @@ public class ScrollerGame extends Game implements Serializable{
         color = null;
         character = null;
         textFont = null;
-
     }
 
 
@@ -24,13 +23,17 @@ public class ScrollerGame extends Game implements Serializable{
      * Updates score of the Game and the total score of the account
      * @param i The amount to add to the score
      */
-    public void updateScore(Integer i){this.gameScore = i;}
+    public void updateScore(Integer i){
+        cumulativeScore += i - gameScore;
+        this.gameScore = i;
+    }
 
     /**
      * Updates currency of the Game and the total currency of the account
      * @param i The amount to add to the currency
      */
     public void updateCurrency(Integer i){
+        cumulativeCurrency += i - gameCurrency;
         this.gameCurrency = i;
     }
 

@@ -17,8 +17,11 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import uoft.csc207.games.R;
 import uoft.csc207.games.activity.GameSelectActivity;
+import uoft.csc207.games.activity.TurnDisplayActivity;
 import uoft.csc207.games.controller.ProfileManager;
 
 public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
@@ -75,10 +78,21 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         inflater.inflate(R.menu.game_menu, popup.getMenu());
         popup.show();
     }
-    public void finishGame(){
+
+    public void finishGame(RpgGameState rpgState, boolean wipeGameStats){
+        if(rpgState != null && wipeGameStats){
+            rpgState.restart();
+        }
         ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
         gameSurface.getGameThread().setRunning(false);
-        Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
+
+        //Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
+        Intent myIntent;
+        if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){
+            myIntent = new Intent(RpgActivity.this, TurnDisplayActivity.class);
+        } else {
+            myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
+        }
         startActivity(myIntent);
     }
 
@@ -115,7 +129,7 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
                 //textView.setTypeface(Typeface.SANS_SERIF);
                 break;
             case R.id.exit_rpg_item:
-                finishGame();
+                finishGame(null, false);
                 break;
         }
         return false;
@@ -125,8 +139,10 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         Button pauseResumeBtn = new Button(this);
         pauseResumeBtn.setText(R.string.rpg_setting);
 
-        RelativeLayout.LayoutParams params4Btn = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        RelativeLayout.LayoutParams params4Layout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams params4Btn = new RelativeLayout.LayoutParams(RelativeLayout.
+                LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params4Layout = new RelativeLayout.LayoutParams(RelativeLayout.
+                LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         widgetHolder.setLayoutParams(params4Layout);
         widgetHolder.addView(pauseResumeBtn);
         params4Btn.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
@@ -134,40 +150,4 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         pauseResumeBtn.setLayoutParams(params4Btn);
         return pauseResumeBtn;
     }
-
-/*    private TextView createTextView(RelativeLayout widgetHolder) {
-        TextView textView = new TextView(this);
-
-        textView.setTextSize(24);
-        textView.setTextColor(Color.RED);
-
-        RelativeLayout.LayoutParams params4Btn = new RelativeLayout.LayoutParams(RelativeLayout.
-                LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        //RelativeLayout.LayoutParams params4Layout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        //textViewHolder.setLayoutParams(params4Layout);
-        widgetHolder.addView(textView);
-        params4Btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        params4Btn.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        params4Btn.addRule(RelativeLayout.TEXT_ALIGNMENT_CENTER, RelativeLayout.TRUE);
-
-        textView.setLayoutParams(params4Btn);
-
-        return textView;
-    }*/
-
-/*    private TextView createScoreView(RelativeLayout widgetHolder){
-        TextView textView = new TextView(this);
-        textView.setTextSize(20);
-        textView.setTextColor(Color.WHITE);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.
-                LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        widgetHolder.addView(textView);
-        params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.TEXT_ALIGNMENT_CENTER, RelativeLayout.TRUE);
-        return textView;
-    }
-    public void setStatsView(String s){
-        statsView.setText(s);
-    }*/
 }

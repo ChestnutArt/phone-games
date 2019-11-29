@@ -7,6 +7,8 @@ import java.util.Iterator;
 public abstract class Game implements Serializable {
     protected Integer gameScore;
     protected Integer gameCurrency;
+    protected Integer cumulativeScore;
+    protected Integer cumulativeCurrency;
     /**
      * Collection of all achievements that are still available to be achieved in this game.
      */
@@ -27,6 +29,8 @@ public abstract class Game implements Serializable {
     public Game(){
         gameScore = 0;
         gameCurrency = 0;
+        cumulativeScore = 0;
+        cumulativeCurrency = 0; 
         //owner = p;
         availableAchievements = new ArrayList<>();
         completedAchievements = new ArrayList<>();
@@ -43,12 +47,26 @@ public abstract class Game implements Serializable {
      * @param i The amount to add to the score
      */
     public abstract void updateScore(Integer i);
+        /*cumulativeScore += gameScore - i;
+        gameScore = i;
+    }*/
 
     /**
      * Updates currency of the Game and the total currency of the account
      * @param i The amount to add to the currency
      */
-    public abstract void updateCurrency(Integer i);
+    public abstract void updateCurrency(Integer i);/*{
+        cumulativeCurrency += gameCurrency - i;
+        gameCurrency = i;
+    }*/
+
+    public void setCumulativeCurrency(Integer i){ cumulativeCurrency = i; }
+
+    public int getCumulativeCurrency(){ return cumulativeCurrency; }
+
+    public void setCumulativeScore(Integer i){ cumulativeScore = i; }
+
+    public int getCumulativeScore(){ return cumulativeScore; }
 
     /**
      * Clears the game stats

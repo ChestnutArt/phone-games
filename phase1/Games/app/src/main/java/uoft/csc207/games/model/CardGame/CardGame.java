@@ -22,12 +22,14 @@ public class CardGame extends Game {
     @Override
     public void updateScore(Integer i) {
         if (i > gameScore) {
+            cumulativeScore += i - gameScore;
             super.gameScore = i;
         }
     }
 
     @Override
     public void updateCurrency(Integer i) {
+        cumulativeCurrency += i - gameCurrency;
         gameCurrency = i;
     }
 

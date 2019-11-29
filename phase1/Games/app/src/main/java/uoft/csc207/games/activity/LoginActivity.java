@@ -21,7 +21,10 @@ public class LoginActivity extends AppCompatActivity {
     private Button doubleLogin;
     private TextView errorMsg;
     private ProfileManager profileManager;
-    private boolean isFirst;
+    /**
+     * Whether it is the first login of the two player login or not.
+     */
+    private boolean isFirstLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +38,13 @@ public class LoginActivity extends AppCompatActivity {
         create = (Button) findViewById(R.id.btnCreate);
         doubleLogin = (Button) findViewById(R.id.btnDoubleLogin);
         errorMsg = (TextView) findViewById(R.id.txtErrorMsg);
-        isFirst = true;
+        isFirstLogin = true;
 
         login.setOnClickListener(new View.OnClickListener(){
            public void onClick(View view){
                validate(username.getText().toString(), password.getText().toString());
                moveToGameSelectActivity();
+               profileManager.setIsTwoPlayerMode(false);
            }
         });
 
@@ -57,7 +61,8 @@ public class LoginActivity extends AppCompatActivity {
                 username.setText("");
                 password.setText("");
                 doubleLogin.setText("2 Player Login (2 of 2)");
-                isFirst = false;
+                isFirstLogin = false;
+                profileManager.setIsTwoPlayerMode(true);
             }
         });
     }
@@ -80,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
             errorMsg.setText("The password of user: " + userName + " is incorrect!");
             return;
         }
-        if(isFirst){
+        if(isFirstLogin){
             profileManager.setCurrentPlayer(tmpProfile);
             errorMsg.setText("User " + tmpProfile.getId() + " has been logged in");
         } else {

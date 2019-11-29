@@ -343,7 +343,7 @@ public class RPGGameManager {
                 playerCharacter.setCoordinates(playerCharacter.getWidth(), playerCharacter.getY());
                 playerCharacter.stopMoving();
             } else {
-                ((RpgActivity) currentContext).finishGame();
+                ((RpgActivity) currentContext).finishGame(currentGameState, true);
             }
         }
         GameObject interceptor = this.findInterceptor();

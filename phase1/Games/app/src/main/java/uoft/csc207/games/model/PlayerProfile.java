@@ -39,7 +39,7 @@ public class PlayerProfile implements Serializable {
     public int getCurrency(){
         int totalCurrency = 0;
         for (Game g: games){
-            totalCurrency += g.getGameCurrency();
+            totalCurrency += g.getCumulativeCurrency();
         }
         return totalCurrency;
     }
@@ -47,7 +47,7 @@ public class PlayerProfile implements Serializable {
     public int getScore(){
         int totalScore = 0;
         for (Game g: games){
-            totalScore += g.getScore();
+            totalScore += g.getCumulativeScore();
         }
         return totalScore;
     }

@@ -45,6 +45,10 @@ public class ProfileManager {
 
     private TreeMap<String, PlayerProfile> profileMap;
 
+    public TreeMap getMap(){
+        return profileMap;
+    }
+
     public Context getAppContext() {
         return appContext;
     }
@@ -54,7 +58,6 @@ public class ProfileManager {
         this.appContext = appContext;
     }
 */
-
     private Context appContext;
 
     public PlayerProfile getCurrentPlayer() {
@@ -64,16 +67,24 @@ public class ProfileManager {
     public void setCurrentPlayer(PlayerProfile currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
+
     public void setSecondPlayer(PlayerProfile secondPlayer){
         this.secondPlayer = secondPlayer;
     }
-    public TreeMap getMap(){
-        return profileMap;
-    }
+    public boolean isFirstTurn(){ return isFirstTurn; }
 
     private PlayerProfile currentPlayer;
     private PlayerProfile secondPlayer;
+    private boolean isFirstTurn = false;
+    private boolean isTwoPlayerMode;
     private static ProfileManager singletonProfileManager;
+
+    public void setIsTwoPlayerMode(boolean b){
+        isTwoPlayerMode = b;
+    }
+    public boolean isTwoPlayerMode(){
+        return isTwoPlayerMode;
+    }
 
     /**
      * Retrieve a singleton ProfileManager object for a caller

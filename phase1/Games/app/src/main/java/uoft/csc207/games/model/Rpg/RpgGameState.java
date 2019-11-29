@@ -28,13 +28,16 @@ public class RpgGameState extends Game {
         return id;
     }
     public void updateScore(Integer i){
-        gameScore += 50;
+        gameScore += i;
+        cumulativeScore += i;
     }
     public void updateCurrency(Integer i){
-        gameCurrency++;
+        gameCurrency += i;
+        cumulativeCurrency += i;
     }
     public void restart(){
-
+        gameCurrency = 0;
+        gameScore = 0; 
     }
     public void chooseCharacter(String character){
         this.character = character;
