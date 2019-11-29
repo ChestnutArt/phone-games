@@ -41,7 +41,7 @@ public class CardCollection {
      * @param index the index where c should be inserted
      * @return the card formerly at index
      */
-    public Card setCard(Card c, int index) {
+    public Card setCard(int index, Card c) {
         Card prev = cards[index];
         cards[index] = c;
         return prev;
@@ -67,5 +67,14 @@ public class CardCollection {
      */
     public boolean isOccupied(int index) {
         return cards[index] == emptyCard;
+    }
+
+    /**
+     * Returns the number of cards this collection can hold
+     *
+     * @return the number of cards this collection can hold
+     */
+    public int getSize() {
+        return cards.length;
     }
 }
