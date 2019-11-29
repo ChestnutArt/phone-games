@@ -59,8 +59,10 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
         //Sets the CardPool
 
-        cardPool.addNewCard(new MonsterCard(100, 2000, "Ghost Ogre", R.drawable.ghost_ogre));
-        cardPool.addNewCard(new MonsterCard(1800, 0, "Ash", R.drawable.ashblossom));
+        cardPool.addNewCard(new MonsterCard(100, 2000, "Ghost Ogre",
+                R.drawable.ghost_ogre));
+        cardPool.addNewCard(new MonsterCard(1800, 0, "Ash",
+                R.drawable.ashblossom));
 
 
         //Sets the deck of the player
@@ -173,7 +175,8 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                         if (curr_deck_size < hand_occupancy) {
                             Snackbar lose_message =
                                     Snackbar.make(
-                                            findViewById(R.id.toolbar), R.string.lose_string, Snackbar.LENGTH_SHORT);
+                                            findViewById(R.id.toolbar), R.string.lose_string,
+                                            Snackbar.LENGTH_SHORT);
                             lose_message.show();
                         } else {
 
@@ -232,27 +235,30 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 cardGameState.getP_h()[posIndex] = true;
                 cardGameState.getP_brd()[posIndex] = false;
                 cardGameState.setSummoned(true);
-            } else if (!(cardGameState.getPlayer_hand().get(posIndex).getCard_art() == R.drawable.square)) {
+            } else if (!(cardGameState.getPlayer_hand().get(posIndex).getCard_art() ==
+                    R.drawable.square)) {
                 Snackbar cannot_summon =
-                        Snackbar.make(
-                                findViewById(R.id.toolbar), R.string.slot_occupied, Snackbar.LENGTH_SHORT);
+                        Snackbar.make(findViewById(R.id.toolbar), R.string.slot_occupied,
+                                Snackbar.LENGTH_SHORT);
                 cannot_summon.show();
             }
         } else {
-            Snackbar already_summoned = Snackbar.make(findViewById(R.id.toolbar), R.string.summoned,
-                    Snackbar.LENGTH_SHORT);
+            Snackbar already_summoned = Snackbar.make(findViewById(R.id.toolbar),
+                    R.string.summoned, Snackbar.LENGTH_SHORT);
             already_summoned.show();
         }
     }
 
     public void clickAttack(CardGameState cardGameState, int posIndex) {
         if (!cardGameState.getAttacked()[posIndex]) {
-            cardGameState.direct_attack(((MonsterCard) cardGameState.getPlayer_board().get(posIndex)), "ai");
+            cardGameState.direct_attack(((MonsterCard)
+                    cardGameState.getPlayer_board().get(posIndex)), "ai");
             TextView ai_lp = findViewById(R.id.ai_lp);
             ai_lp.setText("LP: " + cardGameState.getAi_health());
             cardGameState.getAttacked()[posIndex] = true;
             int currentScore = gameState.getCurrentScore();
-            gameState.setCurrentScore(currentScore + ((MonsterCard)cardGameState.getPlayer_board().get(posIndex)).getAttack());
+            gameState.setCurrentScore(currentScore +
+                    ((MonsterCard)cardGameState.getPlayer_board().get(posIndex)).getAttack());
             if (cardGameState.getAi_health() == 0) {
                 int currScore = gameState.getCurrentScore();
                 gameState.setCurrentScore(currScore + 3000);
@@ -267,7 +273,8 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             }
         } else {
             Snackbar attacked =
-                    Snackbar.make(findViewById(R.id.toolbar), R.string.attacked, Snackbar.LENGTH_SHORT);
+                    Snackbar.make(findViewById(R.id.toolbar), R.string.attacked,
+                            Snackbar.LENGTH_SHORT);
             attacked.show();
         }
     }
