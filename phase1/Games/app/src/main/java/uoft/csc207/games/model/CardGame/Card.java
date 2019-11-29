@@ -5,15 +5,15 @@ package uoft.csc207.games.model.CardGame;
  */
 public class Card {
     private String name;
-    private int card_art;
+    private int cardArt;
 
-    public Card(String name, int card_art) {
+    public Card(String name, int cardArt) {
         this.name = name;
-        this.card_art = card_art;
+        this.cardArt = cardArt;
     }
 
-    int getCard_art() {
-        return card_art;
+    int getCardArt() {
+        return cardArt;
     }
 
     String getName() {

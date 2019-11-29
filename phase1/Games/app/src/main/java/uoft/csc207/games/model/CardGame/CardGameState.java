@@ -3,9 +3,9 @@ package uoft.csc207.games.model.CardGame;
 
 public class CardGameState {
 
-    private CardDeck player_deck, ai_deck; // the cards in the deck
-    private int player_health, ai_health;
-    private CardCollection ai_hand, ai_board, player_hand, player_board; // the cards in the slots
+    private CardDeck playerDeck, aiDeck; // the cards in the deck
+    private int playerHealth, aiHealth;
+    private CardCollection aiHand, aiBoard, playerHand, playerBoard; // the cards in the slots
     private boolean[] attacked; // track whether each card has attacked this turn
     private boolean summoned; // track whether the player has summoned this turn
 
@@ -13,16 +13,16 @@ public class CardGameState {
         int handCap = 3;
         int boardCap = 3;
 
-        player_deck = new CardDeck();
-        ai_deck = new CardDeck();
+        playerDeck = new CardDeck();
+        aiDeck = new CardDeck();
 
-        player_health = 4000;
-        ai_health = 4000;
+        playerHealth = 4000;
+        aiHealth = 4000;
 
-        ai_hand = new CardCollection(handCap);
-        ai_board = new CardCollection(boardCap);
-        player_hand = new CardCollection(handCap);
-        player_board = new CardCollection(boardCap);
+        aiHand = new CardCollection(handCap);
+        aiBoard = new CardCollection(boardCap);
+        playerHand = new CardCollection(handCap);
+        playerBoard = new CardCollection(boardCap);
 
         attacked = new boolean[boardCap];
         summoned = false;
@@ -30,26 +30,6 @@ public class CardGameState {
         for (int i = 2; i >= 0; i--) {
             attacked[i] = false;
         }
-    }
-
-    Card getAi_board(int index) {
-        return ai_board.getCard(index);
-    }
-
-    Card getPlayer_hand(int index) {
-        return player_hand.getCard(index);
-    }
-
-    Card getAi_hand(int index) {
-        return ai_hand.getCard(index);
-    }
-
-    Card setPlayer_hand(int index, Card c) {
-        return player_hand.setCard(index, c);
-    }
-
-    Card setAi_hand(int index, Card c) {
-        return ai_hand.setCard(index, c);
     }
 
     /**
@@ -61,11 +41,118 @@ public class CardGameState {
     void direct_attack(MonsterCard card, String target) {
         if (target.equals("ai")) {
             // don't let anyone's health go below 0
-            this.ai_health = Math.max(this.ai_health - card.getAttack(), 0);
+            this.aiHealth = Math.max(this.aiHealth - card.getAttack(), 0);
         } else {
-            this.player_health = Math.max(this.player_health - card.getAttack(), 0);
+            this.playerHealth = Math.max(this.playerHealth - card.getAttack(), 0);
         }
     }
+
+    void restoreAttack() {
+        this.attacked[0] = false;
+        this.attacked[1] = false;
+        this.attacked[2] = false;
+    }
+
+
+    // everything after this is getters and setters
+
+    // decks
+
+    CardDeck getPlayerDeck() {
+        return playerDeck;
+    }
+
+    CardDeck getAiDeck() {
+        return aiDeck;
+    }
+
+    // health
+
+    public int getPlayerHealth() {
+        return playerHealth;
+    }
+
+    public void setPlayerHealth(int playerHealth) {
+        this.playerHealth = playerHealth;
+    }
+
+    int getAiHealth() {
+        return this.aiHealth;
+    }
+
+    // AI hand
+
+    Card getAiHand(int index) {
+        return aiHand.getCard(index);
+    }
+
+    Card setAiHand(int index, Card c) {
+        return aiHand.setCard(index, c);
+    }
+
+    /**
+     * Return whether there is a card in the AI's hand at index
+     *
+     * @param index the index to check
+     * @return whether or not the slot in the AI's hand at index is occupied
+     */
+    public boolean getAiHandOccupied(int index) {
+        return aiHand.isOccupied(index);
+    }
+
+    // player hand
+
+    Card getPlayerHand(int index) {
+        return playerHand.getCard(index);
+    }
+
+    Card setPlayerHand(int index, Card c) {
+        return playerHand.setCard(index, c);
+    }
+
+    /**
+     * Return whether there is a card in the player's hand at index
+     *
+     * @param index the index to check
+     * @return whether or not the slot in the player's hand at index is occupied
+     */
+    boolean getPlayerHandOccupied(int index) {
+        return playerHand.isOccupied(index);
+    }
+
+    int getPlayerHandSize() {
+        return playerHand.getSize();
+    }
+
+    // boards
+
+    Card getAiBoard(int index) {
+        return aiBoard.getCard(index);
+    }
+
+    Card getPlayerBoard(int index) {
+        return playerBoard.getCard(index);
+    }
+
+    Card setPlayerBoard(int index, Card c) {
+        return playerBoard.setCard(index, c);
+    }
+
+    boolean getPlayerBoardOccupied(int index) {
+        return playerBoard.isOccupied(index);
+    }
+
+    // attacked
+
+    boolean getAttacked(int index) {
+        return attacked[index];
+    }
+
+    void setAttacked(int index, boolean value) {
+        attacked[index] = value;
+    }
+
+    // summoned
 
     void setSummoned(boolean summoned) {
         this.summoned = summoned;
@@ -73,51 +160,5 @@ public class CardGameState {
 
     boolean isSummoned() {
         return summoned;
-    }
-
-    boolean[] getAttacked() {
-        return attacked;
-    }
-
-    int getAi_health() {
-        return this.ai_health;
-    }
-
-    public int getPlayer_health() {
-        return player_health;
-    }
-
-    boolean getPlayer_hand_occupied(int index) {
-        return player_hand.isOccupied(index);
-    }
-
-    public boolean getAi_hand_occupied(int index) {
-        return ai_hand.isOccupied(index);
-    }
-
-    boolean getPlayer_board_occupied(int index) {
-        return player_board.isOccupied(index);
-    }
-
-    CardDeck getPlayer_deck() {
-        return player_deck;
-    }
-
-    Card getPlayer_board(int index) {
-        return player_board.getCard(index);
-    }
-
-    Card setPlayer_board(int index, Card c) {
-        return player_board.setCard(index, c);
-    }
-
-    int getPlayer_hand_size() {
-        return player_hand.getSize();
-    }
-
-    void restoreAttack() {
-        this.attacked[0] = false;
-        this.attacked[1] = false;
-        this.attacked[2] = false;
     }
 }

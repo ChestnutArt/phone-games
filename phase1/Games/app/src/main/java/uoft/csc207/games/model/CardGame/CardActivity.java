@@ -39,7 +39,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         //Objects positions set up
         gameState = (CardGame) CardGame.getPlayerProfile().containsGame("257846");
         newGame = new CardGameState();
-        playerDeck = newGame.getPlayer_deck();
+        playerDeck = newGame.getPlayerDeck();
         bottomLeft = findViewById(R.id.bleft);
         bottomMid = findViewById(R.id.bmid);
         bottomRight = findViewById(R.id.bright);
@@ -159,10 +159,10 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                         TextView score = findViewById(R.id.score);
                         score.setText("HIGH SCORE: " + gameState.getScore());
                         // Determines whether loses
-                        int curr_deck_size = newGame.getPlayer_deck().getDeckSize();
+                        int curr_deck_size = newGame.getPlayerDeck().getDeckSize();
                         int hand_occupancy = 0;
-                        for (int i = 0; i < newGame.getPlayer_hand_size(); i++) {
-                            if (newGame.getPlayer_hand_occupied(i)) {
+                        for (int i = 0; i < newGame.getPlayerHandSize(); i++) {
+                            if (newGame.getPlayerHandOccupied(i)) {
                                 hand_occupancy++;
                             }
                         }
@@ -180,20 +180,20 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                             upperRight.setImageResource(R.drawable.card_back);
 
                             // Replenish cards in hand
-                            for (int i = 0; i < newGame.getPlayer_hand_size(); i++) {
-                                if (newGame.getPlayer_hand_occupied(i)) {
+                            for (int i = 0; i < newGame.getPlayerHandSize(); i++) {
+                                if (newGame.getPlayerHandOccupied(i)) {
                                     Card next_card = playerDeck.getNextCard();
                                     if (i == 0) {
-                                        newGame.setPlayer_hand(0, next_card);
-                                        bottomLeft.setImageResource(next_card.getCard_art());
+                                        newGame.setPlayerHand(0, next_card);
+                                        bottomLeft.setImageResource(next_card.getCardArt());
                                         playerDeck.removeNextCard();
                                     } else if (i == 1) {
-                                        newGame.setPlayer_hand(1, next_card);
-                                        bottomMid.setImageResource(next_card.getCard_art());
+                                        newGame.setPlayerHand(1, next_card);
+                                        bottomMid.setImageResource(next_card.getCardArt());
                                         playerDeck.removeNextCard();
                                     } else if (i == 2) {
-                                        newGame.setPlayer_hand(2, next_card);
-                                        bottomRight.setImageResource(next_card.getCard_art());
+                                        newGame.setPlayerHand(2, next_card);
+                                        bottomRight.setImageResource(next_card.getCardArt());
                                         playerDeck.removeNextCard();
                                     }
                                 }
@@ -207,24 +207,24 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
     public void clickSummon(CardGameState cardGameState, int posIndex) {
         if (!cardGameState.isSummoned()) {
-            if (!cardGameState.getPlayer_hand_occupied(posIndex) ==
-                    cardGameState.getPlayer_board_occupied(posIndex)) {
-                MonsterCard next_card = (MonsterCard) cardGameState.getPlayer_hand(posIndex);
-                cardGameState.setPlayer_board(posIndex, next_card);
+            if (!cardGameState.getPlayerHandOccupied(posIndex) ==
+                    cardGameState.getPlayerBoardOccupied(posIndex)) {
+                MonsterCard next_card = (MonsterCard) cardGameState.getPlayerHand(posIndex);
+                cardGameState.setPlayerBoard(posIndex, next_card);
                 if (posIndex == 0) {
-                    battlePosLeft.setImageResource(next_card.getCard_art());
+                    battlePosLeft.setImageResource(next_card.getCardArt());
                     bottomLeft.setImageResource(R.drawable.square);
                 } else if (posIndex == 1) {
-                    battlePosMid.setImageResource(next_card.getCard_art());
+                    battlePosMid.setImageResource(next_card.getCardArt());
                     bottomMid.setImageResource(R.drawable.square);
                 } else {
-                    battlePosRight.setImageResource(next_card.getCard_art());
+                    battlePosRight.setImageResource(next_card.getCardArt());
                     bottomRight.setImageResource(R.drawable.square);
                 }
 //                cardGameState.getP_h()[posIndex] = true;
 //                cardGameState.getP_brd()[posIndex] = false;
                 cardGameState.setSummoned(true);
-            } else if (!(cardGameState.getPlayer_hand(posIndex).getCard_art() ==
+            } else if (!(cardGameState.getPlayerHand(posIndex).getCardArt() ==
                     R.drawable.square)) {
                 Snackbar cannot_summon =
                         Snackbar.make(findViewById(R.id.toolbar), R.string.slot_occupied,
@@ -239,16 +239,16 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     }
 
     public void clickAttack(CardGameState cardGameState, int posIndex) {
-        if (!cardGameState.getAttacked()[posIndex]) {
+        if (!cardGameState.getAttacked(posIndex)) {
             cardGameState.direct_attack(((MonsterCard)
-                    cardGameState.getPlayer_board(posIndex)), "ai");
+                    cardGameState.getPlayerBoard(posIndex)), "ai");
             TextView ai_lp = findViewById(R.id.ai_lp);
-            ai_lp.setText("LP: " + cardGameState.getAi_health());
-            cardGameState.getAttacked()[posIndex] = true;
+            ai_lp.setText("LP: " + cardGameState.getAiHealth());
+            cardGameState.setAttacked(posIndex, true);
             int currentScore = gameState.getCurrentScore();
             gameState.setCurrentScore(currentScore +
-                    ((MonsterCard)cardGameState.getPlayer_board(posIndex)).getAttack());
-            if (cardGameState.getAi_health() == 0) {
+                    ((MonsterCard)cardGameState.getPlayerBoard(posIndex)).getAttack());
+            if (cardGameState.getAiHealth() == 0) {
                 int currScore = gameState.getCurrentScore();
                 gameState.setCurrentScore(currScore + 3000);
                 gameState.updateScore(gameState.getCurrentScore());
