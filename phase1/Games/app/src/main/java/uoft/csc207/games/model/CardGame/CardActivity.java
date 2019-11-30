@@ -182,7 +182,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
                             // Replenish cards in hand
                             for (int i = 0; i < newGame.getPlayerHandSize(); i++) {
-                                if (newGame.getPlayerHandOccupied(i)) {
+                                if (!newGame.getPlayerHandOccupied(i)) {
                                     Card next_card = playerDeck.getNextCard();
                                     if (i == 0) {
                                         newGame.setPlayerHand(0, next_card);
@@ -210,7 +210,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         if (!cardGameState.isSummoned()) {
             if (!cardGameState.getPlayerHandOccupied(posIndex) ==
                     cardGameState.getPlayerBoardOccupied(posIndex)) {
-                MonsterCard next_card = (MonsterCard) cardGameState.getPlayerHand(posIndex);
+                MonsterCard next_card = (MonsterCard) cardGameState.popPlayerHand(posIndex);
                 cardGameState.setPlayerBoard(posIndex, next_card);
                 if (posIndex == 0) {
                     battlePosLeft.setImageResource(next_card.getCardArt());
@@ -222,8 +222,6 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                     battlePosRight.setImageResource(next_card.getCardArt());
                     bottomRight.setImageResource(R.drawable.square);
                 }
-//                cardGameState.getP_h()[posIndex] = true;
-//                cardGameState.getP_brd()[posIndex] = false;
                 cardGameState.setSummoned(true);
             } else if (!(cardGameState.getPlayerHand(posIndex).getCardArt() ==
                     R.drawable.square)) {

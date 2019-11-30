@@ -124,6 +124,10 @@ public class CardGameState {
         return playerHand.getSize();
     }
 
+    Card popPlayerHand(int index) {
+        return playerHand.pop(index);
+    }
+
     // boards
 
     Card getAiBoard(int index) {
