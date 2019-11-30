@@ -12,7 +12,7 @@ public class Constants {
     public static Context CURRENT_CONTEXT;
 
     public static Activity activity;
-    public static PlayerProfile player;
+    //public static PlayerProfile player;
 
     public static int SPEED = 0;
 }
