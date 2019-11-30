@@ -30,17 +30,25 @@ public class TurnDisplayActivity extends AppCompatActivity{
         setContentView(R.layout.activity_turn_display);
         currentTurnDisplay = findViewById(R.id.tvCurrentTurn);
         currentTurnDisplay.setText("User " + ProfileManager.getProfileManager(this).getCurrentPlayer().getId() + "'s Turn");
-
+        initClassTypeLists();
     }
     public boolean onTouchEvent(MotionEvent event){
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-            if (ProfileManager.getProfileManager(this).isFirstTurn()){
-
-            } else {
-
+            Bundle extras = getIntent().getExtras();
+            Intent myIntent;
+            String sourceClassName = extras.getString("SOURCE_ACTIVITY");
+            Class sourceClass = null;
+            try{
+                sourceClass = Class.forName(sourceClassName);
+            } catch (ClassNotFoundException e){
             }
-            Intent myIntent = new Intent(TurnDisplayActivity.this, GameSelectActivity.class);
-            startActivity(myIntent);
+
+            if (ProfileManager.getProfileManager(this).isFirstTurn()){
+                myIntent = new Intent(TurnDisplayActivity.this, sourceClass);
+                startActivity(myIntent);
+            } else {
+                goToRandomGame(sourceClass);
+            }
             return true;
         } else {
             return false;
@@ -54,7 +62,15 @@ public class TurnDisplayActivity extends AppCompatActivity{
         gameActivities.add(CardActivity.class);
     }
 
-    private void goToRandomGame(){
-        Class destination;
+    private void goToRandomGame(Class previousGame){
+        Class[] gameActivityNames = gameActivities.toArray(new Class[0]);
+        Intent myIntent;
+        Class temp;
+        int i;
+        do{
+            i = (int) (Math.random() * gameActivityNames.length);
+        } while ((temp = gameActivityNames[i]) == previousGame);
+        myIntent = new Intent(TurnDisplayActivity.this, temp);
+        startActivity(myIntent);
     }
 }

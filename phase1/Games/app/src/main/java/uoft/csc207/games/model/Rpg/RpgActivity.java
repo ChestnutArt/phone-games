@@ -90,6 +90,8 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         Intent myIntent;
         if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){
             myIntent = new Intent(RpgActivity.this, TurnDisplayActivity.class);
+            myIntent.putExtra("SOURCE_ACTIVITY", RpgActivity.class.getName());
+            ProfileManager.getProfileManager(this).changeCurrentPlayer();
         } else {
             myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
         }

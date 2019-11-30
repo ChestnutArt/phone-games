@@ -118,6 +118,7 @@ public class ProfileManager {
         PlayerProfile temp = currentPlayer;
         currentPlayer = secondPlayer;
         secondPlayer = temp;
+        isFirstTurn = !isFirstTurn;
     }
     public PlayerProfile getProfileById(String id){
         return profileMap.get(id);
