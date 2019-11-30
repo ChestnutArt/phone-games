@@ -151,21 +151,21 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickSummon(newGame, 0);
+                        clickActivate(newGame, 0);
                     }
                 });
 
         bottomMid.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickSummon(newGame, 1);
+                        clickActivate(newGame, 1);
                     }
                 });
 
         bottomRight.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickSummon(newGame, 2);
+                        clickActivate(newGame, 2);
                     }
                 });
 
@@ -324,6 +324,23 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             Snackbar already_summoned = Snackbar.make(findViewById(R.id.toolbar),
                     R.string.summoned, Snackbar.LENGTH_SHORT);
             already_summoned.show();
+        }
+    }
+
+    @Override
+    public void clickActivate(CardGameState cardGameState, int posIndex) {
+        if (cardGameState.getPlayerHand(posIndex) instanceof MonsterCard) {
+            clickSummon(cardGameState, posIndex);
+        } else {
+            SpellCard spell = (SpellCard) cardGameState.getPlayerHand(posIndex);
+            String spellEffect = spell.getSpellEffect();
+            switch (spellEffect) {
+                case "destroyOneRandom": destroyOneRandom();
+                case "destroyAll": destroyAll();
+                case "increaseHP": increaseHP(spell.getEffectValue());
+                case "decreaseHP": decreaseHP(spell.getEffectValue());
+                case "attackAgain": attackAgain();
+            }
         }
     }
 

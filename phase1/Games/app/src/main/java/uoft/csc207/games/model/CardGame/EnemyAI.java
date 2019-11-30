@@ -60,7 +60,8 @@ public class EnemyAI implements CardClicker {
 
     }
 
-    public CardDeck getAiDeck() {
-        return aiDeck;
+    @Override
+    public void clickActivate(CardGameState cardGameState, int posIndex) {
+
     }
 }
