@@ -35,15 +35,15 @@ public class CardGameState {
     /**
      * Directly attack target using card, reducing their health by the card's attack
      *
-     * @param card   the card that should do the attacking
+     * @param damage the damage that would be dealt to any of the two parties
      * @param target who should be attacked - assumed to be the player unless "ai" is given
      */
-    void direct_attack(MonsterCard card, String target) {
+    void attack(int damage, String target) {
         if (target.equals("ai")) {
             // don't let anyone's health go below 0
-            this.aiHealth = Math.max(this.aiHealth - card.getAttack(), 0);
+            this.aiHealth = Math.max(this.aiHealth - damage, 0);
         } else {
-            this.playerHealth = Math.max(this.playerHealth - card.getAttack(), 0);
+            this.playerHealth = Math.max(this.playerHealth - damage, 0);
         }
     }
 
@@ -129,6 +129,10 @@ public class CardGameState {
     }
 
     // boards
+
+    CardCollection getFullAiBoard() { return aiBoard; }
+
+    CardCollection getFullPlayerBoard() { return playerBoard; }
 
     Card getAiBoard(int index) {
         return aiBoard.getCard(index);

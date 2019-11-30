@@ -32,6 +32,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     private CardPool cardPool;
     private CardDeck playerDeck;
     private int attackTarget;
+    private int attackOrigin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,10 +257,9 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         }
     }
 
-    public void clickAttack(CardGameState cardGameState, int posIndex) {
-        if (!cardGameState.getAttacked(posIndex)) {
-            cardGameState.direct_attack(((MonsterCard)
-                    cardGameState.getPlayerBoard(posIndex)), "ai");
+    public void clickDirectAttack(CardGameState cardGameState, int posIndex) {
+            cardGameState.attack(((MonsterCard)
+                    cardGameState.getPlayerBoard(posIndex)).getAttack(), "ai");
 
             TextView ai_lp = findViewById(R.id.ai_lp);
             ai_lp.setText("LP: " + cardGameState.getAiHealth());
@@ -268,27 +268,8 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             int currentScore = gameState.getCurrentScore();
             gameState.setCurrentScore(currentScore +
                     ((MonsterCard)cardGameState.getPlayerBoard(posIndex)).getAttack());
-
-            if (cardGameState.getAiHealth() == 0) {
-                int currScore = gameState.getCurrentScore();
-                gameState.setCurrentScore(currScore + 3000);
-                gameState.updateScore(gameState.getCurrentScore());
-                gameState.setCurrentScore(0);
-                score.setText("HIGH SCORE: " + gameState.getScore());
-                gameState.checkAchievements();
-                ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
-                Snackbar winner_msg =
-                        Snackbar.make(
-                                findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
-                winner_msg.show();
-            }
-        } else {
-            Snackbar attacked =
-                    Snackbar.make(findViewById(R.id.toolbar), R.string.attacked,
-                            Snackbar.LENGTH_SHORT);
-            attacked.show();
         }
-    }
+
 
     @Override
     public void destroyOneRandom() {
@@ -318,8 +299,52 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
     @Override
     public void clickTargetAttack(CardGameState cardGameState, int posIndex) {
-        attackTarget = posIndex;
-        openDialog();
+        if (cardGameState.getPlayerBoardOccupied(posIndex)){
+            attackOrigin = posIndex;
+            openDialog();
+        }
+    }
+
+
+    @Override
+    public void clickAttack(CardGameState cardGameState, int posIndex, int targetPosIndex) {
+        if (!cardGameState.getAttacked(posIndex)) {
+            int damageDifference =
+                    ((MonsterCard) cardGameState.getPlayerBoard(posIndex)).getAttack() -
+                    ((MonsterCard) cardGameState.getAiBoard(targetPosIndex)).getAttack();
+            if (damageDifference > 0) {
+                //Destroys ai monster card and deals damage difference to AI
+                cardGameState.getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
+                cardGameState.attack(damageDifference, "ai");
+            } else if (damageDifference < 0) {
+                //Destroys own monster card and deals damage difference to self
+                cardGameState.getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
+                cardGameState.attack(damageDifference, "player");
+            } else {
+                //Destroys both monsters
+                cardGameState.getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
+                cardGameState.getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
+            }
+            //Announces victory
+            if (cardGameState.getAiHealth() == 0) {
+                int currScore = gameState.getCurrentScore();
+                gameState.setCurrentScore(currScore + 3000);
+                gameState.updateScore(gameState.getCurrentScore());
+                gameState.setCurrentScore(0);
+                score.setText("HIGH SCORE: " + gameState.getScore());
+                gameState.checkAchievements();
+                ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
+                Snackbar winner_msg =
+                        Snackbar.make(
+                                findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
+                winner_msg.show();
+            }
+        }  else {
+            Snackbar attacked =
+                    Snackbar.make(findViewById(R.id.toolbar), R.string.attacked,
+                            Snackbar.LENGTH_SHORT);
+            attacked.show();
+        }
     }
 
     public void openDialog() {
@@ -330,21 +355,27 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
     @Override
     public void onOtherPlayerClicked() {
-        clickAttack(newGame, attackTarget);
+        clickDirectAttack(newGame, attackOrigin);
     }
 
     @Override
     public void onLeftCardClicked() {
-        attackTarget = 1;
+        if (newGame.getFullAiBoard().isOccupied(0)) {
+            clickAttack(newGame, attackOrigin, 0);
+        }
     }
 
     @Override
-    public void onMiddleCardClicked() {
-        attackTarget = 2;
+    public void onMiddleCardClicked(){
+        if (newGame.getFullAiBoard().isOccupied(1)) {
+            clickAttack(newGame, attackOrigin, 1);
+        }
     }
 
     @Override
     public void onRightCardClicked() {
-        attackTarget = 3;
+        if (newGame.getFullAiBoard().isOccupied(2)) {
+            clickAttack(newGame, attackOrigin, 2);
+        }
     }
 }
