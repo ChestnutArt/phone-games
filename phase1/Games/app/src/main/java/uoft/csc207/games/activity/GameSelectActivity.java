@@ -85,12 +85,12 @@ public class GameSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(GameSelectActivity.this, RpgActivity.class);
-                Game game = currentProfile.containsGame(IGameID.RPG);
-                if (game == null){
+                //Game game = currentProfile.containsGame(IGameID.RPG);
+                /*if (game == null){
                     //dependency injection design
                     Game newRpgGame = new RpgGameState();
                     currentProfile.addGame(newRpgGame);
-                }
+                }*/
                 startActivity(myIntent);
             }
         });
