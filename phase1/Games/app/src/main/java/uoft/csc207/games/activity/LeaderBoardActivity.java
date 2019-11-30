@@ -25,14 +25,16 @@ public class LeaderBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        score_view = findViewById(R.id.score_board);
+        setContentView(R.layout.activity_view_scores);
+        score_view = (ListView)findViewById(R.id.score_board);
         scores = scoreBoard.sortScores(true);
         adapter = new ArrayAdapter(LeaderBoardActivity.this, android.R.layout.simple_list_item_1, viewScore(scores));
         score_view.setAdapter(adapter);
     }
 
-    private ArrayList viewScore(ArrayList<Score> scores){
+    private ArrayList<String> viewScore(ArrayList<Score> scores){
         ArrayList<String> return_list = new ArrayList<>();
+        return_list.add("Scores: ");
         for (Score s: scores){
             return_list.add(s.getName() + ": Money - "+s.getPoints()+" Coins Earned - "+s.getPoints());
         }

@@ -28,7 +28,9 @@ public class ScoreBoard implements Serializable {
     public ScoreBoard(){
         this.context = Constants.CURRENT_CONTEXT;
         score_board = new ArrayList<>();
-        loadScores();
+        if (context != null) {
+            loadScores();
+        }
         this.ranker = new Ranker(score_board);
     }
 
