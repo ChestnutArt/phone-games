@@ -77,4 +77,18 @@ public class CardCollection {
     public int getSize() {
         return cards.length;
     }
+
+    public int getOccupiedSize() {
+        int occupiedNumber = 0;
+        for (Card card: cards) {
+            if (!card.equals(emptyCard)) {
+                occupiedNumber++;
+            }
+        }
+        return occupiedNumber;
+    }
+
+    public Card[] getCards() {
+        return cards;
+    }
 }
