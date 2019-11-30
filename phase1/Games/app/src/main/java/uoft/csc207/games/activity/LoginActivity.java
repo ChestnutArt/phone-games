@@ -58,12 +58,13 @@ public class LoginActivity extends AppCompatActivity {
 
         doubleLogin.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
+                profileManager.setIsTwoPlayerMode(true);
                 validate(username.getText().toString(), password.getText().toString());
                 username.setText("");
                 password.setText("");
                 doubleLogin.setText("2 Player Login (2 of 2)");
-                isFirstLogin = false;
-                profileManager.setIsTwoPlayerMode(true);
+
+
             }
         });
     }
@@ -92,14 +93,15 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+
         if(!profileManager.isTwoPlayerMode()){
-            profileManager.setCurrentPlayer(tmpProfile);
-            errorMsg.setText("User " + tmpProfile.getId() + " has been logged in");
             moveToGameSelectActivity();
+            profileManager.setCurrentPlayer(tmpProfile);
         } else {
             if(isFirstLogin){
                 profileManager.setCurrentPlayer(tmpProfile);
                 errorMsg.setText("User " + tmpProfile.getId() + " has been logged in");
+                isFirstLogin = false;
             } else {
                 if(profileManager.getCurrentPlayer() == tmpProfile){
                     errorMsg.setText("User " + tmpProfile.getId() + " has already been logged in");
