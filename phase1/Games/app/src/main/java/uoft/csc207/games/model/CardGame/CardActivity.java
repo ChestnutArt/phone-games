@@ -71,6 +71,8 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 R.drawable.ghost_ogre));
         cardPool.addNewCard(new MonsterCard(1800, 0, "Ash",
                 R.drawable.ashblossom));
+        cardPool.addNewCard(new SpellCard("Raigeki", R.drawable.raigeki,
+                "destroyAll", 0));
 
         //Sets up the EnemyAI deck
         aiDeck.addThree("Ghost Ogre", cardPool);
@@ -84,12 +86,13 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             deck_name = gameState.getCardDeck();
         }
         if (deck_name.equals("Ash")) {
-            playerDeck.addThree("Ghost Ogre", cardPool);
+            playerDeck.addThree("Raigeki", cardPool);
             playerDeck.addThree("Ash", cardPool);
+            playerDeck.addThree("Ghost Ogre", cardPool);
             gameState.setCardDeck("Ash");
         } else if (deck_name.equals("G_ogre")) {
-            playerDeck.addThree("Ash", cardPool);
             playerDeck.addThree("Ghost Ogre", cardPool);
+            playerDeck.addThree("Ash", cardPool);
             gameState.setCardDeck("G_ogre");
         }
 
@@ -341,6 +344,12 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 case "decreaseHP": decreaseHP(spell.getEffectValue());
                 case "attackAgain": attackAgain();
             }
+            cardGameState.getFullPlayerHand().pop(posIndex);
+            switch (posIndex) {
+                case 0: bottomLeft.setImageResource(R.drawable.square);
+                case 1: bottomMid.setImageResource(R.drawable.square);
+                case 2: bottomRight.setImageResource(R.drawable.square);
+            }
         }
     }
 
@@ -356,6 +365,11 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             Random random = new Random();
             int posNext = random.nextInt();
             newGame.getFullAiBoard().setCard(posNext, CardCollection.emptyCard);
+            switch (posNext) {
+                case 0: battleAiLeft.setImageResource(R.drawable.square);
+                case 1: battleAiMid.setImageResource(R.drawable.square);
+                case 2: battleAiRight.setImageResource(R.drawable.square);
+            }
         }
 
     }
@@ -365,16 +379,24 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         newGame.getFullAiBoard().setCard(0, CardCollection.emptyCard);
         newGame.getFullAiBoard().setCard(1, CardCollection.emptyCard);
         newGame.getFullAiBoard().setCard(2, CardCollection.emptyCard);
+        battleAiLeft.setImageResource(R.drawable.square);
+        battleAiMid.setImageResource(R.drawable.square);
+        battleAiRight.setImageResource(R.drawable.square);
     }
 
     @Override
     public void increaseHP(int healthPoint) {
+        TextView player_lp = findViewById(R.id.p_lp);
         newGame.setPlayerHealth(newGame.getPlayerHealth() + healthPoint);
+        player_lp.setText("LP" + newGame.getPlayerHealth());
+
     }
 
     @Override
     public void decreaseHP(int healthPoint) {
-        newGame.setAiHealth(newGame.getPlayerHealth() + healthPoint);
+        TextView ai_lp = findViewById(R.id.ai_lp);
+        newGame.attack(healthPoint, "ai");
+        ai_lp.setText("LP" + newGame.getAiHealth());
     }
 
     @Override

@@ -146,6 +146,8 @@ public class CardGameState {
 
     CardCollection getFullAiHand() { return aiHand; }
 
+    CardCollection getFullPlayerHand() { return playerHand; }
+
     Card getAiBoard(int index) {
         return aiBoard.getCard(index);
     }
