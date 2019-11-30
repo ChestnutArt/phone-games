@@ -16,6 +16,7 @@ import java.util.Random;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.IGameID;
 
 
 public class CardActivity extends AppCompatActivity implements CardClicker, SpellEffect {
@@ -37,7 +38,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         Intent intent = getIntent();
 
         //Objects positions set up
-        gameState = (CardGame) CardGame.getPlayerProfile().containsGame("257846");
+        gameState = (CardGame) CardGame.getPlayerProfile().containsGame(IGameID.CARD);
         newGame = new CardGameState();
         playerDeck = newGame.getPlayerDeck();
         bottomLeft = findViewById(R.id.bleft);

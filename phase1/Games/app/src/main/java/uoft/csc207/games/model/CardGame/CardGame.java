@@ -2,6 +2,7 @@ package uoft.csc207.games.model.CardGame;
 
 import uoft.csc207.games.model.Achievement;
 import uoft.csc207.games.model.Game;
+import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
 
 public class CardGame extends Game {
@@ -11,7 +12,7 @@ public class CardGame extends Game {
 
     public CardGame() {
         super();
-        this.id = "257846";
+        this.id = IGameID.CARD;
     }
 
     @Override

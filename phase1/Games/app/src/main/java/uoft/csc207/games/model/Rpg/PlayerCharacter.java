@@ -114,6 +114,10 @@ public class PlayerCharacter extends GameObject{
         return bitmaps[colUsing];
     }
 
+    /**
+     * Initializes the set of images representing the walk cycle in each of the four possible directions.
+     * @param newImage
+     */
     public void setWalkCycleImages(Bitmap newImage){
         this.image = newImage;
         for(int col = 0; col < NUM_MOVEMENTS; col++){
@@ -124,6 +128,12 @@ public class PlayerCharacter extends GameObject{
         }
     }
 
+    /**
+     * Updates the PlayerCharacter's x and y coordinates based off of its movement vectors and the
+     * set destination coordinates. Always handles movement in x direction first, only begins movement
+     * in y direction after movement in x direction is finished. Also updates the Bitmap image representing
+     * the PlayerCharacter accordingly to imitate a walk cycle.
+     */
     public void update(){
         if (!(movingVectorX == 0 && movingVectorY == 0)){
             this.colUsing++;    //updates walking image being used if the character is moving
@@ -173,6 +183,10 @@ public class PlayerCharacter extends GameObject{
         }
     }
 
+    /**
+     * Stops the PlayerCharacter's movement, which is just setting its movement vectors to 0 and setting
+     * its destination to where it is currently at.
+     */
     public void stopMoving(){
         movingVectorX = 0;
         movingVectorY = 0;
@@ -180,6 +194,11 @@ public class PlayerCharacter extends GameObject{
         destinationY = y;
     }
 
+    /**
+     * Draws itself on the passed in canvas at its position. Offset by half of single width and single height
+     * so x and y coordinates are the center of the PlayerCharacter's Bitmap image
+     * @param canvas The Canvas to draw the PlayerCharacter on
+     */
     public void draw(Canvas canvas){
         Bitmap bitmap = this.getCurrentMoveBitmap();
         canvas.drawBitmap(bitmap, x - (singleWidth / 2), y - (singleWidth / 2), null);
@@ -188,6 +207,12 @@ public class PlayerCharacter extends GameObject{
         this.lastDrawNanoTime = System.nanoTime();
     }
 
+    /**
+     * Sets the movement vectors for the x and y directions. The vector essentially just used to
+     * gauge which direction the PlayerCharacter moves in.
+     * @param movingVectorX The value that movingVectorX is to be set to
+     * @param movingVectorY The value that movingVectorY is to be set to
+     */
     public void setMovementVector(int movingVectorX, int movingVectorY){
         this.movingVectorX = movingVectorX;
         this.movingVectorY = movingVectorY;
@@ -213,18 +238,29 @@ public class PlayerCharacter extends GameObject{
         this.y = y;
     }
 
+    /**
+     * Sets all the booleans of whether the PlayerCharacter is blocked in a certain direction to false.
+     */
     public void unblockAllDirections(){
         isLeftBlocked = false;
         isRightBlocked = false;
         isTopBlocked = false;
         isBotBlocked = false;
     }
+
     public void setNotMoving(){
         movingLeft = false;
         movingRight = false;
         movingTop = false;
         movingBot = false;
     }
+
+    /**
+     * Gets the direction the PlayerCharacter is moving in. The logic for deciding the direction is based
+     * off the fact that I coded PlayerCharacter movement to always handle movement in the x direction
+     * before movement in the y direction.
+     * @return A String representation of the current moving direction.
+     */
     public String getMovingDirection(){
         if(movingVectorX != 0){
             if (movingVectorX > 0){
@@ -241,6 +277,10 @@ public class PlayerCharacter extends GameObject{
         }
     }
 
+    /**
+     * Gets the directions the player is blocked in as a String list.
+     * @return A list with string representations of all the blocked directions
+     */
     public List<String> getBlockedDirections(){
         List<String> blockedDirections = new ArrayList<>();
         if (isRightBlocked){

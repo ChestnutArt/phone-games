@@ -70,7 +70,7 @@ public class GameSelectActivity extends AppCompatActivity {
         cardSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!(currentProfile.containsGame("257846") instanceof CardGame)) {
+                if (!(currentProfile.containsGame(IGameID.CARD) instanceof CardGame)) {
                     currentProfile.addGame(new CardGame());
                 }
                 CardGame.setPlayerProfile(currentProfile);

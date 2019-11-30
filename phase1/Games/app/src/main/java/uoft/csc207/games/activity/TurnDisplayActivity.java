@@ -9,13 +9,20 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.controller.rpg.RPGGameManager;
+import uoft.csc207.games.model.CardGame.CardActivity;
+import uoft.csc207.games.model.Rpg.RpgActivity;
+import uoft.csc207.games.model.dodger.ScrollerActivity;
 
 public class TurnDisplayActivity extends AppCompatActivity{
     private TextView currentTurnDisplay;
     private Class destination;
+    private List<Class> gameActivities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +30,6 @@ public class TurnDisplayActivity extends AppCompatActivity{
         setContentView(R.layout.activity_turn_display);
         currentTurnDisplay = findViewById(R.id.tvCurrentTurn);
         currentTurnDisplay.setText("User " + ProfileManager.getProfileManager(this).getCurrentPlayer().getId() + "'s Turn");
-
-        View turnView = findViewById(R.id.currentTurnLayout);
 
     }
     public boolean onTouchEvent(MotionEvent event){
@@ -40,5 +45,16 @@ public class TurnDisplayActivity extends AppCompatActivity{
         } else {
             return false;
         }
+    }
+
+    private void initClassTypeLists(){
+        gameActivities = new ArrayList<>();
+        gameActivities.add(RpgActivity.class);
+        gameActivities.add(ScrollerActivity.class);
+        gameActivities.add(CardActivity.class);
+    }
+
+    private void goToRandomGame(){
+        Class destination;
     }
 }
