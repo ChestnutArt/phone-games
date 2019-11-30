@@ -18,8 +18,8 @@ public class TargetChoiceDialog extends AppCompatDialogFragment {
         CharSequence[] allChoices = new CharSequence[4];
         allChoices[0] = "Direct Attack";
         allChoices[1] = "Left Card";
-        allChoices[2] = "Right Card";
-        allChoices[3] = "Left Card";
+        allChoices[2] = "Middle Card";
+        allChoices[3] = "Right Card";
         builder.setTitle("Select a target")
                 .setItems(allChoices, new DialogInterface.OnClickListener() {
                     @Override
