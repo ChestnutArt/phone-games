@@ -8,10 +8,16 @@ import uoft.csc207.games.model.PlayerProfile;
 public class CardGame extends Game {
 
     private int currentScore = 0;
+    private String character;
+    private String mode;
+    private String cardDeck;
 
     public CardGame() {
         super();
         this.id = IGameID.CARD;
+        this.character = "Obama";
+        this.mode = "Day";
+        this.cardDeck = "Ash";
         initializeAchievements();
     }
 
@@ -45,7 +51,7 @@ public class CardGame extends Game {
 
     @Override
     public void chooseCharacter(String character) {
-
+        this.character = character;
     }
 
     @Override
@@ -75,5 +81,30 @@ public class CardGame extends Game {
         achieve = new Achievement("Body Count", "\tDeal at least 3000 damage or win a duel",
                 7000, 0, true, false);
         this.availableAchievements.add(achieve);
+    }
+
+    public void setCardDeck(String cardDeck) {
+        this.cardDeck = cardDeck;
+    }
+
+    public String getCardDeck() {
+        return cardDeck;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    @Override
+    public String getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(String character) {
+        this.character = character;
     }
 }
