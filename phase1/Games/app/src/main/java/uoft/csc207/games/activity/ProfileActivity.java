@@ -28,6 +28,8 @@ public class ProfileActivity extends AppCompatActivity {
         profileStatsTv.setText("Score: " + currentProfile.getScore() + "\nCurrency: " + currentProfile.getCurrency()
             + "\nAchievements: \n" + currentProfile.getAchievements());
 
+        ProfileManager profileManager = ProfileManager.getProfileManager(this);
+
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -19,6 +19,11 @@ import uoft.csc207.games.model.CardGame.CardActivity;
 import uoft.csc207.games.model.Rpg.RpgActivity;
 import uoft.csc207.games.model.dodger.ScrollerActivity;
 
+/**
+ * All the logic is in TurnDisplayActivity. Each game's activity only needs to check ProfileManager for
+ * if it's two player mode, and if it is, putExtra the class name of that game's activity, switch the player's
+ * turns, and move from their game's activity to TurnDisplayActivity. About 5 lines of code.
+ */
 public class TurnDisplayActivity extends AppCompatActivity{
     private TextView currentTurnDisplay;
     private Class destination;

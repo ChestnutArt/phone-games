@@ -24,9 +24,6 @@ public class GameSelectActivity extends AppCompatActivity {
     private TextView welcome;
     private Button logout;
     private PlayerProfile currentProfile;
-    private PlayerProfile secondProfile;
-    private boolean isTwoPlayer;
-    private boolean isFirstPlayerTurn = true;
 
     private Button scrollerSelect;
     private Button cardSelect;
@@ -47,10 +44,14 @@ public class GameSelectActivity extends AppCompatActivity {
         profileButton = findViewById(R.id.profileBtn);
         leaderBoard = findViewById(R.id.LeaderBoard);
 
-        /*Intent intent = getIntent();
-        currentProfile = (PlayerProfile)intent.getSerializableExtra(ProfileManager.CURRENT_PLAYER);*/
-        currentProfile = ProfileManager.getProfileManager(this).getCurrentPlayer();
-        welcome.setText("Welcome back " + currentProfile.getId() + "!");
+        ProfileManager profileManager = ProfileManager.getProfileManager(getApplicationContext());
+        currentProfile = profileManager.getCurrentPlayer();
+        if (profileManager.isTwoPlayerMode()){
+            welcome.setText("Welcome back " + currentProfile.getId() + " and " + profileManager.
+                    getSecondPlayer().getId() + "!");
+        } else {
+            welcome.setText("Welcome back " + currentProfile.getId() + "!");
+        }
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
