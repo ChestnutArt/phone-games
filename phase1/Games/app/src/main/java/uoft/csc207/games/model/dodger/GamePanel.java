@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import uoft.csc207.games.R;
+import uoft.csc207.games.activity.dodger.ScrollerActivity;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.controller.Score;
 import uoft.csc207.games.controller.ScoreBoard;

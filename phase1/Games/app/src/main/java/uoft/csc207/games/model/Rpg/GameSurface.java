@@ -3,14 +3,12 @@ package uoft.csc207.games.model.Rpg;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 
-import java.util.Iterator;
-
+import uoft.csc207.games.activity.rpg.RpgActivity;
 import uoft.csc207.games.controller.rpg.RPGGameManager;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
