@@ -12,6 +12,7 @@ public class CardGame extends Game {
     public CardGame() {
         super();
         this.id = IGameID.CARD;
+        initializeAchievements();
     }
 
     @Override
@@ -63,10 +64,10 @@ public class CardGame extends Game {
     @Override
     public void initializeAchievements() {
         Achievement achieve;
-        achieve = new Achievement("Game's On", "Damage the opponent",
+        achieve = new Achievement("Game's On", "\tDamage the opponent",
                 1, 0, true, false);
         this.availableAchievements.add(achieve);
-        achieve = new Achievement("Body Count", "Deal at least 3000 damage or win a duel",
+        achieve = new Achievement("Body Count", "\tDeal at least 3000 damage or win a duel",
                 7000, 0, true, false);
         this.availableAchievements.add(achieve);
     }

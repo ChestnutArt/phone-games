@@ -203,6 +203,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                         }
                         newGame.setSummoned(false);
                         newGame.restoreAttack();
+                        gameState.checkAchievements();
                     }
                 });
 
@@ -211,6 +212,10 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        gameState.updateScore(gameState.getCurrentScore());
+                        gameState.checkAchievements();
+                        ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
+
                         Intent intent = new Intent(CardActivity.this,
                                 GameSelectActivity.class);
                         startActivity(intent);
@@ -254,18 +259,22 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         if (!cardGameState.getAttacked(posIndex)) {
             cardGameState.direct_attack(((MonsterCard)
                     cardGameState.getPlayerBoard(posIndex)), "ai");
+
             TextView ai_lp = findViewById(R.id.ai_lp);
             ai_lp.setText("LP: " + cardGameState.getAiHealth());
+
             cardGameState.setAttacked(posIndex, true);
             int currentScore = gameState.getCurrentScore();
             gameState.setCurrentScore(currentScore +
                     ((MonsterCard)cardGameState.getPlayerBoard(posIndex)).getAttack());
+
             if (cardGameState.getAiHealth() == 0) {
                 int currScore = gameState.getCurrentScore();
                 gameState.setCurrentScore(currScore + 3000);
                 gameState.updateScore(gameState.getCurrentScore());
                 gameState.setCurrentScore(0);
                 score.setText("HIGH SCORE: " + gameState.getScore());
+                gameState.checkAchievements();
                 ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
                 Snackbar winner_msg =
                         Snackbar.make(
