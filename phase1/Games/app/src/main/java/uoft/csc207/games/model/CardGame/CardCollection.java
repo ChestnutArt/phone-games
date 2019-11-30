@@ -66,7 +66,7 @@ public class CardCollection {
      * @return whether there is a card at index
      */
     public boolean isOccupied(int index) {
-        return cards[index] == emptyCard;
+        return cards[index] != emptyCard;
     }
 
     /**

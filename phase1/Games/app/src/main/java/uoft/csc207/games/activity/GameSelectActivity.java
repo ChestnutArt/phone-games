@@ -62,7 +62,7 @@ public class GameSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent sIntent = new Intent(GameSelectActivity.this, ScrollerActivity.class);
-                Constants.player = currentProfile;
+                //Constants.player = currentProfile;
                 startActivity(sIntent);
             }
         });
@@ -70,10 +70,9 @@ public class GameSelectActivity extends AppCompatActivity {
         cardSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!(currentProfile.containsGame("257846") instanceof CardGame)) {
+                if (!(currentProfile.containsGame(IGameID.CARD) instanceof CardGame)) {
                     currentProfile.addGame(new CardGame());
                 }
-                CardGame.setPlayerProfile(currentProfile);
                 Intent cardIntent = new Intent(GameSelectActivity.this, DeckSelection.class);
                 startActivity(cardIntent);
             }
@@ -85,12 +84,6 @@ public class GameSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(GameSelectActivity.this, RpgActivity.class);
-                Game game = currentProfile.containsGame(IGameID.RPG);
-                if (game == null){
-                    //dependency injection design
-                    Game newRpgGame = new RpgGameState();
-                    currentProfile.addGame(newRpgGame);
-                }
                 startActivity(myIntent);
             }
         });

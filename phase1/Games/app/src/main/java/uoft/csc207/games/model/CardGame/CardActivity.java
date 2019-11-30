@@ -15,10 +15,12 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Random;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.IGameID;
 
 
-public class CardActivity extends AppCompatActivity implements CardClicker, SpellEffect {
+public class CardActivity extends AppCompatActivity implements CardClicker, SpellEffect, TargetChoiceDialog.TargetChoiceDialogListener {
 
     private CardGameState newGame;
     private CardGame gameState;
@@ -29,6 +31,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     private View curr_layout;
     private CardPool cardPool;
     private CardDeck playerDeck;
+    private int attackTarget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         Intent intent = getIntent();
 
         //Objects positions set up
-        gameState = (CardGame) CardGame.getPlayerProfile().containsGame("257846");
+        gameState = (CardGame) ProfileManager.getProfileManager(getApplicationContext()).getCurrentPlayer().containsGame(IGameID.CARD);
         newGame = new CardGameState();
         playerDeck = newGame.getPlayerDeck();
         bottomLeft = findViewById(R.id.bleft);
@@ -131,21 +134,21 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         battlePosLeft.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickAttack(newGame, 0);
+                        clickTargetAttack(newGame, 0);
                     }
                 });
 
         battlePosMid.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickAttack(newGame, 1);
+                        clickTargetAttack(newGame, 1);
                     }
                 });
 
         battlePosRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickAttack(newGame, 2);
+                clickTargetAttack(newGame, 2);
             }
         });
 
@@ -167,7 +170,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                             }
                         }
 
-                        if (curr_deck_size < hand_occupancy) {
+                        if (curr_deck_size + 1 < hand_occupancy) {
                             Snackbar lose_message =
                                     Snackbar.make(
                                             findViewById(R.id.toolbar), R.string.lose_string,
@@ -181,7 +184,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
                             // Replenish cards in hand
                             for (int i = 0; i < newGame.getPlayerHandSize(); i++) {
-                                if (newGame.getPlayerHandOccupied(i)) {
+                                if (!newGame.getPlayerHandOccupied(i)) {
                                     Card next_card = playerDeck.getNextCard();
                                     if (i == 0) {
                                         newGame.setPlayerHand(0, next_card);
@@ -201,15 +204,32 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                         }
                         newGame.setSummoned(false);
                         newGame.restoreAttack();
+                        gameState.checkAchievements();
                     }
                 });
+
+        final Button exitButton = findViewById(R.id.exitCardGame);
+        exitButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gameState.updateScore(gameState.getCurrentScore());
+                        gameState.checkAchievements();
+                        ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
+
+                        Intent intent = new Intent(CardActivity.this,
+                                GameSelectActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
     }
 
     public void clickSummon(CardGameState cardGameState, int posIndex) {
         if (!cardGameState.isSummoned()) {
             if (!cardGameState.getPlayerHandOccupied(posIndex) ==
                     cardGameState.getPlayerBoardOccupied(posIndex)) {
-                MonsterCard next_card = (MonsterCard) cardGameState.getPlayerHand(posIndex);
+                MonsterCard next_card = (MonsterCard) cardGameState.popPlayerHand(posIndex);
                 cardGameState.setPlayerBoard(posIndex, next_card);
                 if (posIndex == 0) {
                     battlePosLeft.setImageResource(next_card.getCardArt());
@@ -221,8 +241,6 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                     battlePosRight.setImageResource(next_card.getCardArt());
                     bottomRight.setImageResource(R.drawable.square);
                 }
-//                cardGameState.getP_h()[posIndex] = true;
-//                cardGameState.getP_brd()[posIndex] = false;
                 cardGameState.setSummoned(true);
             } else if (!(cardGameState.getPlayerHand(posIndex).getCardArt() ==
                     R.drawable.square)) {
@@ -242,18 +260,22 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         if (!cardGameState.getAttacked(posIndex)) {
             cardGameState.direct_attack(((MonsterCard)
                     cardGameState.getPlayerBoard(posIndex)), "ai");
+
             TextView ai_lp = findViewById(R.id.ai_lp);
             ai_lp.setText("LP: " + cardGameState.getAiHealth());
+
             cardGameState.setAttacked(posIndex, true);
             int currentScore = gameState.getCurrentScore();
             gameState.setCurrentScore(currentScore +
                     ((MonsterCard)cardGameState.getPlayerBoard(posIndex)).getAttack());
+
             if (cardGameState.getAiHealth() == 0) {
                 int currScore = gameState.getCurrentScore();
                 gameState.setCurrentScore(currScore + 3000);
                 gameState.updateScore(gameState.getCurrentScore());
                 gameState.setCurrentScore(0);
                 score.setText("HIGH SCORE: " + gameState.getScore());
+                gameState.checkAchievements();
                 ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
                 Snackbar winner_msg =
                         Snackbar.make(
@@ -292,5 +314,37 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     @Override
     public void attackAgain() {
 
+    }
+
+    @Override
+    public void clickTargetAttack(CardGameState cardGameState, int posIndex) {
+        attackTarget = posIndex;
+        openDialog();
+    }
+
+    public void openDialog() {
+        TargetChoiceDialog targetChoiceDialog = new TargetChoiceDialog();
+        targetChoiceDialog.show(getSupportFragmentManager(), "Target Choice");
+    }
+
+
+    @Override
+    public void onOtherPlayerClicked() {
+        clickAttack(newGame, attackTarget);
+    }
+
+    @Override
+    public void onLeftCardClicked() {
+        attackTarget = 1;
+    }
+
+    @Override
+    public void onMiddleCardClicked() {
+        attackTarget = 2;
+    }
+
+    @Override
+    public void onRightCardClicked() {
+        attackTarget = 3;
     }
 }

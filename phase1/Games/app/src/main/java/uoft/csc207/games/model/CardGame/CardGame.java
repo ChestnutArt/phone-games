@@ -2,16 +2,17 @@ package uoft.csc207.games.model.CardGame;
 
 import uoft.csc207.games.model.Achievement;
 import uoft.csc207.games.model.Game;
+import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
 
 public class CardGame extends Game {
 
     private int currentScore = 0;
-    private static PlayerProfile playerProfile;
 
     public CardGame() {
         super();
-        this.id = "257846";
+        this.id = IGameID.CARD;
+        initializeAchievements();
     }
 
     @Override
@@ -20,6 +21,11 @@ public class CardGame extends Game {
     }
 
     @Override
+    /**
+     * The method updateScore takes a score and compares it with the existing gameScore, if the
+     * input is higher than the gameScore, then the difference is taken and added to the cumulative
+     * score, and the gameScore is set to be the input as it is the highest
+     */
     public void updateScore(Integer i) {
         if (i > gameScore) {
             cumulativeScore += i - gameScore;
@@ -60,21 +66,13 @@ public class CardGame extends Game {
         this.currentScore = currentScore;
     }
 
-    public static PlayerProfile getPlayerProfile() {
-        return playerProfile;
-    }
-
-    public static void setPlayerProfile(PlayerProfile playerProfile) {
-        CardGame.playerProfile = playerProfile;
-    }
-
     @Override
     public void initializeAchievements() {
         Achievement achieve;
-        achieve = new Achievement("Game's On", "Damage the opponent",
+        achieve = new Achievement("Game's On", "\tDamage the opponent",
                 1, 0, true, false);
         this.availableAchievements.add(achieve);
-        achieve = new Achievement("Body Count", "Deal at least 3000 damage or win a duel",
+        achieve = new Achievement("Body Count", "\tDeal at least 3000 damage or win a duel",
                 7000, 0, true, false);
         this.availableAchievements.add(achieve);
     }

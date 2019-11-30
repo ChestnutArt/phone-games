@@ -9,13 +9,20 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.controller.rpg.RPGGameManager;
+import uoft.csc207.games.model.CardGame.CardActivity;
+import uoft.csc207.games.model.Rpg.RpgActivity;
+import uoft.csc207.games.model.dodger.ScrollerActivity;
 
 public class TurnDisplayActivity extends AppCompatActivity{
     private TextView currentTurnDisplay;
     private Class destination;
+    private List<Class> gameActivities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,22 +30,47 @@ public class TurnDisplayActivity extends AppCompatActivity{
         setContentView(R.layout.activity_turn_display);
         currentTurnDisplay = findViewById(R.id.tvCurrentTurn);
         currentTurnDisplay.setText("User " + ProfileManager.getProfileManager(this).getCurrentPlayer().getId() + "'s Turn");
-
-        View turnView = findViewById(R.id.currentTurnLayout);
-
+        initClassTypeLists();
     }
     public boolean onTouchEvent(MotionEvent event){
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-            if (ProfileManager.getProfileManager(this).isFirstTurn()){
-
-            } else {
-
+            Bundle extras = getIntent().getExtras();
+            Intent myIntent;
+            String sourceClassName = extras.getString("SOURCE_ACTIVITY");
+            Class sourceClass = null;
+            try{
+                sourceClass = Class.forName(sourceClassName);
+            } catch (ClassNotFoundException e){
             }
-            Intent myIntent = new Intent(TurnDisplayActivity.this, GameSelectActivity.class);
-            startActivity(myIntent);
+
+            if (ProfileManager.getProfileManager(this).isFirstTurn()){
+                myIntent = new Intent(TurnDisplayActivity.this, sourceClass);
+                startActivity(myIntent);
+            } else {
+                goToRandomGame(sourceClass);
+            }
             return true;
         } else {
             return false;
         }
+    }
+
+    private void initClassTypeLists(){
+        gameActivities = new ArrayList<>();
+        gameActivities.add(RpgActivity.class);
+        gameActivities.add(ScrollerActivity.class);
+        gameActivities.add(CardActivity.class);
+    }
+
+    private void goToRandomGame(Class previousGame){
+        Class[] gameActivityNames = gameActivities.toArray(new Class[0]);
+        Intent myIntent;
+        Class temp;
+        int i;
+        do{
+            i = (int) (Math.random() * gameActivityNames.length);
+        } while ((temp = gameActivityNames[i]) == previousGame);
+        myIntent = new Intent(TurnDisplayActivity.this, temp);
+        startActivity(myIntent);
     }
 }
