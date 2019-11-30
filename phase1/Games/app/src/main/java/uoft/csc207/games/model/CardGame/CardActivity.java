@@ -318,16 +318,8 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
     @Override
     public void clickTargetAttack(CardGameState cardGameState, int posIndex) {
+        attackTarget = posIndex;
         openDialog();
-        if (attackTarget == 0) {
-            clickAttack(cardGameState, posIndex);
-        } else {
-            switch (attackTarget) {
-                case 1: ;
-                case 2: ;
-                case 3: ;
-            }
-        }
     }
 
     public void openDialog() {
@@ -338,7 +330,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
     @Override
     public void onOtherPlayerClicked() {
-        attackTarget = 0;
+        clickAttack(newGame, attackTarget);
     }
 
     @Override

@@ -21,6 +21,11 @@ public class CardGame extends Game {
     }
 
     @Override
+    /**
+     * The method updateScore takes a score and compares it with the existing gameScore, if the
+     * input is higher than the gameScore, then the difference is taken and added to the cumulative
+     * score, and the gameScore is set to be the input as it is the highest
+     */
     public void updateScore(Integer i) {
         if (i > gameScore) {
             cumulativeScore += i - gameScore;
