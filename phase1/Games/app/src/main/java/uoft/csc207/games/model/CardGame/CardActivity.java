@@ -38,7 +38,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         Intent intent = getIntent();
 
         //Objects positions set up
-        gameState = (CardGame) CardGame.getPlayerProfile().containsGame(IGameID.CARD);
+        gameState = (CardGame) ProfileManager.getProfileManager(getApplicationContext()).getCurrentPlayer().containsGame(IGameID.CARD);
         newGame = new CardGameState();
         playerDeck = newGame.getPlayerDeck();
         bottomLeft = findViewById(R.id.bleft);
@@ -168,7 +168,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                             }
                         }
 
-                        if (curr_deck_size < hand_occupancy) {
+                        if (curr_deck_size + 1 < hand_occupancy) {
                             Snackbar lose_message =
                                     Snackbar.make(
                                             findViewById(R.id.toolbar), R.string.lose_string,
