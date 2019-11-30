@@ -8,7 +8,6 @@ import uoft.csc207.games.model.PlayerProfile;
 public class CardGame extends Game {
 
     private int currentScore = 0;
-    private static PlayerProfile playerProfile;
 
     public CardGame() {
         super();
@@ -59,14 +58,6 @@ public class CardGame extends Game {
 
     public void setCurrentScore(int currentScore) {
         this.currentScore = currentScore;
-    }
-
-    public static PlayerProfile getPlayerProfile() {
-        return playerProfile;
-    }
-
-    public static void setPlayerProfile(PlayerProfile playerProfile) {
-        CardGame.playerProfile = playerProfile;
     }
 
     @Override

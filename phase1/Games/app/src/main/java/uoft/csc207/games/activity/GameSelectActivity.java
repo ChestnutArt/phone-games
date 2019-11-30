@@ -73,7 +73,6 @@ public class GameSelectActivity extends AppCompatActivity {
                 if (!(currentProfile.containsGame(IGameID.CARD) instanceof CardGame)) {
                     currentProfile.addGame(new CardGame());
                 }
-                CardGame.setPlayerProfile(currentProfile);
                 Intent cardIntent = new Intent(GameSelectActivity.this, DeckSelection.class);
                 startActivity(cardIntent);
             }
