@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Random;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.model.IGameID;
 
@@ -204,6 +205,18 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                         newGame.restoreAttack();
                     }
                 });
+
+        final Button exitButton = findViewById(R.id.exitCardGame);
+        exitButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(CardActivity.this,
+                                GameSelectActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
     }
 
     public void clickSummon(CardGameState cardGameState, int posIndex) {
