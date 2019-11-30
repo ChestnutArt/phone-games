@@ -80,6 +80,8 @@ public class CardGameState {
         return this.aiHealth;
     }
 
+    void setAiHealth(int aiHealth) { this.aiHealth = aiHealth; }
+
     // AI hand
 
     Card getAiHand(int index) {

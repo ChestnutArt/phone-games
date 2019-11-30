@@ -31,7 +31,6 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     private View curr_layout;
     private CardPool cardPool;
     private CardDeck playerDeck;
-    private int attackTarget;
     private int attackOrigin;
 
     @Override
@@ -273,28 +272,34 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
     @Override
     public void destroyOneRandom() {
-        Random randCard = new Random();
+        if (newGame.getFullAiBoard().getOccupiedSize() > 0) {
+            Random random = new Random();
+            int posNext = random.nextInt();
+            newGame.getFullAiBoard().setCard(posNext, CardCollection.emptyCard);
+        }
 
     }
 
     @Override
     public void destroyAll() {
-
+        newGame.getFullAiBoard().setCard(0, CardCollection.emptyCard);
+        newGame.getFullAiBoard().setCard(1, CardCollection.emptyCard);
+        newGame.getFullAiBoard().setCard(2, CardCollection.emptyCard);
     }
 
     @Override
     public void increaseHP(int healthPoint) {
-
+        newGame.setPlayerHealth(newGame.getPlayerHealth() + healthPoint);
     }
 
     @Override
     public void decreaseHP(int healthPoint) {
-
+        newGame.setAiHealth(newGame.getPlayerHealth() + healthPoint);
     }
 
     @Override
     public void attackAgain() {
-
+        newGame.restoreAttack();
     }
 
     @Override
