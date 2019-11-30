@@ -63,19 +63,42 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         cardPool.addNewCard(new MonsterCard(1800, 0, "Ash",
                 R.drawable.ashblossom));
 
-
-        //Sets the deck of the player
+        //Sets the deck of the player if none from last session
         String deck_name = intent.getStringExtra("Deck Type");
+        if (deck_name.equals("Chosen")) {
+            deck_name = gameState.getCardDeck();
+        }
         if (deck_name.equals("Ash")) {
             playerDeck.addThree("Ghost Ogre", cardPool);
             playerDeck.addThree("Ash", cardPool);
-        } else {
+            gameState.setCardDeck("Ash");
+        } else if (deck_name.equals("G_ogre")) {
             playerDeck.addThree("Ash", cardPool);
             playerDeck.addThree("Ghost Ogre", cardPool);
+            gameState.setCardDeck("G_ogre");
+        }
+
+        //Recalling old gameState
+        final Button character = findViewById(R.id.character_change);
+        final ImageView character_icon = findViewById(R.id.character_icon);
+        final Button background = findViewById(R.id.background);
+        String currCharacter = gameState.getCharacter();
+        if (currCharacter.equals("Raegan")) {
+            character.setText("Obama Mode");
+            character_icon.setImageResource(R.drawable.raegan);
+        } else {
+            character.setText("Raegan Mode");
+            character_icon.setImageResource(R.drawable.obama);
+        }
+        if (gameState.getMode().equals("Day")) {
+            background.setText("Night");
+            curr_layout.setBackgroundColor(Color.WHITE);
+        } else {
+            background.setText("Day");
+            curr_layout.setBackgroundColor(Color.DKGRAY);
         }
 
         //Day mode and night mode changes
-        final Button background = findViewById(R.id.background);
         background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,25 +106,27 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 if (background.getText().length() == 5) {
                     background.setText("Day");
                     curr_layout.setBackgroundColor(Color.DKGRAY);
+                    gameState.setMode("Night");
                 } else {
                     background.setText("Night");
                     curr_layout.setBackgroundColor(Color.WHITE);
+                    gameState.setMode("Day");
                 }
             }
         });
 
         //Character changes
-        final Button character = findViewById(R.id.character_change);
-        final ImageView character_icon = findViewById(R.id.character_icon);
         character.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (character.getText().length() == 11) {
                     character.setText("Obama Mode");
                     character_icon.setImageResource(R.drawable.raegan);
+                    gameState.setCharacter("Raegan");
                 } else {
                     character.setText("Raegan Mode");
                     character_icon.setImageResource(R.drawable.obama);
+                    gameState.setCharacter("Obama");
                 }
             }
         });
@@ -216,7 +241,6 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                         gameState.updateScore(gameState.getCurrentScore());
                         gameState.checkAchievements();
                         ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
-
                         Intent intent = new Intent(CardActivity.this,
                                 GameSelectActivity.class);
                         startActivity(intent);

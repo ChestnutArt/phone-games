@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
 
 public class DeckSelection extends AppCompatActivity {
@@ -17,26 +18,33 @@ public class DeckSelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deck_selection);
+        Intent intent = getIntent();
         ImageView ash = findViewById(R.id.imageView);
         ImageView g_ogre = findViewById(R.id.imageView2);
+        if (!(ProfileManager.getProfileManager(getApplicationContext()).getCurrentPlayer().containsGame(IGameID.CARD)
+        instanceof CardGame)){
+            ProfileManager.getProfileManager(getApplicationContext()).getCurrentPlayer().addGame(new CardGame());
+            ash.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(DeckSelection.this, CardActivity.class);
+                    intent.putExtra("Deck Type", "Ash");
+                    startActivity(intent);
+                }
+            });
 
-        ash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DeckSelection.this, CardActivity.class);
-                intent.putExtra("Deck Type", "Ash");
-                startActivity(intent);
-            }
-        });
-
-        g_ogre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DeckSelection.this, CardActivity.class);
-                intent.putExtra("Deck Type", "G_ogre");
-                startActivity(intent);
-            }
-        });
-
+            g_ogre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(DeckSelection.this, CardActivity.class);
+                    intent.putExtra("Deck Type", "G_ogre");
+                    startActivity(intent);
+                }
+            });
+        } else {
+            Intent oldIntent = new Intent(DeckSelection.this, CardActivity.class);
+            oldIntent.putExtra("Deck Type", "Chosen");
+            startActivity(oldIntent);
+        }
     }
 }
