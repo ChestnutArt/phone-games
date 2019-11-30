@@ -26,12 +26,15 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     private CardGame gameState;
     private ImageView bottomLeft, bottomMid, bottomRight;
     private ImageView battlePosLeft, battlePosMid, battlePosRight;
+    private ImageView battleAiLeft, battleAiMid, battleAiRight;
     private ImageView upperLeft, upperMid, upperRight;
     private TextView score;
     private View curr_layout;
     private CardPool cardPool;
-    private CardDeck playerDeck;
+    private CardDeck playerDeck, aiDeck;
+    private EnemyAI enemyAI;
     private int attackOrigin;
+    private boolean firstTurn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +46,24 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         gameState = (CardGame) ProfileManager.getProfileManager(getApplicationContext()).getCurrentPlayer().containsGame(IGameID.CARD);
         newGame = new CardGameState();
         playerDeck = newGame.getPlayerDeck();
+        aiDeck = new CardDeck();
         bottomLeft = findViewById(R.id.bleft);
         bottomMid = findViewById(R.id.bmid);
         bottomRight = findViewById(R.id.bright);
         battlePosLeft = findViewById(R.id.battle_p_left);
         battlePosMid = findViewById(R.id.battle_p_mid);
         battlePosRight = findViewById(R.id.battle_p_right);
+        battleAiLeft = findViewById(R.id.battle_ai_left);
+        battleAiMid = findViewById(R.id.battle_ai_mid);
+        battleAiRight = findViewById(R.id.battle_ai_right);
         upperLeft = findViewById(R.id.uleft);
         upperMid = findViewById(R.id.umid);
         upperRight = findViewById(R.id.uright);
         score = findViewById(R.id.score);
         curr_layout = findViewById(R.id.linearLayout);
         cardPool = new CardPool();
+        enemyAI = new EnemyAI(newGame);
+        firstTurn = true;
 
         //Sets the CardPool
 
@@ -62,6 +71,12 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 R.drawable.ghost_ogre));
         cardPool.addNewCard(new MonsterCard(1800, 0, "Ash",
                 R.drawable.ashblossom));
+
+        //Sets up the EnemyAI deck
+        aiDeck.addThree("Ghost Ogre", cardPool);
+        aiDeck.addThree("Ghost Ogre", cardPool);
+        aiDeck.addThree("Ghost Ogre", cardPool);
+        aiDeck.addThree("Ghost Ogre", cardPool);
 
         //Sets the deck of the player if none from last session
         String deck_name = intent.getStringExtra("Deck Type");
@@ -202,10 +217,42 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                                             Snackbar.LENGTH_SHORT);
                             lose_message.show();
                         } else {
-                            // The ai makes its moves
-                            upperLeft.setImageResource(R.drawable.card_back);
-                            upperMid.setImageResource(R.drawable.card_back);
-                            upperRight.setImageResource(R.drawable.card_back);
+                            //AI replenishes its hands
+                            for (int i = 0; i < newGame.getAIHandSize(); i++) {
+                                if (!newGame.getAiHandOccupied(i)) {
+                                    Card next_card = aiDeck.getNextCard();
+                                    if (i == 0) {
+                                        newGame.setAiHand(0, next_card);
+                                        upperLeft.setImageResource(R.drawable.card_back);
+                                        aiDeck.removeNextCard();
+                                    } else if (i == 1) {
+                                        newGame.setAiHand(1, next_card);
+                                        upperMid.setImageResource(R.drawable.card_back);
+                                        aiDeck.removeNextCard();
+                                    } else if (i == 2) {
+                                        newGame.setAiHand(2, next_card);
+                                        upperRight.setImageResource(R.drawable.card_back);
+                                        aiDeck.removeNextCard();
+                                    }
+                                }
+                            }
+                            // The ai makes its moves if it's not the first turn
+                            if (firstTurn) {
+                                firstTurn = false;
+                            } else {
+                                if (!newGame.getFullAiBoard().isOccupied(0)) {
+                                    if (newGame.getFullAiHand().isOccupied(0)) {
+                                        MonsterCard nextCard = (MonsterCard) newGame.popAiHand(0);
+                                        newGame.getFullAiBoard().setCard(0, nextCard);
+                                        battleAiLeft.setImageResource(nextCard.getCardArt());
+                                        newGame.getFullAiHand().setCard(0, CardCollection.emptyCard);
+                                    }
+                                }
+                                upperLeft.setImageResource(R.drawable.card_back);
+                                upperMid.setImageResource(R.drawable.card_back);
+                                upperRight.setImageResource(R.drawable.card_back);
+                            }
+
 
                             // Replenish cards in hand
                             for (int i = 0; i < newGame.getPlayerHandSize(); i++) {
@@ -283,14 +330,6 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     public void clickDirectAttack(CardGameState cardGameState, int posIndex) {
             cardGameState.attack(((MonsterCard)
                     cardGameState.getPlayerBoard(posIndex)).getAttack(), "ai");
-
-            TextView ai_lp = findViewById(R.id.ai_lp);
-            ai_lp.setText("LP: " + cardGameState.getAiHealth());
-
-            cardGameState.setAttacked(posIndex, true);
-            int currentScore = gameState.getCurrentScore();
-            gameState.setCurrentScore(currentScore +
-                    ((MonsterCard)cardGameState.getPlayerBoard(posIndex)).getAttack());
         }
 
 
@@ -344,16 +383,45 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             if (damageDifference > 0) {
                 //Destroys ai monster card and deals damage difference to AI
                 cardGameState.getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
+                switch (targetPosIndex) {
+                    case 0: battleAiLeft.setImageResource(R.drawable.square);
+                    case 1: battleAiMid.setImageResource(R.drawable.square);;
+                    case 2: battleAiRight.setImageResource(R.drawable.square);
+                }
                 cardGameState.attack(damageDifference, "ai");
             } else if (damageDifference < 0) {
                 //Destroys own monster card and deals damage difference to self
                 cardGameState.getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
+                switch (posIndex) {
+                    case 0: battlePosLeft.setImageResource(R.drawable.square);
+                    case 1: battlePosMid.setImageResource(R.drawable.square);;
+                    case 2: battlePosRight.setImageResource(R.drawable.square);
+                }
                 cardGameState.attack(damageDifference, "player");
             } else {
                 //Destroys both monsters
                 cardGameState.getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
+                switch (targetPosIndex) {
+                    case 0: battleAiLeft.setImageResource(R.drawable.square);
+                    case 1: battleAiMid.setImageResource(R.drawable.square);;
+                    case 2: battleAiRight.setImageResource(R.drawable.square);
+                }
                 cardGameState.getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
+                switch (posIndex) {
+                    case 0: battlePosLeft.setImageResource(R.drawable.square);
+                    case 1: battlePosMid.setImageResource(R.drawable.square);;
+                    case 2: battlePosRight.setImageResource(R.drawable.square);
+                }
             }
+            //Updates Score and LP
+            TextView ai_lp = findViewById(R.id.ai_lp);
+            TextView player_lp = findViewById(R.id.p_lp);
+            ai_lp.setText("LP: " + cardGameState.getAiHealth());
+            player_lp.setText("LP" + cardGameState.getPlayerHealth());
+            cardGameState.setAttacked(posIndex, true);
+            int currentScore = gameState.getCurrentScore();
+            gameState.setCurrentScore(currentScore +
+                    ((MonsterCard)cardGameState.getPlayerBoard(posIndex)).getAttack());
             //Announces victory
             if (cardGameState.getAiHealth() == 0) {
                 int currScore = gameState.getCurrentScore();
