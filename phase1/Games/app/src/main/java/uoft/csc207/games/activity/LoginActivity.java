@@ -43,8 +43,8 @@ public class LoginActivity extends AppCompatActivity {
 
         login.setOnClickListener(new View.OnClickListener(){
            public void onClick(View view){
+               //isFirstLogin = true;
                validate(username.getText().toString(), password.getText().toString());
-               moveToGameSelectActivity();
                profileManager.setIsTwoPlayerMode(false);
            }
         });
@@ -68,6 +68,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Validates whether a login is correct and displays the appropriate message based off the outcome
+     * @param userName The entered username
+     * @param passWord The entered password
+     */
     private void validate(String userName, String passWord){
         if(null == userName || userName.equalsIgnoreCase("")){
             errorMsg.setText("Username is required");
@@ -78,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         PlayerProfile tmpProfile = profileManager.getProfileById(userName);
-        if(tmpProfile==null || !tmpProfile.getId().equalsIgnoreCase(userName)){
+        if(tmpProfile == null || !tmpProfile.getId().equalsIgnoreCase(userName)){
             errorMsg.setText("User: " + userName + " doesn't exist!");
             return;
         }
@@ -86,19 +91,31 @@ public class LoginActivity extends AppCompatActivity {
             errorMsg.setText("The password of user: " + userName + " is incorrect!");
             return;
         }
-        if(isFirstLogin){
+
+        if(!profileManager.isTwoPlayerMode()){
             profileManager.setCurrentPlayer(tmpProfile);
             errorMsg.setText("User " + tmpProfile.getId() + " has been logged in");
+            moveToGameSelectActivity();
         } else {
-            if(profileManager.getCurrentPlayer() == tmpProfile){
-                errorMsg.setText("User " + tmpProfile.getId() + " has already been logged in");
+            if(isFirstLogin){
+                profileManager.setCurrentPlayer(tmpProfile);
+                errorMsg.setText("User " + tmpProfile.getId() + " has been logged in");
             } else {
-                profileManager.setSecondPlayer(tmpProfile);
-                moveToGameSelectActivity();
+                if(profileManager.getCurrentPlayer() == tmpProfile){
+                    errorMsg.setText("User " + tmpProfile.getId() + " has already been logged in");
+                } else {
+                    profileManager.setSecondPlayer(tmpProfile);
+                    moveToGameSelectActivity();
+                }
             }
         }
     }
 
+    /**
+     * Creates a PlayerProfile and adds it to to ProfileManager's tree map of PlayerProfiles
+     * @param userName Username of the PlayerProfile to be created
+     * @param passWord Password of the PlayerProfile to be created
+     */
     private void createProfile(String userName, String passWord){
         PlayerProfile newProfile = new PlayerProfile(userName, passWord);
         if(profileManager.getProfileById(userName) != null){
@@ -109,9 +126,11 @@ public class LoginActivity extends AppCompatActivity {
         errorMsg.setText("User has been created.");
     }
 
+    /**
+     * Moves from LoginActivity to GameSelectActivity
+     */
     private void moveToGameSelectActivity(){
         Intent intent = new Intent(LoginActivity.this, GameSelectActivity.class);
-        //intent.putExtra(ProfileManager.CURRENT_PLAYER, profileManager.getCurrentPlayer());
         startActivity(intent);
     }
 }
