@@ -17,6 +17,7 @@
         <activity android:name=".model.CardGame.DeckSelection" />
         <activity android:name=".model.CardGame.CardActivity" />
         <activity android:name=".activity.GameSelectActivity" />
+        <activity android:name=".activity.AddScoreActivity"/>
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

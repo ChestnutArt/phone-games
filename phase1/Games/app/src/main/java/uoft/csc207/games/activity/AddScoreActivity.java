@@ -17,32 +17,52 @@ import uoft.csc207.games.model.PlayerProfile;
 
 public class AddScoreActivity extends AppCompatActivity {
 
-    private Score score;
     private Button submit;
     private Button cancel;
+    private EditText gamer_tag;
+    private TextView error_msg;
+    private ScoreBoard scoreBoard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    public AddScoreActivity(Score score){
-        this.score = score;
-    }
-
-    private void changeName(String nameTag){
-        score.setName(nameTag);
-    }
-
-    public void sumbitScore(){
+        setContentView(R.layout.activty_add_score);
+        gamer_tag = (EditText) findViewById(R.id.GamerTag);
+        submit = (Button) findViewById(R.id.Submit);
+        cancel = (Button) findViewById(R.id.Cancel);
+        error_msg = (TextView) findViewById(R.id.error_msg);
         ScoreBoard scoreBoard = new ScoreBoard(this);
-        scoreBoard.submitScore(score);
-        moveToNextActivity();
+
+        submit.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Submit(gamer_tag.getText().toString(), ScoreBoard.current_score);
+                moveToGameSelectActivity();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                moveToGameSelectActivity();
+            }
+        });
+
     }
 
-    private void moveToNextActivity(){
+    private void Submit(String name, Score s){
+        if (name.equals("") && s.getName().equals("")){
+            error_msg.setText("Gamer Tag is required");
+            return;
+        } else if (s.getName().equals("")){
+            s.setName(name);
+        }
+        scoreBoard.submitScore(s);
+        scoreBoard.saveScores();
+
+    }
+
+    private void moveToGameSelectActivity(){
         Intent intent = new Intent(AddScoreActivity.this, GameSelectActivity.class);
         startActivity(intent);
     }
-
 }
 

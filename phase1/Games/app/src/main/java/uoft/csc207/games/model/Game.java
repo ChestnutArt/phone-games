@@ -1,8 +1,16 @@
 package uoft.csc207.games.model;
 
+import android.content.Context;
+import android.content.Intent;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import uoft.csc207.games.activity.AddScoreActivity;
+import uoft.csc207.games.activity.GameSelectActivity;
+import uoft.csc207.games.controller.Score;
+import uoft.csc207.games.controller.ScoreBoard;
 
 public abstract class Game implements Serializable {
     protected Integer gameScore;
@@ -87,7 +95,10 @@ public abstract class Game implements Serializable {
         return gameCurrency;
     }
 
-
+    public void setScoreboardScore(){
+        ScoreBoard.current_score = new Score("", gameScore, gameCurrency);
+    }
+    
 
     public String getCharacter(){
         return character;
