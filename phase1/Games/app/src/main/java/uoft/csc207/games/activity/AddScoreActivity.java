@@ -21,7 +21,7 @@ public class AddScoreActivity extends AppCompatActivity {
     private Button cancel;
     private EditText gamer_tag;
     private TextView error_msg;
-    private ScoreBoard scoreBoard;
+    private ScoreBoard scoreBoard = new ScoreBoard();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,6 @@ public class AddScoreActivity extends AppCompatActivity {
         submit = (Button) findViewById(R.id.Submit);
         cancel = (Button) findViewById(R.id.Cancel);
         error_msg = (TextView) findViewById(R.id.error_msg);
-        ScoreBoard scoreBoard = new ScoreBoard(this);
 
         submit.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){

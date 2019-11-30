@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
 
+import uoft.csc207.games.activity.AddScoreActivity;
 import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.model.Rpg.RpgActivity;
@@ -33,7 +34,7 @@ public class ScrollerActivity extends Activity {
         ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
         MainThread t = (MainThread)scrollerPanel.getMainThread();
         t.setRunning(false);
-        Intent myIntent = new Intent(ScrollerActivity.this, GameSelectActivity.class);
+        Intent myIntent = new Intent(ScrollerActivity.this, AddScoreActivity.class);
         startActivity(myIntent);
     }
 }

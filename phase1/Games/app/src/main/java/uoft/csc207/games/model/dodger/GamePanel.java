@@ -11,6 +11,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.controller.Score;
+import uoft.csc207.games.controller.ScoreBoard;
 import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.model.ScrollerGame;
@@ -41,7 +43,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         P_y = Constants.SCREEN_HEIGHT/2;
         Obs = new ObsManager(3, Color.MAGENTA, player1.getHeight());
         System.out.println(player1.getHeight());
-        this.playerProfile = ProfileManager.getProfileManager(context).getCurrentPlayer();//Constants.player;
+        this.playerProfile = ProfileManager.getProfileManager(context).getCurrentPlayer();
         InitCurrentGame();
     }
 
@@ -228,6 +230,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             isOver = true;
             Constants.SPEED = 0;
             CurrentGame.checkAchievements();
+            CurrentGame.setCumulativeCurrency(CurrentGame.getCumulativeCurrency()+CurrentGame.getCurrency());
+            CurrentGame.setCumulativeCurrency(CurrentGame.getCumulativeScore()+CurrentGame.getScore());
+            ScoreBoard.current_score = new Score("", CurrentGame.getScore(), CurrentGame.getCurrency());
         }
 
 
@@ -255,6 +260,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             playerProfile.addGame(s);
         }
         CurrentGame = s;
+        s.updateCurrency(0);
+        s.updateScore(0);
     }
 
 }

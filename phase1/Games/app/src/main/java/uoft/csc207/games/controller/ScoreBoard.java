@@ -15,39 +15,27 @@ import java.util.TreeMap;
 
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.model.Ranker;
+import uoft.csc207.games.model.dodger.Constants;
 
 
 public class ScoreBoard implements Serializable {
-    private TreeMap<String, ArrayList<Score>> score_board;
+    ArrayList<Score> score_board;
     private Context context;
     private String NAME_OF_PROFILE_STORE = "Scoreboard";
     private Ranker ranker;
     public static Score current_score = new Score("", 0 , 0);
 
-    public ScoreBoard(Context context){
-        this.context = context;
-        this.ranker = new Ranker(new ArrayList<Score>());
-        addScores();
+    public ScoreBoard(){
+        this.context = Constants.CURRENT_CONTEXT;
+        score_board = new ArrayList<>();
+        loadScores();
+        this.ranker = new Ranker(score_board);
     }
 
-    public void addScores(){
-        ArrayList<ArrayList<Score>> score_list = (ArrayList<ArrayList<Score>>)score_board.values();
-        for (ArrayList<Score> value: score_list){
-            for (Score score: value) {
-                ranker.addScore(score);
-            }
-        }
-    }
+
 
     public void submitScore(Score submit){
-        if (score_board.containsKey(submit.getName())){
-            score_board.get(score_board.get(submit.getName())).add(submit);
-        }
-        else{
-            ArrayList<Score> t = new ArrayList<>();
-            t.add(submit);
-            score_board.put(submit.getName(), t);
-        }
+        score_board.add(submit);
     }
 
     public ArrayList<Score> sortScores(boolean sort_by_points){
@@ -65,12 +53,12 @@ public class ScoreBoard implements Serializable {
         try {
             File fileStoredProfiles = new File(filePath);
             if(!fileStoredProfiles.exists()){
-                score_board = new TreeMap<String, ArrayList<Score>>();
+                score_board = new ArrayList<>();
                 return;
             }
             fileInputStream = new FileInputStream(new File(filePath));
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            score_board = (TreeMap<String, ArrayList<Score>>)objectInputStream.readObject();
+            score_board = (ArrayList<Score>)objectInputStream.readObject();
             objectInputStream.close();
             fileInputStream.close();
         } catch (FileNotFoundException e) {
@@ -101,5 +89,15 @@ public class ScoreBoard implements Serializable {
             e.printStackTrace();
         }
 
+    }
+
+    public ArrayList<Score> getPlayerScores(String name){
+        ArrayList<Score> player_scores = new ArrayList<>();
+        for (Score s: score_board){
+            if (s.getName().equals(name)){
+                player_scores.add(s);
+            }
+        }
+        return player_scores;
     }
 }

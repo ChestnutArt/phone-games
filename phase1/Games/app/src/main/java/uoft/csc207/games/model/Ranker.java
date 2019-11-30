@@ -2,6 +2,8 @@ package uoft.csc207.games.model;
 
 
 import java.util.ArrayList;
+import java.util.List;
+
 import uoft.csc207.games.controller.Score;
 
 public class Ranker {
@@ -17,12 +19,12 @@ public class Ranker {
         else{
             Score pivot = scores.get(r);
             int cnt = l;
-            for (int i = l; i <= scores.size(); i++)
+            for (int i = l; i < scores.size(); i++)
             {
                 Score p = scores.get(i);
                 if (p.getPoints() <= pivot.getPoints())
                 {
-                    swap(scores.get(cnt), scores.get(i));
+                    swap(cnt, i, scores);
                     cnt++;
                 }
             }
@@ -38,12 +40,12 @@ public class Ranker {
         else{
             Score pivot = scores.get(r);
             int cnt = l;
-            for (int i = l; i <= scores.size(); i++)
+            for (int i = l; i < scores.size(); i++)
             {
                 Score p = scores.get(i);
                 if (p.getMoney() <= pivot.getMoney())
                 {
-                    swap(scores.get(cnt), scores.get(i));
+                    swap(cnt, i, scores);
                     cnt++;
                 }
             }
@@ -53,11 +55,13 @@ public class Ranker {
         }
     }
 
-    private void swap(Object a, Object b)
+    private void swap(int a, int b, ArrayList s)
     {
-        Object temp = a;
-        a = b;
-        b = temp;
+        Object temp = s.get(a);
+        if (s.size() > Math.max(a,b)) {
+            s.set(a, s.get(b));
+            s.set(b, temp);
+        }
     }
 
     public void addScore(Score p){

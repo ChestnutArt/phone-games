@@ -12,6 +12,7 @@ import android.widget.TextView;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
+import uoft.csc207.games.model.dodger.Constants;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText username;

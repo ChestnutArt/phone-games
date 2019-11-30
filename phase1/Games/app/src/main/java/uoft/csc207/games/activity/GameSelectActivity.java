@@ -32,6 +32,7 @@ public class GameSelectActivity extends AppCompatActivity {
     private Button cardSelect;
     private Button rpgSelect;
     private Button profileButton;
+    private Button leaderBoard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class GameSelectActivity extends AppCompatActivity {
         cardSelect = findViewById(R.id.btnCard);
         rpgSelect = findViewById(R.id.btnRPG);
         profileButton = findViewById(R.id.profileBtn);
+        leaderBoard = findViewById(R.id.LeaderBoard);
 
         /*Intent intent = getIntent();
         currentProfile = (PlayerProfile)intent.getSerializableExtra(ProfileManager.CURRENT_PLAYER);*/
@@ -58,11 +60,18 @@ public class GameSelectActivity extends AppCompatActivity {
             }
         });
 
+        leaderBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
+                moveToScoreActivity();
+            }
+        });
+
         scrollerSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sIntent = new Intent(GameSelectActivity.this, ScrollerActivity.class);
-                //Constants.player = currentProfile;
                 startActivity(sIntent);
             }
         });
@@ -88,6 +97,8 @@ public class GameSelectActivity extends AppCompatActivity {
             }
         });
 
+
+
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +113,11 @@ public class GameSelectActivity extends AppCompatActivity {
 
     private void moveToLoginActivity(){
         Intent intent = new Intent(GameSelectActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    private void moveToScoreActivity(){
+        Intent intent = new Intent(GameSelectActivity.this, LeaderBoardActivity.class);
         startActivity(intent);
     }
 }

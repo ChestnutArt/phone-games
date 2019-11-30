@@ -70,4 +70,12 @@
         android:text="Profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/LeaderBoard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Leader Board"
+        tools:layout_editor_absoluteX="154dp"
+        tools:layout_editor_absoluteY="442dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
