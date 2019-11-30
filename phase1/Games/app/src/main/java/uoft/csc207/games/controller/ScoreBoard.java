@@ -23,7 +23,7 @@ public class ScoreBoard implements Serializable {
     private Context context;
     private String NAME_OF_PROFILE_STORE = "Scoreboard";
     private Ranker ranker;
-    public static Score current_score = new Score("", 0 , 0);
+    public static Score current_score = new Score("", 0 , 0, "");
 
     public ScoreBoard(){
         this.context = Constants.CURRENT_CONTEXT;
@@ -42,10 +42,11 @@ public class ScoreBoard implements Serializable {
 
     public ArrayList<Score> sortScores(boolean sort_by_points){
         if (sort_by_points){
-            return ranker.createListByScore(0, ranker.scores.size() - 1);
+            ranker.createListByScore(0, ranker.scores.size() - 1);
         } else {
-            return ranker.createListByCurrency(0, ranker.scores.size() - 1);
+            ranker.createListByCurrency(0, ranker.scores.size() - 1);
         }
+        return ranker.scores;
     }
 
     public void loadScores(){

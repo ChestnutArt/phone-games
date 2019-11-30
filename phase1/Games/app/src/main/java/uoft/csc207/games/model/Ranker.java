@@ -8,50 +8,25 @@ import uoft.csc207.games.controller.Score;
 
 public class Ranker {
     public ArrayList<Score> scores;
-    public Ranker(ArrayList scores){
+    public Ranker(ArrayList<Score> scores){
         this.scores = scores;
     }
 
-    public ArrayList<Score> createListByScore(int l, int r){
-        if (l >= r){
-            return scores;
-        }
-        else{
-            Score pivot = scores.get(r);
-            int cnt = l;
-            for (int i = l; i < scores.size(); i++)
-            {
-                Score p = scores.get(i);
-                if (p.getPoints() <= pivot.getPoints())
-                {
-                    swap(cnt, i, scores);
-                    cnt++;
-                }
-            }
-            createListByScore(l, cnt - 2);
-            createListByScore(cnt, r);
-            return scores;
+    public void createListByScore(int begin, int end){
+        if (begin < end) {
+            int partitionIndex = partition(scores, begin, end);
+
+            createListByScore(begin, partitionIndex-1);
+            createListByScore(partitionIndex+1, end);
         }
     }
-    public ArrayList<Score> createListByCurrency(int l, int r){
-        if (l >= r){
-            return scores;
-        }
-        else{
-            Score pivot = scores.get(r);
-            int cnt = l;
-            for (int i = l; i < scores.size(); i++)
-            {
-                Score p = scores.get(i);
-                if (p.getMoney() <= pivot.getMoney())
-                {
-                    swap(cnt, i, scores);
-                    cnt++;
-                }
-            }
-            createListByCurrency(l, cnt - 2);
-            createListByCurrency(cnt, r);
-            return scores;
+
+    public void createListByCurrency(int begin, int end){
+        if (begin < end) {
+            int partitionIndex = partition2(scores, begin, end);
+
+            createListByCurrency(begin, partitionIndex-1);
+            createListByCurrency(partitionIndex+1, end);
         }
     }
 
@@ -64,6 +39,35 @@ public class Ranker {
         }
     }
 
+    private int partition(ArrayList<Score> score_all, int begin, int end) {
+
+        Score pivot = score_all.get(end);
+        int i = (begin-1);
+
+        for (int j = begin; j < end; j++) {
+            if (score_all.get(j).getPoints() <= pivot.getPoints()) {
+                i++;
+                swap(i, j, score_all);
+            }
+        }
+        swap(i+1, end, score_all);
+        return i+1;
+    }
+    private int partition2(ArrayList<Score> score_all, int begin, int end) {
+
+        Score pivot = score_all.get(end);
+        int i = (begin-1);
+
+        for (int j = begin; j < end; j++) {
+            if (score_all.get(j).getMoney() <= pivot.getMoney()) {
+                i++;
+                swap(i, j, score_all);
+            }
+        }
+        swap(i+1, end, score_all);
+        return i+1;
+    }
+
     public void addScore(Score p){
        scores.add(p);
     }
@@ -71,5 +75,6 @@ public class Ranker {
     public int getSize(){
         return scores.size();
     }
+
 
 }

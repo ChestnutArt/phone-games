@@ -13,7 +13,8 @@ import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.controller.Score;
 import uoft.csc207.games.controller.ScoreBoard;
-import uoft.csc207.games.model.PlayerProfile;
+import uoft.csc207.games.model.Rpg.RpgActivity;
+import uoft.csc207.games.model.dodger.ScrollerActivity;
 
 public class AddScoreActivity extends AppCompatActivity {
 
@@ -60,8 +61,15 @@ public class AddScoreActivity extends AppCompatActivity {
     }
 
     private void moveToGameSelectActivity(){
-        Intent intent = new Intent(AddScoreActivity.this, GameSelectActivity.class);
-        startActivity(intent);
+        Intent myIntent;
+        if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){
+            myIntent = new Intent(AddScoreActivity.this, TurnDisplayActivity.class);
+            myIntent.putExtra("SOURCE_ACTIVITY", ScoreBoard.current_score.getClassName());
+            ProfileManager.getProfileManager(this).changeCurrentPlayer();
+        } else {
+            myIntent = new Intent(AddScoreActivity.this, GameSelectActivity.class);
+        }
+        startActivity(myIntent);
     }
 }
 
