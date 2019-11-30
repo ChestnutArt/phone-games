@@ -20,7 +20,7 @@ import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.model.IGameID;
 
 
-public class CardActivity extends AppCompatActivity implements CardClicker, SpellEffect {
+public class CardActivity extends AppCompatActivity implements CardClicker, SpellEffect, TargetChoiceDialog.TargetChoiceDialogListener {
 
     private CardGameState newGame;
     private CardGame gameState;
@@ -31,6 +31,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     private View curr_layout;
     private CardPool cardPool;
     private CardDeck playerDeck;
+    private int attackTarget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,21 +134,21 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         battlePosLeft.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickAttack(newGame, 0);
+                        clickTargetAttack(newGame, 0);
                     }
                 });
 
         battlePosMid.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickAttack(newGame, 1);
+                        clickTargetAttack(newGame, 1);
                     }
                 });
 
         battlePosRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickAttack(newGame, 2);
+                clickTargetAttack(newGame, 2);
             }
         });
 
@@ -304,5 +305,45 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     @Override
     public void attackAgain() {
 
+    }
+
+    @Override
+    public void clickTargetAttack(CardGameState cardGameState, int posIndex) {
+        openDialog();
+        if (attackTarget == 0) {
+            clickAttack(cardGameState, posIndex);
+        } else {
+            switch (attackTarget) {
+                case 1: ;
+                case 2: ;
+                case 3: ;
+            }
+        }
+    }
+
+    public void openDialog() {
+        TargetChoiceDialog targetChoiceDialog = new TargetChoiceDialog();
+        targetChoiceDialog.show(getSupportFragmentManager(), "Target Choice");
+    }
+
+
+    @Override
+    public void onOtherPlayerClicked() {
+        attackTarget = 0;
+    }
+
+    @Override
+    public void onLeftCardClicked() {
+        attackTarget = 1;
+    }
+
+    @Override
+    public void onMiddleCardClicked() {
+        attackTarget = 2;
+    }
+
+    @Override
+    public void onRightCardClicked() {
+        attackTarget = 3;
     }
 }
