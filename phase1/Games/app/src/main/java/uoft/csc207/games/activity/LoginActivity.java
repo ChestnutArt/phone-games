@@ -106,9 +106,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         profileManager.createProfile(newProfile);
-        //profileManager.setCurrentPlayer(newProfile);
         errorMsg.setText("User has been created.");
-       // moveToGameSelectActivity();
     }
 
     private void moveToGameSelectActivity(){
