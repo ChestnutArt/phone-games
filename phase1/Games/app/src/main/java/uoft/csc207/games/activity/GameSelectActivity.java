@@ -16,6 +16,7 @@ import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
 import uoft.csc207.games.activity.rpg.RpgActivity;
 import uoft.csc207.games.activity.dodger.ScrollerActivity;
+import uoft.csc207.games.model.dodger.Constants;
 
 public class GameSelectActivity extends AppCompatActivity {
     private TextView welcome;
@@ -40,6 +41,7 @@ public class GameSelectActivity extends AppCompatActivity {
         rpgSelect = findViewById(R.id.btnRPG);
         profileButton = findViewById(R.id.profileBtn);
         leaderBoard = findViewById(R.id.LeaderBoard);
+        Constants.CURRENT_CONTEXT = this;
 
         ProfileManager profileManager = ProfileManager.getProfileManager(getApplicationContext());
         currentProfile = profileManager.getCurrentPlayer();

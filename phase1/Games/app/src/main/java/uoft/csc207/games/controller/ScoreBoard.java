@@ -11,15 +11,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.TreeMap;
-
-import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.model.Ranker;
 import uoft.csc207.games.model.dodger.Constants;
 
 
 public class ScoreBoard implements Serializable {
-    ArrayList<Score> score_board;
+    private ArrayList<Score> score_board;
     private Context context;
     private String NAME_OF_PROFILE_STORE = "Scoreboard";
     private Ranker ranker;
