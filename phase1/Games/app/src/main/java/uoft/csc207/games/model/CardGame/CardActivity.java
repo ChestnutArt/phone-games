@@ -224,19 +224,16 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                             for (int i = 0; i < newGame.getAIHandSize(); i++) {
                                 if (!newGame.getAiHandOccupied(i)) {
                                     Card next_card = aiDeck.getNextCard();
+
+                                    newGame.setAiHand(i, next_card);
                                     if (i == 0) {
-                                        newGame.setAiHand(0, next_card);
                                         upperLeft.setImageResource(R.drawable.card_back);
-                                        aiDeck.removeNextCard();
                                     } else if (i == 1) {
-                                        newGame.setAiHand(1, next_card);
                                         upperMid.setImageResource(R.drawable.card_back);
-                                        aiDeck.removeNextCard();
                                     } else if (i == 2) {
-                                        newGame.setAiHand(2, next_card);
                                         upperRight.setImageResource(R.drawable.card_back);
-                                        aiDeck.removeNextCard();
                                     }
+                                    aiDeck.removeNextCard();
                                 }
                             }
                             // The ai makes its moves if it's not the first turn
@@ -335,20 +332,35 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         if (cardGameState.getPlayerHand(posIndex) instanceof MonsterCard) {
             clickSummon(cardGameState, posIndex);
         } else {
-            SpellCard spell = (SpellCard) cardGameState.getPlayerHand(posIndex);
+            SpellCard spell = (SpellCard) cardGameState.popPlayerHand(posIndex);
             String spellEffect = spell.getSpellEffect();
             switch (spellEffect) {
-                case "destroyOneRandom": destroyOneRandom();
-                case "destroyAll": destroyAll();
-                case "increaseHP": increaseHP(spell.getEffectValue());
-                case "decreaseHP": decreaseHP(spell.getEffectValue());
-                case "attackAgain": attackAgain();
+                case "destroyOneRandom":
+                    destroyOneRandom();
+                    break;
+                case "destroyAll":
+                    destroyAll();
+                    break;
+                case "increaseHP":
+                    increaseHP(spell.getEffectValue());
+                    break;
+                case "decreaseHP":
+                    decreaseHP(spell.getEffectValue());
+                    break;
+                case "attackAgain":
+                    attackAgain();
+                    break;
             }
-            cardGameState.getFullPlayerHand().pop(posIndex);
             switch (posIndex) {
-                case 0: bottomLeft.setImageResource(R.drawable.square);
-                case 1: bottomMid.setImageResource(R.drawable.square);
-                case 2: bottomRight.setImageResource(R.drawable.square);
+                case 0:
+                    bottomLeft.setImageResource(R.drawable.square);
+                    break;
+                case 1:
+                    bottomMid.setImageResource(R.drawable.square);
+                    break;
+                case 2:
+                    bottomRight.setImageResource(R.drawable.square);
+                    break;
             }
         }
     }
