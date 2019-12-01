@@ -16,6 +16,10 @@ import uoft.csc207.games.activity.rpg.RpgActivity;
 import uoft.csc207.games.activity.dodger.ScrollerActivity;
 import uoft.csc207.games.model.dodger.Constants;
 
+/**
+ * Provides an interface that allows the user to choose one of the three
+ * games, view the leader board, view their statistics across all the games, or log out.
+ */
 public class GameSelectActivity extends AppCompatActivity {
     private TextView welcome;
     private Button logout;
@@ -27,6 +31,10 @@ public class GameSelectActivity extends AppCompatActivity {
     private Button profileButton;
     private Button leaderBoard;
 
+    /**
+     * Initializes all the necessary widgets and their functions.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,13 +51,14 @@ public class GameSelectActivity extends AppCompatActivity {
 
         ProfileManager profileManager = ProfileManager.getProfileManager(getApplicationContext());
         currentProfile = profileManager.getCurrentPlayer();
+        //Provides a welcome message at the top based off how many users are logged in
         if (profileManager.isTwoPlayerMode()){
             welcome.setText("Welcome back " + currentProfile.getId() + " and " + profileManager.
                     getSecondPlayer().getId() + "!");
         } else {
             welcome.setText("Welcome back " + currentProfile.getId() + "!");
         }
-
+        //Logs the player out on click, moving back to LoginActivity
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +66,7 @@ public class GameSelectActivity extends AppCompatActivity {
                 moveToLoginActivity();
             }
         });
-
+        //Moves to the leader board on click
         leaderBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +74,7 @@ public class GameSelectActivity extends AppCompatActivity {
                 moveToScoreActivity();
             }
         });
-
+        //Moves to the scroller game on click
         scrollerSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +82,7 @@ public class GameSelectActivity extends AppCompatActivity {
                 startActivity(sIntent);
             }
         });
-
+        //Moves to the card game on click
         cardSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,9 +90,7 @@ public class GameSelectActivity extends AppCompatActivity {
                 startActivity(cardIntent);
             }
         });
-        /**
-         * Button that transfers to RPG game
-         */
+        //Moves to the rpg game on click
         rpgSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +98,7 @@ public class GameSelectActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
-
+        //Moves to a screen that shows the statistics of all logged in players
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,11 +111,17 @@ public class GameSelectActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Moves from GameSelect back to the login screen
+     */
     private void moveToLoginActivity(){
         Intent intent = new Intent(GameSelectActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Moves from GameSelect to the leader board screen
+     */
     private void moveToScoreActivity(){
         Intent intent = new Intent(GameSelectActivity.this, LeaderBoardActivity.class);
         startActivity(intent);

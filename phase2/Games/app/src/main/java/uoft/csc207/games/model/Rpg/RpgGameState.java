@@ -49,13 +49,21 @@ public class RpgGameState extends Game {
         this.color = color;
     }
 
+    /**
+     * Initializes all the attainable achievements in the rpg game
+     */
     public void initializeAchievements(){
         Achievement temp;
-        temp = new Achievement("Adventurer", "\tAchieved score of 100 in the Rpg",
+        temp = new Achievement("Adventurer", "\tAchieve score of at least 100 in the Rpg.",
                 100, 0, true, false);
         availableAchievements.add(temp);
-        temp = new Achievement("Moving up in the world", "\tIncreased your money above 0",
+        temp = new Achievement("Talkative", "\tAchieve score of at least 200 in the Rpg",
+                200, 0, true, false);
+        availableAchievements.add(temp);
+        temp = new Achievement("Moving up in the world", "\tGet 1 gold.",
                 0, 1, false, true);
         availableAchievements.add(temp);
+        temp = new Achievement("Enough for a meal", "\tGet 10 gold.", 0,
+                10, false, true);
     }
 }

@@ -12,6 +12,10 @@ import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.model.PlayerProfile;
 
+/**
+ * Activity that displays the total score, the total currency, and the attained achievements of one
+ * or both logged in PlayerProfiles across all the games.
+ */
 public class ProfileActivity extends AppCompatActivity {
     private TextView profileStatsTv;
     private Button exit;
@@ -25,9 +29,23 @@ public class ProfileActivity extends AppCompatActivity {
         exit = findViewById(R.id.exitBtn);
         Intent intent = getIntent();
         currentProfile = (PlayerProfile)intent.getSerializableExtra(ProfileManager.CURRENT_PLAYER);
-        profileStatsTv.setText("Score: " + currentProfile.getScore() + "\nCurrency: " + currentProfile.getCurrency()
-            + "\nAchievements: \n" + currentProfile.getAchievements());
+        String display = "User: " + currentProfile.getId() + "\nScore: " + currentProfile.getScore() +
+                "\nCurrency: " + currentProfile.getCurrency() + "\nAchievements: \n" +
+                currentProfile.getAchievements();
 
+        ProfileManager profileManager = ProfileManager.getProfileManager(this);
+        //If it's two player mode, will add the second player's information as well
+        if (profileManager.isTwoPlayerMode()){
+            PlayerProfile secondPlayer = profileManager.getSecondPlayer();
+            display += "\nUser: \n" + secondPlayer.getId() + " Score: " + secondPlayer.getScore() +
+                    "\nCurrency: " + secondPlayer.getCurrency() + "\nAchievements: \n" +
+                    secondPlayer.getAchievements();
+        }
+        profileStatsTv.setText(display);
+
+        /**
+         * Exit button returning user to the GameSelectActivity
+         */
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
