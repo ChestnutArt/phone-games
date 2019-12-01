@@ -241,12 +241,12 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
                             if (newGame.isFirstTurn()) {
                                 newGame.setFirstTurn(false);
                             } else {
-                                if (!newGame.getFullAiBoard().isOccupied(0)) {
-                                    if (newGame.getFullAiHand().isOccupied(0)) {
+                                if (!newGame.getAiHandOccupied(0)) {
+                                    if (newGame.getAiHandOccupied(0)) {
                                         MonsterCard nextCard = (MonsterCard) newGame.popAiHand(0);
-                                        newGame.getFullAiBoard().setCard(0, nextCard);
+                                        newGame.setAiBoard(0, nextCard);
                                         aiBoard[0].setImageResource(nextCard.getCardArt());
-                                        newGame.getFullAiHand().setCard(0, CardCollection.emptyCard);
+                                        newGame.setAiHand(0, CardCollection.emptyCard);
                                     }
                                 }
                                 for (int i = 0; i < 3; i++) {
@@ -364,21 +364,21 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
 
     @Override
     public void onLeftCardClicked() {
-        if (newGame.getFullAiBoard().isOccupied(0)) {
+        if (newGame.getAiBoardOccupied(0)) {
             clickAttack(newGame, newGame.getAttackOrigin(), 0);
         }
     }
 
     @Override
     public void onMiddleCardClicked(){
-        if (newGame.getFullAiBoard().isOccupied(1)) {
+        if (newGame.getAiBoardOccupied(1)) {
             clickAttack(newGame, newGame.getAttackOrigin(), 1);
         }
     }
 
     @Override
     public void onRightCardClicked() {
-        if (newGame.getFullAiBoard().isOccupied(2)) {
+        if (newGame.getAiBoardOccupied(2)) {
             clickAttack(newGame, newGame.getAttackOrigin(), 2);
         }
     }

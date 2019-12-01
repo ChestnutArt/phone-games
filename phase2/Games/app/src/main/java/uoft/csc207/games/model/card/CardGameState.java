@@ -153,6 +153,10 @@ public class CardGameState implements CardClicker, SpellEffect {
         return playerHand.isOccupied(index);
     }
 
+    public boolean getAIHandOccupied(int index) {
+        return aiHand.isOccupied(index);
+    }
+
     public int getPlayerHandSize() {
         return playerHand.getSize();
     }
@@ -178,28 +182,16 @@ public class CardGameState implements CardClicker, SpellEffect {
 
     // boards
 
-    public CardCollection getFullAiBoard() {
-        return aiBoard;
-    }
-
-    public CardCollection getFullPlayerBoard() {
-        return playerBoard;
-    }
-
-    public CardCollection getFullAiHand() {
-        return aiHand;
-    }
-
-    public CardCollection getFullPlayerHand() {
-        return playerHand;
-    }
-
     public Card getAiBoard(int index) {
         return aiBoard.getCard(index);
     }
 
     public Boolean getAiBoardOccupied(int index) {
         return aiBoard.isOccupied(index);
+    }
+
+    public void setAiBoard(int index, Card c) {
+        aiBoard.setCard(index, c);
     }
 
     public Card getPlayerBoard(int index) {
@@ -260,23 +252,23 @@ public class CardGameState implements CardClicker, SpellEffect {
     public void clickAttack(CardGameState cardGameState, int posIndex, int targetPosIndex) {
         int damageDifference =
                 ((MonsterCard) getPlayerBoard(posIndex)).getAttack() -
-                        ((MonsterCard) getAiBoard(targetPosIndex)).getAttack();
+                        ((MonsterCard) getAiBoard(targetPosIndex)).getDefence();
         if (damageDifference > 0) {
             //Destroys ai monster card and deals damage difference to AI
-            getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
+            aiBoard.setCard(targetPosIndex, CardCollection.emptyCard);
             aiBoardView[targetPosIndex].setImageResource(R.drawable.square);
             attack(damageDifference, "ai");
             cardGame.updateCurrency(1 + cardGame.getGameCurrency());
         } else if (damageDifference < 0) {
             //Destroys own monster card and deals damage difference to self
-            getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
+            playerBoard.setCard(posIndex, CardCollection.emptyCard);
             playerBoardView[posIndex].setImageResource(R.drawable.square);
             attack(damageDifference, "player");
         } else {
             //Destroys both monsters
-            getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
+            playerBoard.setCard(posIndex, CardCollection.emptyCard);
             aiBoardView[targetPosIndex].setImageResource(R.drawable.square);
-            getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
+            playerBoard.setCard(targetPosIndex, CardCollection.emptyCard);
             playerBoardView[posIndex].setImageResource(R.drawable.square);
             cardGame.updateCurrency(1 + cardGame.getGameCurrency());
         }
@@ -341,17 +333,17 @@ public class CardGameState implements CardClicker, SpellEffect {
             if (!getAiBoard(i).equals(CardCollection.emptyCard)) {
                 cardGame.updateCurrency(cardGame.getGameCurrency() + 1);
             }
-            getFullAiBoard().setCard(i, CardCollection.emptyCard);
+            aiBoard.setCard(i, CardCollection.emptyCard);
             aiBoardView[i].setImageResource(R.drawable.square);
         }
     }
 
     @Override
     public void destroyOneRandom() {
-        if (getFullAiBoard().getOccupiedSize() > 0) {
+        if (aiBoard.getOccupiedSize() > 0) {
             Random random = new Random();
             int posNext = random.nextInt();
-            getFullAiBoard().setCard(posNext, CardCollection.emptyCard);
+            aiBoard.setCard(posNext, CardCollection.emptyCard);
             aiBoardView[posNext].setImageResource(R.drawable.square);
             cardGame.updateCurrency(cardGame.getCurrentScore() + 1);
         }
