@@ -40,8 +40,6 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
         //Objects positions set up
         cardGame = (CardGame) ProfileManager.getProfileManager(getApplicationContext()).getCurrentPlayer().containsGame(IGameID.CARD);
-        newGame = new CardGameState();
-
         playerHand = new ImageView[3];
         playerBoard = new ImageView[3];
         aiBoard = new ImageView[3];
@@ -58,6 +56,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         aiHand[0] = findViewById(R.id.uleft);
         aiHand[1] = findViewById(R.id.umid);
         aiHand[2] = findViewById(R.id.uright);
+        newGame = new CardGameState(playerHand, playerBoard, aiHand, aiBoard);
         score = findViewById(R.id.score);
         curr_layout = findViewById(R.id.linearLayout);
         final CardPool cardPool = cardGame.getCardPool();
@@ -217,7 +216,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                                 }
                             }
                             // The ai makes its moves if it's not the first turn
-                            if (newGame.getFirstTurn()) {
+                            if (newGame.isFirstTurn()) {
                                 newGame.setFirstTurn(false);
                             } else {
                                 if (!newGame.getFullAiBoard().isOccupied(0)) {

@@ -1,6 +1,9 @@
 package uoft.csc207.games.model.CardGame;
 
 
+import android.media.Image;
+import android.widget.ImageView;
+
 public class CardGameState {
 
     private EnemyAI enemyAI; // the enemyAI that will play against the player
@@ -10,8 +13,13 @@ public class CardGameState {
     private boolean[] attacked; // track whether each card has attacked this turn
     private boolean summoned; // track whether the player has summoned this turn
     private boolean firstTurn; // track whether this is the first turn
+    private ImageView[] playerHandView; // The View objects on the board
+    private ImageView[] playerBoardView;
+    private ImageView[] aiBoardView;
+    private ImageView[] aiHandView;
 
-    CardGameState() {
+    CardGameState(ImageView[] playerHandView, ImageView[] playerBoardView, ImageView[] aiHandView,
+                  ImageView[] aiBoardView) {
         int handCap = 3;
         int boardCap = 3;
 
@@ -27,6 +35,11 @@ public class CardGameState {
         aiBoard = new CardCollection(boardCap);
         playerHand = new CardCollection(handCap);
         playerBoard = new CardCollection(boardCap);
+
+        this.playerHandView = playerHandView;
+        this.playerBoardView = playerBoardView;
+        this.aiHandView = aiHandView;
+        this.aiBoardView = aiBoardView;
 
         attacked = new boolean[boardCap];
         summoned = false;
@@ -198,7 +211,7 @@ public class CardGameState {
 
     // first turn boolean
 
-    boolean getFirstTurn() {
+    boolean isFirstTurn() {
         return firstTurn;
     }
 
