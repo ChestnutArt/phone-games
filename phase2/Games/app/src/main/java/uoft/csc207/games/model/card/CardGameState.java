@@ -257,7 +257,7 @@ public class CardGameState implements CardClicker, SpellEffect {
     public void clickAttack(CardGameState cardGameState, int posIndex, int targetPosIndex) {
         int damageDifference =
                 ((MonsterCard) getPlayerBoard(posIndex)).getAttack() -
-                        ((MonsterCard) getAiBoard(targetPosIndex)).getDefence();
+                        ((MonsterCard) getAiBoard(targetPosIndex)).getAttack();
         if (damageDifference > 0) {
             //Destroys ai monster card and deals damage difference to AI
             aiBoard.setCard(targetPosIndex, CardCollection.emptyCard);
@@ -273,7 +273,7 @@ public class CardGameState implements CardClicker, SpellEffect {
             //Destroys both monsters
             playerBoard.setCard(posIndex, CardCollection.emptyCard);
             aiBoardView[targetPosIndex].setImageResource(R.drawable.square);
-            playerBoard.setCard(targetPosIndex, CardCollection.emptyCard);
+            aiBoard.setCard(targetPosIndex, CardCollection.emptyCard);
             playerBoardView[posIndex].setImageResource(R.drawable.square);
             cardGame.updateCurrency(1 + cardGame.getGameCurrency());
         }

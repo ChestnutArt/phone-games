@@ -287,7 +287,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
                             if (newGame.isFirstTurn()) {
                                 newGame.setFirstTurn(false);
                             } else {
-                                if (!newGame.getAiHandOccupied(0)) {
+                                if (!newGame.getAiBoardOccupied(0)) {
                                     if (newGame.getAiHandOccupied(0)) {
                                         MonsterCard nextCard = (MonsterCard) newGame.popAiHand(0);
                                         newGame.setAiBoard(0, nextCard);

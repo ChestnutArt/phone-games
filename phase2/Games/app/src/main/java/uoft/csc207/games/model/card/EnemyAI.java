@@ -14,34 +14,34 @@ public class EnemyAI implements CardClicker {
 
     @Override
     public void clickSummon(CardGameState cardGameState, int posIndex) {
-        if (!cardGameState.getFullAiBoard().isOccupied(posIndex)) {
-            if (cardGameState.getFullAiHand().isOccupied(posIndex)) {
-                cardGameState.getFullAiBoard().setCard(posIndex, cardGameState.getAiHand(0));
-                cardGameState.getFullAiHand().setCard(posIndex, CardCollection.emptyCard);
+        if (!cardGameState.getAiBoardOccupied(posIndex)) {
+            if (cardGameState.getAiHandOccupied(posIndex)) {
+                cardGameState.setAiBoard(posIndex, cardGameState.getAiHand(0));
+                cardGameState.setAiHand(posIndex, CardCollection.emptyCard);
             }
         }
     }
 
     @Override
     public void clickAttack(CardGameState cardGameState, int posIndex, int targetPosIndex) {
-        if (cardGameState.getFullAiBoard().isOccupied(posIndex)) {
-            if (cardGameState.getFullPlayerBoard().isOccupied(targetPosIndex)) {
+        if (cardGameState.getAiBoardOccupied(posIndex)) {
+            if (cardGameState.getPlayerBoardOccupied(targetPosIndex)) {
                 int damageDifference =
                         ((MonsterCard) cardGameState.getAiBoard(posIndex)).getAttack() -
                                 ((MonsterCard) cardGameState.getPlayerBoard(targetPosIndex)).getAttack();
                 if (damageDifference > 0) {
-                    cardGameState.getFullPlayerBoard().setCard(targetPosIndex, CardCollection.emptyCard);
+                    cardGameState.setPlayerBoard(targetPosIndex, CardCollection.emptyCard);
                     cardGameState.attack(damageDifference, "player");
                 } else if (damageDifference < 0) {
-                    cardGameState.getFullAiBoard().setCard(posIndex, CardCollection.emptyCard);
+                    cardGameState.setAiBoard(posIndex, CardCollection.emptyCard);
                     cardGameState.attack(damageDifference, "ai");
                 } else {
-                    cardGameState.getFullAiBoard().setCard(posIndex, CardCollection.emptyCard);
-                    cardGameState.getFullPlayerBoard().setCard(targetPosIndex, CardCollection.emptyCard);
+                    cardGameState.setAiBoard(posIndex, CardCollection.emptyCard);
+                    cardGameState.setPlayerBoard(targetPosIndex, CardCollection.emptyCard);
                 }
             } else {
                 cardGameState.attack(
-                        ((MonsterCard) cardGameState.getFullAiBoard().getCard(posIndex)).getAttack(),
+                        ((MonsterCard) cardGameState.getAiBoard(posIndex)).getAttack(),
                         "player");
             }
         }
