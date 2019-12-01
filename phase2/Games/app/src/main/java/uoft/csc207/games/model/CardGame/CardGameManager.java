@@ -18,8 +18,8 @@ import uoft.csc207.games.R;
 import uoft.csc207.games.activity.AddScoreActivity;
 import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.controller.ProfileManager;
-import uoft.csc207.games.controller.Score;
-import uoft.csc207.games.controller.ScoreBoard;
+import uoft.csc207.games.controller.scoreboard.Score;
+import uoft.csc207.games.controller.scoreboard.ScoreBoard;
 import uoft.csc207.games.model.IGameID;
 
 
