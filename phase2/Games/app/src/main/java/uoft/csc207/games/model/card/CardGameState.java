@@ -23,7 +23,7 @@ public class CardGameState implements CardClicker, SpellEffect {
     private ImageView[] playerBoardView;
     private ImageView[] aiBoardView;
     private ImageView[] aiHandView;
-    private int attackOrigin; // the origin of attack, where on the board is an attack coming from
+    private int attackOrigin; // the attacking card's position on player's board
 
     public CardGameState(ImageView[] playerHandView, ImageView[] playerBoardView, ImageView[] aiHandView,
                   ImageView[] aiBoardView, CardGame cardGame, TextView aiLP, TextView playerLP) {
@@ -249,6 +249,11 @@ public class CardGameState implements CardClicker, SpellEffect {
     // CardClicker Methods
 
     @Override
+    /**
+     * Take the difference in the monsters' attacks and either destroy the weaker one and inflict
+     * the damage difference, or mutual destruction, if an enemy monster is destroyed, its attack is
+     * added to the score and the currency goes up by 1
+     */
     public void clickAttack(CardGameState cardGameState, int posIndex, int targetPosIndex) {
         int damageDifference =
                 ((MonsterCard) getPlayerBoard(posIndex)).getAttack() -
@@ -283,6 +288,9 @@ public class CardGameState implements CardClicker, SpellEffect {
     }
 
     @Override
+    /**
+     * Summons a card to its position on the board, then erasing the ImageResource set as its hand
+     */
     public void clickSummon(CardGameState cardGameState, int posIndex) {
         MonsterCard next_card = (MonsterCard) popPlayerHand(posIndex);
         setPlayerBoard(posIndex, next_card);
@@ -292,6 +300,7 @@ public class CardGameState implements CardClicker, SpellEffect {
     }
 
     @Override
+    //Directly attacks the enemy
     public void clickDirectAttack(CardGameState cardGameState, int posIndex) {
         int cardAttack = ((MonsterCard) getPlayerBoard(posIndex)).getAttack();
         attack(cardAttack, "ai");
@@ -299,11 +308,16 @@ public class CardGameState implements CardClicker, SpellEffect {
     }
 
     @Override
+    //Sets the attack origin to be the indicated position
     public void clickTargetAttack(CardGameState cardGameState, int posIndex) {
         setAttackOrigin(posIndex);
     }
 
     @Override
+    /*
+    Activates a spell effect based on the spellEffect attribute of a SpellCard class object, then
+    setting the hand to empty the spell card's card slot
+     */
     public void clickActivate(CardGameState cardGameState, int posIndex) {
         SpellCard spell = (SpellCard) popPlayerHand(posIndex);
         String spellEffect = spell.getSpellEffect();
