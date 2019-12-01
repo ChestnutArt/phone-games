@@ -14,8 +14,8 @@
         <activity android:name=".activity.ProfileActivity" />
         <activity android:name=".activity.rpg.RpgActivity" />
         <activity android:name=".activity.dodger.ScrollerActivity" />
-        <activity android:name=".model.CardGame.CardGameManager" />
         <activity android:name=".activity.card.CardActivity" />
+        <activity android:name=".controller.card.CardGameManager" />
         <activity android:name=".activity.GameSelectActivity" />
         <activity android:name=".activity.AddScoreActivity"/>
         <activity android:name=".activity.LeaderBoardActivity"/>

@@ -1,8 +1,12 @@
 package uoft.csc207.games.model.CardGame;
 
+import android.widget.ImageView;
+
 public class EnemyAI implements CardClicker {
 
     private CardDeck aiDeck;
+    private ImageView[] aiHandView;
+    private CardCollection aiBoard, aiHand;
 
     public EnemyAI() {
         aiDeck = new CardDeck();
