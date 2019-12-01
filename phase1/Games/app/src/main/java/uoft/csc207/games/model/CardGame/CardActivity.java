@@ -23,18 +23,14 @@ import uoft.csc207.games.model.IGameID;
 public class CardActivity extends AppCompatActivity implements CardClicker, SpellEffect, TargetChoiceDialog.TargetChoiceDialogListener {
 
     private CardGameState newGame;
-    private CardGame gameState;
     private ImageView[] playerHand;
     private ImageView[] playerBoard;
     private ImageView[] aiBoard;
     private ImageView[] aiHand;
+    private CardGame cardGame;
     private TextView score;
     private View curr_layout;
-    private CardPool cardPool;
-    private CardDeck playerDeck, aiDeck;
-    private EnemyAI enemyAI;
     private int attackOrigin;
-    private boolean firstTurn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +39,8 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         Intent intent = getIntent();
 
         //Objects positions set up
-        gameState = (CardGame) ProfileManager.getProfileManager(getApplicationContext()).getCurrentPlayer().containsGame(IGameID.CARD);
+        cardGame = (CardGame) ProfileManager.getProfileManager(getApplicationContext()).getCurrentPlayer().containsGame(IGameID.CARD);
         newGame = new CardGameState();
-        playerDeck = newGame.getPlayerDeck();
-        aiDeck = new CardDeck();
 
         playerHand = new ImageView[3];
         playerBoard = new ImageView[3];
@@ -64,49 +58,35 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         aiHand[0] = findViewById(R.id.uleft);
         aiHand[1] = findViewById(R.id.umid);
         aiHand[2] = findViewById(R.id.uright);
-
         score = findViewById(R.id.score);
         curr_layout = findViewById(R.id.linearLayout);
-        cardPool = new CardPool();
-        enemyAI = new EnemyAI(newGame);
-        firstTurn = true;
-
-        //Sets the CardPool
-
-        cardPool.addNewCard(new MonsterCard(100, 2000, "Ghost Ogre",
-                R.drawable.ghost_ogre));
-        cardPool.addNewCard(new MonsterCard(1800, 0, "Ash",
-                R.drawable.ashblossom));
-        cardPool.addNewCard(new SpellCard("Raigeki", R.drawable.raigeki,
-                "destroyAll", 0));
-
-        //Sets up the EnemyAI deck
-        aiDeck.addThree("Ghost Ogre", cardPool);
-        aiDeck.addThree("Ghost Ogre", cardPool);
-        aiDeck.addThree("Ghost Ogre", cardPool);
-        aiDeck.addThree("Ghost Ogre", cardPool);
+        final CardPool cardPool = cardGame.getCardPool();
+        final CardDeck playerDeck = newGame.getPlayerDeck();
+        final EnemyAI enemyAI = newGame.getEnemyAI();
+        final CardDeck aiDeck = enemyAI.getAiDeck();
+        enemyAI.setUpDeck("Ghost Ogre", cardPool);
 
         //Sets the deck of the player if none from last session
         String deck_name = intent.getStringExtra("Deck Type");
         if (deck_name.equals("Chosen")) {
-            deck_name = gameState.getCardDeck();
+            deck_name = cardGame.getCardDeck();
         }
         if (deck_name.equals("Ash")) {
             playerDeck.addThree("Raigeki", cardPool);
             playerDeck.addThree("Ash", cardPool);
             playerDeck.addThree("Ghost Ogre", cardPool);
-            gameState.setCardDeck("Ash");
+            cardGame.setCardDeck("Ash");
         } else if (deck_name.equals("G_ogre")) {
             playerDeck.addThree("Ghost Ogre", cardPool);
             playerDeck.addThree("Ash", cardPool);
-            gameState.setCardDeck("G_ogre");
+            cardGame.setCardDeck("G_ogre");
         }
 
-        //Recalling old gameState
+        //Recalling old cardGame
         final Button character = findViewById(R.id.character_change);
         final ImageView character_icon = findViewById(R.id.character_icon);
         final Button background = findViewById(R.id.background);
-        String currCharacter = gameState.getCharacter();
+        String currCharacter = cardGame.getCharacter();
         if (currCharacter.equals("Raegan")) {
             character.setText("Obama Mode");
             character_icon.setImageResource(R.drawable.raegan);
@@ -114,7 +94,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             character.setText("Raegan Mode");
             character_icon.setImageResource(R.drawable.obama);
         }
-        if (gameState.getMode().equals("Day")) {
+        if (cardGame.getMode().equals("Day")) {
             background.setText("Night");
             curr_layout.setBackgroundColor(Color.WHITE);
         } else {
@@ -130,11 +110,11 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 if (background.getText().length() == 5) {
                     background.setText("Day");
                     curr_layout.setBackgroundColor(Color.DKGRAY);
-                    gameState.setMode("Night");
+                    cardGame.setMode("Night");
                 } else {
                     background.setText("Night");
                     curr_layout.setBackgroundColor(Color.WHITE);
-                    gameState.setMode("Day");
+                    cardGame.setMode("Day");
                 }
             }
         });
@@ -146,11 +126,11 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 if (character.getText().length() == 11) {
                     character.setText("Obama Mode");
                     character_icon.setImageResource(R.drawable.raegan);
-                    gameState.setCharacter("Raegan");
+                    cardGame.setCharacter("Raegan");
                 } else {
                     character.setText("Raegan Mode");
                     character_icon.setImageResource(R.drawable.obama);
-                    gameState.setCharacter("Obama");
+                    cardGame.setCharacter("Obama");
                 }
             }
         });
@@ -209,7 +189,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                     public void onClick(View v) {
                         action.setText("Next Turn");
                         TextView score = findViewById(R.id.score);
-                        score.setText("HIGH SCORE: " + gameState.getScore());
+                        score.setText("HIGH SCORE: " + cardGame.getScore());
                         // Determines whether loses
                         int curr_deck_size = newGame.getPlayerDeck().getDeckSize();
                         int hand_occupancy = 0;
@@ -237,8 +217,8 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                                 }
                             }
                             // The ai makes its moves if it's not the first turn
-                            if (firstTurn) {
-                                firstTurn = false;
+                            if (newGame.getFirstTurn()) {
+                                newGame.setFirstTurn(false);
                             } else {
                                 if (!newGame.getFullAiBoard().isOccupied(0)) {
                                     if (newGame.getFullAiHand().isOccupied(0)) {
@@ -266,7 +246,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                         }
                         newGame.setSummoned(false);
                         newGame.restoreAttack();
-                        gameState.checkAchievements();
+                        cardGame.checkAchievements();
                     }
                 });
 
@@ -275,8 +255,8 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        gameState.updateScore(gameState.getCurrentScore());
-                        gameState.checkAchievements();
+                        cardGame.updateScore(cardGame.getCurrentScore());
+                        cardGame.checkAchievements();
                         ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
                         Intent intent = new Intent(CardActivity.this,
                                 GameSelectActivity.class);
@@ -338,8 +318,11 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     }
 
     public void clickDirectAttack(CardGameState cardGameState, int posIndex) {
+        if (!cardGameState.getAiHandOccupied(0) & !cardGameState.getAiHandOccupied(1) &
+        !cardGameState.getAiHandOccupied(2)) {
             cardGameState.attack(((MonsterCard)
                     cardGameState.getPlayerBoard(posIndex)).getAttack(), "ai");
+        }
         }
 
 
@@ -420,17 +403,17 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             ai_lp.setText("LP: " + cardGameState.getAiHealth());
             player_lp.setText("LP" + cardGameState.getPlayerHealth());
             cardGameState.setAttacked(posIndex, true);
-            int currentScore = gameState.getCurrentScore();
-            gameState.setCurrentScore(currentScore +
+            int currentScore = cardGame.getCurrentScore();
+            cardGame.setCurrentScore(currentScore +
                     ((MonsterCard)cardGameState.getPlayerBoard(posIndex)).getAttack());
             //Announces victory
             if (cardGameState.getAiHealth() == 0) {
-                int currScore = gameState.getCurrentScore();
-                gameState.setCurrentScore(currScore + 3000);
-                gameState.updateScore(gameState.getCurrentScore());
-                gameState.setCurrentScore(0);
-                score.setText("HIGH SCORE: " + gameState.getScore());
-                gameState.checkAchievements();
+                int currScore = cardGame.getCurrentScore();
+                cardGame.setCurrentScore(currScore + 3000);
+                cardGame.updateScore(cardGame.getCurrentScore());
+                cardGame.setCurrentScore(0);
+                score.setText("HIGH SCORE: " + cardGame.getScore());
+                cardGame.checkAchievements();
                 ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
                 Snackbar winner_msg =
                         Snackbar.make(

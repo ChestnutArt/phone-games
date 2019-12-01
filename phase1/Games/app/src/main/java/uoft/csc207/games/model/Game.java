@@ -95,7 +95,6 @@ public abstract class Game implements Serializable {
         return gameCurrency;
     }
 
-
     public String getCharacter(){
         return character;
     }

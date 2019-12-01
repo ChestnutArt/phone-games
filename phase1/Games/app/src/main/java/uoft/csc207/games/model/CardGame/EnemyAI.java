@@ -1,18 +1,11 @@
 package uoft.csc207.games.model.CardGame;
 
-import java.util.List;
-
 public class EnemyAI implements CardClicker {
 
-    private CardCollection aiHandCards, aiBoard;
     private CardDeck aiDeck;
-    private CardGameState cardGameState;
 
-    public EnemyAI(CardGameState cardGameState) {
-        this.cardGameState = cardGameState;
-        aiBoard = cardGameState.getFullAiBoard();
-        aiHandCards = cardGameState.getFullAiHand();
-        aiDeck = cardGameState.getAiDeck();
+    public EnemyAI() {
+        aiDeck = new CardDeck();
     }
 
     @Override
@@ -63,5 +56,17 @@ public class EnemyAI implements CardClicker {
     @Override
     public void clickActivate(CardGameState cardGameState, int posIndex) {
 
+    }
+
+    public void setUpDeck(String cardName, CardPool cardpool) {
+        //Sets up the EnemyAI deck
+        aiDeck.addThree(cardName, cardpool);
+        aiDeck.addThree(cardName, cardpool);
+        aiDeck.addThree(cardName, cardpool);
+        aiDeck.addThree(cardName, cardpool);
+    }
+
+    public CardDeck getAiDeck() {
+        return aiDeck;
     }
 }
