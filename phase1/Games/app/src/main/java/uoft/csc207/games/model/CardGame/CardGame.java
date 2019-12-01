@@ -57,6 +57,11 @@ public class CardGame extends Game {
     }
 
     @Override
+    public int getGameCurrency() {
+        return super.getGameCurrency();
+    }
+
+    @Override
     public void restart() {
     }
 

@@ -15,8 +15,12 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Random;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.activity.AddScoreActivity;
 import uoft.csc207.games.activity.GameSelectActivity;
+import uoft.csc207.games.activity.dodger.ScrollerActivity;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.controller.Score;
+import uoft.csc207.games.controller.ScoreBoard;
 import uoft.csc207.games.model.IGameID;
 
 
@@ -332,6 +336,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             int posNext = random.nextInt();
             newGame.getFullAiBoard().setCard(posNext, CardCollection.emptyCard);
             aiBoard[posNext].setImageResource(R.drawable.square);
+            cardGame.updateCurrency(cardGame.getCurrentScore() + 1);
         }
 
     }
@@ -339,6 +344,9 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
     @Override
     public void destroyAll() {
         for (int i = 0; i < 3; i++) {
+            if (!newGame.getAiBoard(i).equals(CardCollection.emptyCard)) {
+                cardGame.updateCurrency(cardGame.getGameCurrency() + 1);
+            }
             newGame.getFullAiBoard().setCard(i, CardCollection.emptyCard);
             aiBoard[i].setImageResource(R.drawable.square);
         }
@@ -384,6 +392,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 cardGameState.getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
                 aiBoard[targetPosIndex].setImageResource(R.drawable.square);
                 cardGameState.attack(damageDifference, "ai");
+                cardGame.updateCurrency(1 + cardGame.getGameCurrency());
             } else if (damageDifference < 0) {
                 //Destroys own monster card and deals damage difference to self
                 cardGameState.getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
@@ -395,6 +404,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 aiBoard[targetPosIndex].setImageResource(R.drawable.square);
                 cardGameState.getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
                 playerBoard[posIndex].setImageResource(R.drawable.square);
+                cardGame.updateCurrency(1 + cardGame.getGameCurrency());
             }
             //Updates Score and LP
             TextView ai_lp = findViewById(R.id.ai_lp);
@@ -413,11 +423,17 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                 cardGame.setCurrentScore(0);
                 score.setText("HIGH SCORE: " + cardGame.getScore());
                 cardGame.checkAchievements();
+                cardGame.setCumulativeCurrency(cardGame.getCumulativeCurrency()+cardGame.getGameCurrency());
+                cardGame.setCumulativeScore(cardGame.getCumulativeScore()+cardGame.getScore());
+                ScoreBoard.setCurrentScore(new Score("", cardGame.getScore(), cardGame.getGameCurrency(),
+                        CardActivity.class.getName()));
                 ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
                 Snackbar winner_msg =
                         Snackbar.make(
                                 findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
                 winner_msg.show();
+                Intent newIntent = new Intent(CardActivity.this, AddScoreActivity.class);
+                startActivity(newIntent);
             }
         }  else {
             Snackbar attacked =
