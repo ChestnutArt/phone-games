@@ -17,13 +17,19 @@ import uoft.csc207.games.activity.rpg.RpgActivity;
 import uoft.csc207.games.activity.dodger.ScrollerActivity;
 
 /**
- * All the logic is in TurnDisplayActivity. Each game's activity only needs to check ProfileManager for
- * if it's two player mode, and if it is, putExtra the class name of that game's activity, switch the player's
- * turns, and move from their game's activity to TurnDisplayActivity. About 5 lines of code.
+ * Activity with a single TextView in the center informing the players whose turn it is. Depending on
+ * which of the two players just finished playing, TurnDisplayActivity will either go back to the previous
+ * game's activity with the second player as the current player, or move on to a different, randomly
+ * selected game with the first player as the current player.
  */
 public class TurnDisplayActivity extends AppCompatActivity{
+    /**
+     * Displays which player's turn it is
+     */
     private TextView currentTurnDisplay;
-    private Class destination;
+    /**
+     * Holds the class types of each game's starting activity
+     */
     private List<Class> gameActivities;
 
     @Override
@@ -35,16 +41,21 @@ public class TurnDisplayActivity extends AppCompatActivity{
         initClassTypeLists();
     }
     public boolean onTouchEvent(MotionEvent event){
+        //Decides which activity to move to when the player clicks the screen
         if(event.getAction() == MotionEvent.ACTION_DOWN){
             Bundle extras = getIntent().getExtras();
             Intent myIntent;
+            //Gets the class name of the previous game class (as a String) the was putExtra'd into the intent by
+            //the previous activity
             String sourceClassName = extras.getString("SOURCE_ACTIVITY");
             Class sourceClass = null;
             try{
+                //converts the retrieved String to Class type
                 sourceClass = Class.forName(sourceClassName);
             } catch (ClassNotFoundException e){
             }
 
+            //Decides whether to go to a random game or repeat the same game based on which turn it is
             if (ProfileManager.getProfileManager(this).isFirstTurn()){
                 myIntent = new Intent(TurnDisplayActivity.this, sourceClass);
                 startActivity(myIntent);
@@ -57,6 +68,9 @@ public class TurnDisplayActivity extends AppCompatActivity{
         }
     }
 
+    /**
+     * Initializes the List of all games' activities that TurnDisplayActivity can choose to travel to
+     */
     private void initClassTypeLists(){
         gameActivities = new ArrayList<>();
         gameActivities.add(RpgActivity.class);
@@ -64,6 +78,10 @@ public class TurnDisplayActivity extends AppCompatActivity{
         gameActivities.add(CardActivity.class);
     }
 
+    /**
+     * Moves to a random game different from the previously played one
+     * @param previousGame The Class type of the previous game's activity
+     */
     private void goToRandomGame(Class previousGame){
         Class[] gameActivityNames = gameActivities.toArray(new Class[0]);
         Intent myIntent;

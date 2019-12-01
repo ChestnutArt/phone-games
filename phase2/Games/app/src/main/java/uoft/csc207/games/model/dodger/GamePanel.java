@@ -16,7 +16,6 @@ import uoft.csc207.games.controller.scoreboard.Score;
 import uoft.csc207.games.controller.scoreboard.ScoreBoard;
 import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
-import uoft.csc207.games.model.ScrollerGame;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {

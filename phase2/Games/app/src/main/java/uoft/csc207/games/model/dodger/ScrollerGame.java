@@ -1,7 +1,11 @@
-package uoft.csc207.games.model;
+package uoft.csc207.games.model.dodger;
 
 
 import java.io.Serializable;
+
+import uoft.csc207.games.model.Achievement;
+import uoft.csc207.games.model.Game;
+import uoft.csc207.games.model.IGameID;
 
 public class ScrollerGame extends Game implements Serializable{
 

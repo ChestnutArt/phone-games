@@ -7,9 +7,6 @@ import android.graphics.Rect;
 
 import java.util.ArrayList;
 
-import uoft.csc207.games.model.Game;
-import uoft.csc207.games.model.ScrollerGame;
-
 public class Coin implements GameObject{
 
     private ArrayList<Rect> coins;
