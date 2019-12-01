@@ -24,10 +24,10 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
     private CardGameState newGame;
     private CardGame gameState;
-    private ImageView bottomLeft, bottomMid, bottomRight;
-    private ImageView battlePosLeft, battlePosMid, battlePosRight;
-    private ImageView battleAiLeft, battleAiMid, battleAiRight;
-    private ImageView upperLeft, upperMid, upperRight;
+    private ImageView[] playerHand;
+    private ImageView[] playerBoard;
+    private ImageView[] aiBoard;
+    private ImageView[] aiHand;
     private TextView score;
     private View curr_layout;
     private CardPool cardPool;
@@ -47,18 +47,24 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         newGame = new CardGameState();
         playerDeck = newGame.getPlayerDeck();
         aiDeck = new CardDeck();
-        bottomLeft = findViewById(R.id.bleft);
-        bottomMid = findViewById(R.id.bmid);
-        bottomRight = findViewById(R.id.bright);
-        battlePosLeft = findViewById(R.id.battle_p_left);
-        battlePosMid = findViewById(R.id.battle_p_mid);
-        battlePosRight = findViewById(R.id.battle_p_right);
-        battleAiLeft = findViewById(R.id.battle_ai_left);
-        battleAiMid = findViewById(R.id.battle_ai_mid);
-        battleAiRight = findViewById(R.id.battle_ai_right);
-        upperLeft = findViewById(R.id.uleft);
-        upperMid = findViewById(R.id.umid);
-        upperRight = findViewById(R.id.uright);
+
+        playerHand = new ImageView[3];
+        playerBoard = new ImageView[3];
+        aiBoard = new ImageView[3];
+        aiHand = new ImageView[3];
+        playerHand[0] = findViewById(R.id.bleft);
+        playerHand[1] = findViewById(R.id.bmid);
+        playerHand[2] = findViewById(R.id.bright);
+        playerBoard[0] = findViewById(R.id.battle_p_left);
+        playerBoard[1] = findViewById(R.id.battle_p_mid);
+        playerBoard[2] = findViewById(R.id.battle_p_right);
+        aiBoard[0] = findViewById(R.id.battle_ai_left);
+        aiBoard[1] = findViewById(R.id.battle_ai_mid);
+        aiBoard[2] = findViewById(R.id.battle_ai_right);
+        aiHand[0] = findViewById(R.id.uleft);
+        aiHand[1] = findViewById(R.id.umid);
+        aiHand[2] = findViewById(R.id.uright);
+
         score = findViewById(R.id.score);
         curr_layout = findViewById(R.id.linearLayout);
         cardPool = new CardPool();
@@ -150,7 +156,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
         });
 
         // Card summoning
-        bottomLeft.setOnClickListener(
+        playerHand[0].setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -158,14 +164,14 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                     }
                 });
 
-        bottomMid.setOnClickListener(new View.OnClickListener() {
+        playerHand[1].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         clickActivate(newGame, 1);
                     }
                 });
 
-        bottomRight.setOnClickListener(new View.OnClickListener() {
+        playerHand[2].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         clickActivate(newGame, 2);
@@ -174,21 +180,21 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
 
 
         // Card attack to another card or direct attack, also checks whether win or not
-        battlePosLeft.setOnClickListener(new View.OnClickListener() {
+        playerBoard[0].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         clickTargetAttack(newGame, 0);
                     }
                 });
 
-        battlePosMid.setOnClickListener(new View.OnClickListener() {
+        playerBoard[1].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         clickTargetAttack(newGame, 1);
                     }
                 });
 
-        battlePosRight.setOnClickListener(new View.OnClickListener() {
+        playerBoard[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clickTargetAttack(newGame, 2);
@@ -226,13 +232,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                                     Card next_card = aiDeck.getNextCard();
 
                                     newGame.setAiHand(i, next_card);
-                                    if (i == 0) {
-                                        upperLeft.setImageResource(R.drawable.card_back);
-                                    } else if (i == 1) {
-                                        upperMid.setImageResource(R.drawable.card_back);
-                                    } else if (i == 2) {
-                                        upperRight.setImageResource(R.drawable.card_back);
-                                    }
+                                    aiHand[i].setImageResource(R.drawable.card_back);
                                     aiDeck.removeNextCard();
                                 }
                             }
@@ -244,13 +244,13 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                                     if (newGame.getFullAiHand().isOccupied(0)) {
                                         MonsterCard nextCard = (MonsterCard) newGame.popAiHand(0);
                                         newGame.getFullAiBoard().setCard(0, nextCard);
-                                        battleAiLeft.setImageResource(nextCard.getCardArt());
+                                        aiBoard[0].setImageResource(nextCard.getCardArt());
                                         newGame.getFullAiHand().setCard(0, CardCollection.emptyCard);
                                     }
                                 }
-                                upperLeft.setImageResource(R.drawable.card_back);
-                                upperMid.setImageResource(R.drawable.card_back);
-                                upperRight.setImageResource(R.drawable.card_back);
+                                for (int i = 0; i < 3; i++) {
+                                    aiHand[i].setImageResource(R.drawable.card_back);
+                                }
                             }
 
 
@@ -258,19 +258,9 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                             for (int i = 0; i < newGame.getPlayerHandSize(); i++) {
                                 if (!newGame.getPlayerHandOccupied(i)) {
                                     Card next_card = playerDeck.getNextCard();
-                                    if (i == 0) {
-                                        newGame.setPlayerHand(0, next_card);
-                                        bottomLeft.setImageResource(next_card.getCardArt());
-                                        playerDeck.removeNextCard();
-                                    } else if (i == 1) {
-                                        newGame.setPlayerHand(1, next_card);
-                                        bottomMid.setImageResource(next_card.getCardArt());
-                                        playerDeck.removeNextCard();
-                                    } else if (i == 2) {
-                                        newGame.setPlayerHand(2, next_card);
-                                        bottomRight.setImageResource(next_card.getCardArt());
-                                        playerDeck.removeNextCard();
-                                    }
+                                    newGame.setPlayerHand(i, next_card);
+                                    playerHand[i].setImageResource(next_card.getCardArt());
+                                    playerDeck.removeNextCard();
                                 }
                             }
                         }
@@ -302,16 +292,8 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                     cardGameState.getPlayerBoardOccupied(posIndex)) {
                 MonsterCard next_card = (MonsterCard) cardGameState.popPlayerHand(posIndex);
                 cardGameState.setPlayerBoard(posIndex, next_card);
-                if (posIndex == 0) {
-                    battlePosLeft.setImageResource(next_card.getCardArt());
-                    bottomLeft.setImageResource(R.drawable.square);
-                } else if (posIndex == 1) {
-                    battlePosMid.setImageResource(next_card.getCardArt());
-                    bottomMid.setImageResource(R.drawable.square);
-                } else {
-                    battlePosRight.setImageResource(next_card.getCardArt());
-                    bottomRight.setImageResource(R.drawable.square);
-                }
+                playerBoard[posIndex].setImageResource(next_card.getCardArt());
+                playerHand[posIndex].setImageResource(R.drawable.square);
                 cardGameState.setSummoned(true);
             } else if (!(cardGameState.getPlayerHand(posIndex).getCardArt() ==
                     R.drawable.square)) {
@@ -351,17 +333,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
                     attackAgain();
                     break;
             }
-            switch (posIndex) {
-                case 0:
-                    bottomLeft.setImageResource(R.drawable.square);
-                    break;
-                case 1:
-                    bottomMid.setImageResource(R.drawable.square);
-                    break;
-                case 2:
-                    bottomRight.setImageResource(R.drawable.square);
-                    break;
-            }
+            playerHand[posIndex].setImageResource(R.drawable.square);
         }
     }
 
@@ -377,23 +349,17 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             Random random = new Random();
             int posNext = random.nextInt();
             newGame.getFullAiBoard().setCard(posNext, CardCollection.emptyCard);
-            switch (posNext) {
-                case 0: battleAiLeft.setImageResource(R.drawable.square);
-                case 1: battleAiMid.setImageResource(R.drawable.square);
-                case 2: battleAiRight.setImageResource(R.drawable.square);
-            }
+            aiBoard[posNext].setImageResource(R.drawable.square);
         }
 
     }
 
     @Override
     public void destroyAll() {
-        newGame.getFullAiBoard().setCard(0, CardCollection.emptyCard);
-        newGame.getFullAiBoard().setCard(1, CardCollection.emptyCard);
-        newGame.getFullAiBoard().setCard(2, CardCollection.emptyCard);
-        battleAiLeft.setImageResource(R.drawable.square);
-        battleAiMid.setImageResource(R.drawable.square);
-        battleAiRight.setImageResource(R.drawable.square);
+        for (int i = 0; i < 3; i++) {
+            newGame.getFullAiBoard().setCard(i, CardCollection.emptyCard);
+            aiBoard[i].setImageResource(R.drawable.square);
+        }
     }
 
     @Override
@@ -434,35 +400,19 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             if (damageDifference > 0) {
                 //Destroys ai monster card and deals damage difference to AI
                 cardGameState.getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
-                switch (targetPosIndex) {
-                    case 0: battleAiLeft.setImageResource(R.drawable.square);
-                    case 1: battleAiMid.setImageResource(R.drawable.square);;
-                    case 2: battleAiRight.setImageResource(R.drawable.square);
-                }
+                aiBoard[targetPosIndex].setImageResource(R.drawable.square);
                 cardGameState.attack(damageDifference, "ai");
             } else if (damageDifference < 0) {
                 //Destroys own monster card and deals damage difference to self
                 cardGameState.getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
-                switch (posIndex) {
-                    case 0: battlePosLeft.setImageResource(R.drawable.square);
-                    case 1: battlePosMid.setImageResource(R.drawable.square);;
-                    case 2: battlePosRight.setImageResource(R.drawable.square);
-                }
+                playerBoard[posIndex].setImageResource(R.drawable.square);
                 cardGameState.attack(damageDifference, "player");
             } else {
                 //Destroys both monsters
                 cardGameState.getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
-                switch (targetPosIndex) {
-                    case 0: battleAiLeft.setImageResource(R.drawable.square);
-                    case 1: battleAiMid.setImageResource(R.drawable.square);;
-                    case 2: battleAiRight.setImageResource(R.drawable.square);
-                }
+                aiBoard[targetPosIndex].setImageResource(R.drawable.square);
                 cardGameState.getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
-                switch (posIndex) {
-                    case 0: battlePosLeft.setImageResource(R.drawable.square);
-                    case 1: battlePosMid.setImageResource(R.drawable.square);;
-                    case 2: battlePosRight.setImageResource(R.drawable.square);
-                }
+                playerBoard[posIndex].setImageResource(R.drawable.square);
             }
             //Updates Score and LP
             TextView ai_lp = findViewById(R.id.ai_lp);
