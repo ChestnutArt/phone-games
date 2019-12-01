@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.activity.card.CardActivity;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.activity.rpg.RpgActivity;
 import uoft.csc207.games.activity.dodger.ScrollerActivity;
-import uoft.csc207.games.model.CardGame.CardActivity;
 
 /**
  * All the logic is in TurnDisplayActivity. Each game's activity only needs to check ProfileManager for
