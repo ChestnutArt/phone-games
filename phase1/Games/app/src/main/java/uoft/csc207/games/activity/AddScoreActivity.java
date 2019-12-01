@@ -34,13 +34,13 @@ public class AddScoreActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Submit(gamer_tag.getText().toString(), ScoreBoard.current_score);
-                moveToGameSelectActivity();
+                moveToNextActivity();
             }
         });
 
         cancel.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                moveToGameSelectActivity();
+                moveToNextActivity();
             }
         });
 
@@ -58,7 +58,7 @@ public class AddScoreActivity extends AppCompatActivity {
 
     }
 
-    private void moveToGameSelectActivity(){
+    private void moveToNextActivity(){
         Intent myIntent;
         if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){
             myIntent = new Intent(AddScoreActivity.this, TurnDisplayActivity.class);

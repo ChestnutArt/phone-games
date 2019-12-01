@@ -28,14 +28,6 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
    private GameSurface gameSurface;
    private FrameLayout gameFrame;
    private RelativeLayout widgetHolder;
-
-    /*public TextView getTextView() {
-        return textView;
-    }*/
-    //public TextView getStatsView() { return statsView; }
-
-    //private TextView textView;
-    //private TextView statsView;
     private Button settingsBtn;
 
     @SuppressLint("ResourceType")
@@ -109,7 +101,6 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
             case R.id.black_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseColor("black");
                 gameSurface.getRpgGameManager().getScorePaint().setColor(Color.BLACK);
-                //textView.setBackgroundColor(Color.BLACK);
                 break;
             case R.id.red_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseColor(RpgGameState.FONT_COLOR_RED);
@@ -118,7 +109,6 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
             case R.id.white_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseColor(RpgGameState.FONT_COLOR_WHITE);
                 gameSurface.getRpgGameManager().getScorePaint().setColor(Color.WHITE);
-                //textView.setBackgroundColor(Color.WHITE);
                 break;
             case R.id.monospace_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseFont(RpgGameState.FONT_TYPE_MONOSPACE);
@@ -126,11 +116,11 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
                 break;
             case R.id.sans_serif_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseFont(RpgGameState.FONT_TYPE_SANS_SERIF);
-                gameSurface.getRpgGameManager().getScorePaint().setTypeface(Typeface.SANS_SERIF);
-                //textView.setTypeface(Typeface.SANS_SERIF);
+                gameSurface.getRpgGameManager().getScorePaint().setTypeface(Typeface.SANS_SERIF);;
                 break;
             case R.id.exit_rpg_item:
-                finishGame(null, false);
+                Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
+                startActivity(myIntent);
                 break;
         }
         return false;

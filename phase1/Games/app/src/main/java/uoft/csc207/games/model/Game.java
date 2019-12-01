@@ -96,7 +96,7 @@ public abstract class Game implements Serializable {
     }
 
     public void setScoreboardScore(){
-        ScoreBoard.current_score = new Score("", gameScore, gameCurrency);
+        //ScoreBoard.current_score = new Score("", gameScore, gameCurrency);
     }
 
 
