@@ -45,11 +45,11 @@ public class ScoreBoard implements Serializable {
 
     public ArrayList<Score> sortScores(boolean sort_by_points){
         if (sort_by_points){
-            ranker.createListByScore(0, ranker.scores.size() - 1);
+            ranker.createListByScore(0, ranker.getScores().size() - 1);
         } else {
-            ranker.createListByCurrency(0, ranker.scores.size() - 1);
+            ranker.createListByCurrency(0, ranker.getScores().size() - 1);
         }
-        return ranker.scores;
+        return ranker.getScores();
     }
 
     public void loadScores(){

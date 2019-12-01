@@ -200,7 +200,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
                 if (CurrentGame.getColor().equals("RED")) {
                     canvas.drawColor(Color.RED);
-                } else if (CurrentGame.getColor().equals("Blue"))  {
+                } else {
                     canvas.drawColor(Color.BLUE);
                 }
 
