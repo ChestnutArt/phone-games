@@ -16,6 +16,7 @@ import java.util.Random;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.activity.AddScoreActivity;
+import uoft.csc207.games.activity.card.CardActivity;
 import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.controller.Score;
@@ -325,8 +326,8 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
             int cardAttack = ((MonsterCard) cardGameState.getPlayerBoard(posIndex)).getAttack();
             cardGameState.attack(cardAttack, "ai");
             TextView ai_lp = findViewById(R.id.ai_lp);
-            newGame.attack(cardAttack, "ai");
             ai_lp.setText("LP" + newGame.getAiHealth());
+            endGame(newGame);
         }
         }
 
@@ -420,25 +421,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
                         ((MonsterCard) cardGameState.getPlayerBoard(posIndex)).getAttack());
             }
             //Announces victory
-            if (cardGameState.getAiHealth() == 0) {
-                int currScore = cardGame.getCurrentScore();
-                cardGame.setCurrentScore(currScore + 3000);
-                cardGame.updateScore(cardGame.getCurrentScore());
-                cardGame.setCurrentScore(0);
-                score.setText("HIGH SCORE: " + cardGame.getScore());
-                cardGame.checkAchievements();
-                cardGame.setCumulativeCurrency(cardGame.getCumulativeCurrency()+cardGame.getGameCurrency());
-                cardGame.setCumulativeScore(cardGame.getCumulativeScore()+cardGame.getScore());
-                ScoreBoard.setCurrentScore(new Score("", cardGame.getScore(), cardGame.getGameCurrency(),
-                        CardActivity.class.getName()));
-                ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
-                Snackbar winner_msg =
-                        Snackbar.make(
-                                findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
-                winner_msg.show();
-                Intent newIntent = new Intent(CardGameManager.this, AddScoreActivity.class);
-                startActivity(newIntent);
-            }
+            endGame(newGame);
         }  else {
             Snackbar attacked =
                     Snackbar.make(findViewById(R.id.toolbar), R.string.attacked,
@@ -476,6 +459,28 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
     public void onRightCardClicked() {
         if (newGame.getFullAiBoard().isOccupied(2)) {
             clickAttack(newGame, attackOrigin, 2);
+        }
+    }
+
+    public void endGame(CardGameState cardGameState) {
+        if (cardGameState.getAiHealth() == 0) {
+            int currScore = cardGame.getCurrentScore();
+            cardGame.setCurrentScore(currScore + 3000);
+            cardGame.updateScore(cardGame.getCurrentScore());
+            cardGame.setCurrentScore(0);
+            score.setText("HIGH SCORE: " + cardGame.getScore());
+            cardGame.checkAchievements();
+            cardGame.setCumulativeCurrency(cardGame.getCumulativeCurrency()+cardGame.getGameCurrency());
+            cardGame.setCumulativeScore(cardGame.getCumulativeScore()+cardGame.getScore());
+            ScoreBoard.setCurrentScore(new Score("", cardGame.getScore(), cardGame.getGameCurrency(),
+                    CardActivity.class.getName()));
+            ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
+            Snackbar winner_msg =
+                    Snackbar.make(
+                            findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
+            winner_msg.show();
+            Intent newIntent = new Intent(CardGameManager.this, AddScoreActivity.class);
+            startActivity(newIntent);
         }
     }
 }
