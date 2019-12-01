@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.CardGame;
+package uoft.csc207.games.controller.card;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,20 +12,32 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Random;
-
 import uoft.csc207.games.R;
 import uoft.csc207.games.activity.AddScoreActivity;
-import uoft.csc207.games.activity.card.CardActivity;
 import uoft.csc207.games.activity.GameSelectActivity;
+import uoft.csc207.games.activity.card.CardActivity;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.controller.scoreboard.Score;
 import uoft.csc207.games.controller.scoreboard.ScoreBoard;
+import uoft.csc207.games.model.CardGame.Card;
+import uoft.csc207.games.model.CardGame.CardClicker;
+import uoft.csc207.games.model.CardGame.CardCollection;
+import uoft.csc207.games.model.CardGame.CardDeck;
+import uoft.csc207.games.model.CardGame.CardGame;
+import uoft.csc207.games.model.CardGame.CardGameState;
+import uoft.csc207.games.model.CardGame.CardPool;
+import uoft.csc207.games.model.CardGame.EnemyAI;
+import uoft.csc207.games.model.CardGame.MonsterCard;
+import uoft.csc207.games.model.CardGame.TargetChoiceDialog;
 import uoft.csc207.games.model.IGameID;
 
 
-public class CardGameManager extends AppCompatActivity implements CardClicker, SpellEffect, TargetChoiceDialog.TargetChoiceDialogListener {
+public class CardGameManager extends AppCompatActivity implements CardClicker, TargetChoiceDialog.TargetChoiceDialogListener {
 
+
+    /**
+     *
+     */
     private CardGameState newGame;
     private ImageView[] playerHand;
     private ImageView[] playerBoard;
@@ -34,7 +46,6 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
     private CardGame cardGame;
     private TextView score;
     private View curr_layout;
-    private int attackOrigin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +71,9 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
         aiHand[0] = findViewById(R.id.uleft);
         aiHand[1] = findViewById(R.id.umid);
         aiHand[2] = findViewById(R.id.uright);
-        newGame = new CardGameState(playerHand, playerBoard, aiHand, aiBoard);
+        TextView ai_lp = findViewById(R.id.ai_lp);
+        TextView player_lp = findViewById(R.id.p_lp);
+        newGame = new CardGameState(playerHand, playerBoard, aiHand, aiBoard, cardGame, ai_lp, player_lp);
         score = findViewById(R.id.score);
         curr_layout = findViewById(R.id.linearLayout);
         final CardPool cardPool = cardGame.getCardPool();
@@ -194,6 +207,10 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
                         TextView score = findViewById(R.id.score);
                         score.setText("HIGH SCORE: " + cardGame.getScore());
                         // Determines whether loses
+                        if (newGame.getPlayerHealth() == 0) {
+                            endGame();
+                        }
+
                         int curr_deck_size = newGame.getPlayerDeck().getDeckSize();
                         int hand_occupancy = 0;
                         for (int i = 0; i < newGame.getPlayerHandSize(); i++) {
@@ -208,6 +225,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
                                             findViewById(R.id.toolbar), R.string.lose_string,
                                             Snackbar.LENGTH_SHORT);
                             lose_message.show();
+                            endGame();
                         } else {
                             //AI replenishes its hands
                             for (int i = 0; i < newGame.getAIHandSize(); i++) {
@@ -273,11 +291,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
         if (!cardGameState.isSummoned()) {
             if (!cardGameState.getPlayerHandOccupied(posIndex) ==
                     cardGameState.getPlayerBoardOccupied(posIndex)) {
-                MonsterCard next_card = (MonsterCard) cardGameState.popPlayerHand(posIndex);
-                cardGameState.setPlayerBoard(posIndex, next_card);
-                playerBoard[posIndex].setImageResource(next_card.getCardArt());
-                playerHand[posIndex].setImageResource(R.drawable.square);
-                cardGameState.setSummoned(true);
+                cardGameState.clickSummon(cardGameState, posIndex);
             } else if (!(cardGameState.getPlayerHand(posIndex).getCardArt() ==
                     R.drawable.square)) {
                 Snackbar cannot_summon =
@@ -297,88 +311,25 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
         if (cardGameState.getPlayerHand(posIndex) instanceof MonsterCard) {
             clickSummon(cardGameState, posIndex);
         } else {
-            SpellCard spell = (SpellCard) cardGameState.popPlayerHand(posIndex);
-            String spellEffect = spell.getSpellEffect();
-            switch (spellEffect) {
-                case "destroyOneRandom":
-                    destroyOneRandom();
-                    break;
-                case "destroyAll":
-                    destroyAll();
-                    break;
-                case "increaseHP":
-                    increaseHP(spell.getEffectValue());
-                    break;
-                case "decreaseHP":
-                    decreaseHP(spell.getEffectValue());
-                    break;
-                case "attackAgain":
-                    attackAgain();
-                    break;
-            }
-            playerHand[posIndex].setImageResource(R.drawable.square);
+            cardGameState.clickActivate(cardGameState, posIndex);
         }
     }
 
     public void clickDirectAttack(CardGameState cardGameState, int posIndex) {
         if (!cardGameState.getAiHandOccupied(0) & !cardGameState.getAiBoardOccupied(1) &
-        !cardGameState.getAiBoardOccupied(0)) {
-            int cardAttack = ((MonsterCard) cardGameState.getPlayerBoard(posIndex)).getAttack();
-            cardGameState.attack(cardAttack, "ai");
-            TextView ai_lp = findViewById(R.id.ai_lp);
-            ai_lp.setText("LP" + newGame.getAiHealth());
-            endGame(newGame);
-        }
-        }
-
-
-    @Override
-    public void destroyOneRandom() {
-        if (newGame.getFullAiBoard().getOccupiedSize() > 0) {
-            Random random = new Random();
-            int posNext = random.nextInt();
-            newGame.getFullAiBoard().setCard(posNext, CardCollection.emptyCard);
-            aiBoard[posNext].setImageResource(R.drawable.square);
-            cardGame.updateCurrency(cardGame.getCurrentScore() + 1);
-        }
-
-    }
-
-    @Override
-    public void destroyAll() {
-        for (int i = 0; i < 3; i++) {
-            if (!newGame.getAiBoard(i).equals(CardCollection.emptyCard)) {
-                cardGame.updateCurrency(cardGame.getGameCurrency() + 1);
+                !cardGameState.getAiBoardOccupied(0)) {
+            cardGameState.clickDirectAttack(cardGameState, posIndex);
+            if (cardGameState.getAiHealth() == 0) {
+                cardGame.setCurrentScore(cardGame.getCurrentScore() + 3000);
+                endGame();
             }
-            newGame.getFullAiBoard().setCard(i, CardCollection.emptyCard);
-            aiBoard[i].setImageResource(R.drawable.square);
         }
-    }
-
-    @Override
-    public void increaseHP(int healthPoint) {
-        TextView player_lp = findViewById(R.id.p_lp);
-        newGame.setPlayerHealth(newGame.getPlayerHealth() + healthPoint);
-        player_lp.setText("LP" + newGame.getPlayerHealth());
-
-    }
-
-    @Override
-    public void decreaseHP(int healthPoint) {
-        TextView ai_lp = findViewById(R.id.ai_lp);
-        newGame.attack(healthPoint, "ai");
-        ai_lp.setText("LP" + newGame.getAiHealth());
-    }
-
-    @Override
-    public void attackAgain() {
-        newGame.restoreAttack();
     }
 
     @Override
     public void clickTargetAttack(CardGameState cardGameState, int posIndex) {
         if (cardGameState.getPlayerBoardOccupied(posIndex)){
-            attackOrigin = posIndex;
+            cardGameState.clickDirectAttack(cardGameState, posIndex);
             openDialog();
         }
     }
@@ -387,41 +338,11 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
     @Override
     public void clickAttack(CardGameState cardGameState, int posIndex, int targetPosIndex) {
         if (!cardGameState.getAttacked(posIndex)) {
-            int damageDifference =
-                    ((MonsterCard) cardGameState.getPlayerBoard(posIndex)).getAttack() -
-                    ((MonsterCard) cardGameState.getAiBoard(targetPosIndex)).getAttack();
-            if (damageDifference > 0) {
-                //Destroys ai monster card and deals damage difference to AI
-                cardGameState.getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
-                aiBoard[targetPosIndex].setImageResource(R.drawable.square);
-                cardGameState.attack(damageDifference, "ai");
-                cardGame.updateCurrency(1 + cardGame.getGameCurrency());
-            } else if (damageDifference < 0) {
-                //Destroys own monster card and deals damage difference to self
-                cardGameState.getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
-                playerBoard[posIndex].setImageResource(R.drawable.square);
-                cardGameState.attack(damageDifference, "player");
-            } else {
-                //Destroys both monsters
-                cardGameState.getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
-                aiBoard[targetPosIndex].setImageResource(R.drawable.square);
-                cardGameState.getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
-                playerBoard[posIndex].setImageResource(R.drawable.square);
-                cardGame.updateCurrency(1 + cardGame.getGameCurrency());
-            }
-            //Updates Score and LP
-            TextView ai_lp = findViewById(R.id.ai_lp);
-            TextView player_lp = findViewById(R.id.p_lp);
-            ai_lp.setText("LP: " + cardGameState.getAiHealth());
-            player_lp.setText("LP" + cardGameState.getPlayerHealth());
-            cardGameState.setAttacked(posIndex, true);
-            int currentScore = cardGame.getCurrentScore();
-            if (!(damageDifference == 0)) {
-                cardGame.setCurrentScore(currentScore +
-                        ((MonsterCard) cardGameState.getPlayerBoard(posIndex)).getAttack());
-            }
+            cardGameState.clickAttack(cardGameState, posIndex, targetPosIndex);
             //Announces victory
-            endGame(newGame);
+            if (cardGameState.getAiHealth() == 0) {
+                endGame();
+            }
         }  else {
             Snackbar attacked =
                     Snackbar.make(findViewById(R.id.toolbar), R.string.attacked,
@@ -438,49 +359,45 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
 
     @Override
     public void onOtherPlayerClicked() {
-        clickDirectAttack(newGame, attackOrigin);
+        clickDirectAttack(newGame, newGame.getAttackOrigin());
     }
 
     @Override
     public void onLeftCardClicked() {
         if (newGame.getFullAiBoard().isOccupied(0)) {
-            clickAttack(newGame, attackOrigin, 0);
+            clickAttack(newGame, newGame.getAttackOrigin(), 0);
         }
     }
 
     @Override
     public void onMiddleCardClicked(){
         if (newGame.getFullAiBoard().isOccupied(1)) {
-            clickAttack(newGame, attackOrigin, 1);
+            clickAttack(newGame, newGame.getAttackOrigin(), 1);
         }
     }
 
     @Override
     public void onRightCardClicked() {
         if (newGame.getFullAiBoard().isOccupied(2)) {
-            clickAttack(newGame, attackOrigin, 2);
+            clickAttack(newGame, newGame.getAttackOrigin(), 2);
         }
     }
 
-    public void endGame(CardGameState cardGameState) {
-        if (cardGameState.getAiHealth() == 0) {
-            int currScore = cardGame.getCurrentScore();
-            cardGame.setCurrentScore(currScore + 3000);
-            cardGame.updateScore(cardGame.getCurrentScore());
-            cardGame.setCurrentScore(0);
-            score.setText("HIGH SCORE: " + cardGame.getScore());
-            cardGame.checkAchievements();
-            cardGame.setCumulativeCurrency(cardGame.getCumulativeCurrency()+cardGame.getGameCurrency());
-            cardGame.setCumulativeScore(cardGame.getCumulativeScore()+cardGame.getScore());
-            ScoreBoard.setCurrentScore(new Score("", cardGame.getScore(), cardGame.getGameCurrency(),
-                    CardActivity.class.getName()));
-            ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
-            Snackbar winner_msg =
-                    Snackbar.make(
-                            findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
-            winner_msg.show();
-            Intent newIntent = new Intent(CardGameManager.this, AddScoreActivity.class);
-            startActivity(newIntent);
-        }
+    public void endGame() {
+        cardGame.updateScore(cardGame.getCurrentScore());
+        cardGame.setCurrentScore(0);
+        score.setText("HIGH SCORE: " + cardGame.getScore());
+        cardGame.checkAchievements();
+        cardGame.setCumulativeCurrency(cardGame.getCumulativeCurrency()+cardGame.getGameCurrency());
+        cardGame.setCumulativeScore(cardGame.getCumulativeScore()+cardGame.getScore());
+        ScoreBoard.setCurrentScore(new Score("", cardGame.getScore(), cardGame.getGameCurrency(),
+                CardActivity.class.getName()));
+        ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
+        Snackbar winner_msg =
+                Snackbar.make(
+                        findViewById(R.id.toolbar), R.string.winner_msg, Snackbar.LENGTH_LONG);
+        winner_msg.show();
+        Intent newIntent = new Intent(CardGameManager.this, AddScoreActivity.class);
+        startActivity(newIntent);
     }
 }

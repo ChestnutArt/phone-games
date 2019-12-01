@@ -12,7 +12,7 @@ public class Card {
         this.cardArt = cardArt;
     }
 
-    int getCardArt() {
+    public int getCardArt() {
         return cardArt;
     }
 
