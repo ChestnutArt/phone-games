@@ -77,9 +77,6 @@ public class GameSelectActivity extends AppCompatActivity {
         cardSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (!(currentProfile.containsGame(IGameID.CARD) instanceof CardGame)) {
-                    currentProfile.addGame(new CardGame());
-                }*/
                 Intent cardIntent = new Intent(GameSelectActivity.this, CardActivity.class);
                 startActivity(cardIntent);
             }

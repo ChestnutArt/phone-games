@@ -1,15 +1,13 @@
 package uoft.csc207.games.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
-
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.scoreboard.Score;
 import uoft.csc207.games.controller.scoreboard.ScoreBoard;
@@ -23,6 +21,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
      * scoreBoard: ScoreBoard - ScoreBoard
      * adapter: ArrayAdapter - adapter for List of Scores
      * change: Button - Button to prompt different sort
+     * exit: Button - to return to game selection
      * score: ArrayList<Score> - list of scores in scoreBoard
      * sort_by_points - indicates sorting type
      */
@@ -31,6 +30,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
     private ScoreBoard scoreBoard = new ScoreBoard();
     private ArrayAdapter adapter;
     private Button change;
+    private Button exit;
     private ArrayList<Score> scores;
     private boolean sort_by_points;
 
@@ -41,6 +41,9 @@ public class LeaderBoardActivity extends AppCompatActivity {
         score_view = (ListView)findViewById(R.id.score_board);
         sort_by_points = true;
         change = (Button)findViewById(R.id.Change);
+        exit = (Button)findViewById(R.id.score_exit);
+
+        // change sorting
         change.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 sort_by_points = !sort_by_points;
@@ -49,6 +52,15 @@ public class LeaderBoardActivity extends AppCompatActivity {
                 score_view.setAdapter(adapter);
             }
         });
+
+        //exit screen
+        exit.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Intent intent = new Intent(LeaderBoardActivity.this, GameSelectActivity.class);
+                startActivity(intent);
+            }
+        });
+
         scores = scoreBoard.sortScores(sort_by_points);
         adapter = new ArrayAdapter(LeaderBoardActivity.this, android.R.layout.simple_list_item_1, viewScore(scores));
         score_view.setAdapter(adapter);
