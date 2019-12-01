@@ -13,8 +13,6 @@ import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.controller.Score;
 import uoft.csc207.games.controller.ScoreBoard;
-import uoft.csc207.games.model.Rpg.RpgActivity;
-import uoft.csc207.games.model.dodger.ScrollerActivity;
 
 public class AddScoreActivity extends AppCompatActivity {
 
