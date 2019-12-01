@@ -403,8 +403,7 @@ public class CardActivity extends AppCompatActivity implements CardClicker, Spel
             player_lp.setText("LP" + cardGameState.getPlayerHealth());
             cardGameState.setAttacked(posIndex, true);
             int currentScore = cardGame.getCurrentScore();
-            cardGame.setCurrentScore(currentScore +
-                    ((MonsterCard)cardGameState.getPlayerBoard(posIndex)).getAttack());
+            cardGame.setCurrentScore(currentScore + damageDifference);
             //Announces victory
             if (cardGameState.getAiHealth() == 0) {
                 int currScore = cardGame.getCurrentScore();
