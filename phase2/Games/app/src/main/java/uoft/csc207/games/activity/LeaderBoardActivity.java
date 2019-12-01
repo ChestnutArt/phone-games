@@ -15,6 +15,18 @@ import uoft.csc207.games.controller.scoreboard.Score;
 import uoft.csc207.games.controller.scoreboard.ScoreBoard;
 
 public class LeaderBoardActivity extends AppCompatActivity {
+    /**
+     * Activity to view Score Board
+     *
+     * Fields
+     * score_view: ListView - scores
+     * scoreBoard: ScoreBoard - ScoreBoard
+     * adapter: ArrayAdapter - adapter for List of Scores
+     * change: Button - Button to prompt different sort
+     * score: ArrayList<Score> - list of scores in scoreBoard
+     * sort_by_points - indicates sorting type
+     */
+
     private ListView score_view;
     private ScoreBoard scoreBoard = new ScoreBoard();
     private ArrayAdapter adapter;
@@ -42,6 +54,11 @@ public class LeaderBoardActivity extends AppCompatActivity {
         score_view.setAdapter(adapter);
     }
 
+    /**
+     * Creates a String list from Score List
+     * @param score_all: ArrayList<Score> - Score List
+     * @return ArrayList<String> of scores
+     */
     private ArrayList<String> viewScore(ArrayList<Score> score_all){
         ArrayList<String> return_list = new ArrayList<>();
         String sorted_by = "Points:";

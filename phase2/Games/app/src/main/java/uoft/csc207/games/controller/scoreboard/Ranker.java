@@ -1,11 +1,9 @@
-package uoft.csc207.games.model;
+package uoft.csc207.games.controller.scoreboard;
 
 
 import java.util.ArrayList;
 
-import uoft.csc207.games.controller.scoreboard.Score;
-
-public class Ranker {
+class Ranker {
     /**
      * Sorts and ArrayList of Scores
      *
@@ -14,7 +12,7 @@ public class Ranker {
      */
 
     private ArrayList<Score> scores;
-    public Ranker(ArrayList<Score> scores){
+    Ranker(ArrayList<Score> scores){
         this.scores = scores;
     }
 
@@ -23,7 +21,7 @@ public class Ranker {
      * @param begin: start index
      * @param end: last index
      */
-    public void createListByScore(int begin, int end){
+    void createListByScore(int begin, int end){
         if (begin < end) {
             int partitionIndex = partition(scores, begin, end);
 
@@ -37,7 +35,7 @@ public class Ranker {
      * @param begin: start index
      * @param end: last index
      */
-    public void createListByCurrency(int begin, int end){
+    void createListByCurrency(int begin, int end){
         if (begin < end) {
             int partitionIndex = partition2(scores, begin, end);
 
@@ -108,7 +106,7 @@ public class Ranker {
     /**
      * @return - ArrayList of Scores
      */
-    public ArrayList<Score> getScores() {
+    ArrayList<Score> getScores() {
         return scores;
     }
 }

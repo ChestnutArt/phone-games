@@ -1,7 +1,6 @@
 package uoft.csc207.games.controller.scoreboard;
 
 import android.content.Context;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,14 +11,24 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import uoft.csc207.games.model.Ranker;
 import uoft.csc207.games.model.dodger.Constants;
 
 
 public class ScoreBoard implements Serializable {
+    /**
+     * ScoreBoard class storing all posted scores
+     *
+     * Fields
+     * score_board - stores posted scores
+     * context: Current context to be used for loading
+     * NAME_OF_SCORE_STORE: String stores save location of ScoreBoard
+     * ranker: Ranker - Sorts scores
+     * currentScore - previously added score, or current achieved score
+     */
+
     private ArrayList<Score> score_board;
     private Context context;
-    private String NAME_OF_PROFILE_STORE = "Scoreboard";
+    private String NAME_OF_SCORE_STORE = "Scoreboard";
     private Ranker ranker;
     private static Score currentScore = new Score("", 0 , 0, "");
 
@@ -32,17 +41,32 @@ public class ScoreBoard implements Serializable {
         this.ranker = new Ranker(score_board);
     }
 
+    /**
+     * @param s: Current Score score to be set
+     */
     public static void setCurrentScore(Score s){
         currentScore = s;
     }
+
+    /**
+     * @return (Score)current score
+     */
     public static Score getCurrentScore(){
         return currentScore;
     }
 
+    /**
+     * @param submit: Score to added to board
+     */
     public void submitScore(Score submit){
         score_board.add(submit);
     }
 
+    /**
+     * Sort scores
+     * @param sort_by_points: indicates sort type
+     * @return ArrayList<Score> sorted scores
+     */
     public ArrayList<Score> sortScores(boolean sort_by_points){
         if (sort_by_points){
             ranker.createListByScore(0, ranker.getScores().size() - 1);
@@ -52,9 +76,12 @@ public class ScoreBoard implements Serializable {
         return ranker.getScores();
     }
 
-    public void loadScores(){
+    /**
+     * load serialized scores
+     */
+    private void loadScores(){
         File dir2store = context.getFilesDir();
-        String filePath = dir2store.getPath() + File.pathSeparator + NAME_OF_PROFILE_STORE;
+        String filePath = dir2store.getPath() + File.pathSeparator + NAME_OF_SCORE_STORE;
         FileInputStream fileInputStream = null;
         try {
             File fileStoredProfiles = new File(filePath);
@@ -81,7 +108,7 @@ public class ScoreBoard implements Serializable {
      */
     public void saveScores(){
         File dir2store = context.getFilesDir();
-        String filePath = dir2store.getPath() + File.pathSeparator + NAME_OF_PROFILE_STORE;
+        String filePath = dir2store.getPath() + File.pathSeparator + NAME_OF_SCORE_STORE;
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = new FileOutputStream(new File(filePath));
@@ -97,6 +124,11 @@ public class ScoreBoard implements Serializable {
 
     }
 
+    /**
+     * May be needed to search score by name
+     * @param name: name to be used for search
+     * @return ArrayList<Score> all scores of selected name
+     */
     public ArrayList<Score> getPlayerScores(String name){
         ArrayList<Score> player_scores = new ArrayList<>();
         for (Score s: score_board){

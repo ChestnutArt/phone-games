@@ -16,10 +16,25 @@ import uoft.csc207.games.controller.scoreboard.Score;
 import uoft.csc207.games.controller.scoreboard.ScoreBoard;
 import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
-import uoft.csc207.games.model.ScrollerGame;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
+    /**
+     * Surface for Scroller Game - handles game functionality
+     *
+     * Field
+     * scrollerActivity: ScrollerActivity - activity for scroller game
+     * thread: MainThread - Thread for scroller game
+     * Obs: ObsManager - Obstacles in the game
+     * coins: Coin - Coins to be collected in the game
+     * playerProfile: profile to retrieve scroller game from
+     * P_y: int - Y position of game player character
+     * player1: scrollerCharacter - game player character
+     * male: Boolean - character customisation of game
+     * CurrentGame: ScrollerGame - Current scroller game
+     * start: boolean - indicates whether customisation is set
+     */
+
     private ScrollerActivity scrollerActivity;
     private MainThread thread;
     private ObsManager Obs;
@@ -50,9 +65,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width,int height){
-
-    }
+    public void surfaceChanged(SurfaceHolder holder, int format, int width,int height){}
 
     public ScrollerActivity getScrollerActivity(){
         return this.scrollerActivity;
@@ -79,6 +92,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * when tapped: game character is moved up, score is incremented by 1
+     * @param e: Motion event
+     * @return Motion event processed
+     */
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         if (!isOver) {
@@ -104,6 +122,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         return thread;
     }
 
+    /**
+     * Font Selection
+     * @param canvas : canvas to be drawn on
+     */
     public void startScreen(Canvas canvas){
         super.draw(canvas);
         Paint p1 = new Paint();
@@ -123,6 +145,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         po.x = -1;
         po.y = -1;
     }
+
+    /**
+     * Character Selection
+     * @param canvas: Canvas to be drawn on
+     */
     public void startScreen2(Canvas canvas){
         super.draw(canvas);
         Paint p1 = new Paint();
@@ -144,6 +171,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         po.y = -1;
     }
 
+    /**
+     * Color Theme Selection
+     * @param canvas: Canvas to be drawn on
+     */
     private void startScreen3(Canvas canvas){
         super.draw(canvas);
         Paint p1 = new Paint();
@@ -162,6 +193,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         po.y = -1;
     }
 
+    /**
+     * Difficulty selection
+     * @param canvas: Canvas to be drawn on
+     */
     private void startScreen4(Canvas canvas){
         super.draw(canvas);
         Paint p1 = new Paint();
@@ -180,6 +215,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         po.y = -1;
     }
 
+    /**
+     * Main draw method, draws all Game Objects and canvas according to customisation
+     * @param canvas: Canvas to be drawn on
+     */
     @Override
     public void draw(Canvas canvas){
         super.draw(canvas);
@@ -211,9 +250,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 canvas.drawText("Money: " + CurrentGame.getCurrency(), 100, 200 + p.descent() - p.ascent(), p);
             }
         }
-
         }
 
+    /**
+     * Prompts for all customisations
+     * @param canvas: Canvas to be drawn on
+     */
     private void startGame(Canvas canvas){
         if (CurrentGame.getFont() == null) {
             startScreen(canvas);
@@ -228,27 +270,38 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-        private void GameOverScreen(Canvas canvas, Paint p){
-            canvas.drawColor(Color.BLACK);
-            p.setColor(Color.YELLOW);
-            p.setStrokeWidth(10);
-            p.setTextSize(100);
-            canvas.drawText("GAME OVER!", Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT /2, p);
-            canvas.drawText("Scroller Points: " + CurrentGame.getScore(), 50, 50 + p.descent() - p.ascent(), p);
-            canvas.drawText("Scroller Money: " + CurrentGame.getCurrency(), 50, 350 + p.descent() - p.ascent(), p);
-        }
+    /**
+     * Screen when game is ober
+     * @param canvas: Canvas to be drawn on
+     * @param p: Paint object to be used
+     */
+    private void GameOverScreen(Canvas canvas, Paint p){
+        canvas.drawColor(Color.BLACK);
+        p.setColor(Color.YELLOW);
+        p.setStrokeWidth(10);
+        p.setTextSize(100);
+        canvas.drawText("GAME OVER!", Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT /2, p);
+        canvas.drawText("Scroller Points: " + CurrentGame.getScore(), 50, 50 + p.descent() - p.ascent(), p);
+        canvas.drawText("Scroller Money: " + CurrentGame.getCurrency(), 50, 350 + p.descent() - p.ascent(), p);
+    }
 
-        private void gameOver(){
-            isOver = true;
-            Constants.SPEED = 0;
-            CurrentGame.checkAchievements();
-            CurrentGame.setCumulativeCurrency(CurrentGame.getCumulativeCurrency()+CurrentGame.getCurrency());
-            CurrentGame.setCumulativeScore(CurrentGame.getCumulativeScore()+CurrentGame.getScore());
-            ScoreBoard.setCurrentScore(new Score("", CurrentGame.getScore(), CurrentGame.getCurrency(),
-                    ScrollerActivity.class.getName()));
-        }
+    /**
+     * Game Over method, goes to AddScoreActivity
+     */
+    private void gameOver(){
+        isOver = true;
+        Constants.SPEED = 0;
+        CurrentGame.checkAchievements();
+        CurrentGame.setCumulativeCurrency(CurrentGame.getCumulativeCurrency()+CurrentGame.getCurrency());
+        CurrentGame.setCumulativeScore(CurrentGame.getCumulativeScore()+CurrentGame.getScore());
+        ScoreBoard.setCurrentScore(new Score("", CurrentGame.getScore(), CurrentGame.getCurrency(),
+                ScrollerActivity.class.getName()));
+    }
 
 
+    /**
+     * Updates game Objects, and checks status of the game
+     */
     public void update() {
         if (!isOver && start) {
             if (!Obs.detectCollision(player1)) {
@@ -262,10 +315,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             } else {
                 gameOver();
             }
-
         }
     }
 
+    /**
+     * Retrieves Scroller Game from playerProfile
+     */
     private void InitCurrentGame(){
         ScrollerGame s = (ScrollerGame) playerProfile.containsGame(IGameID.DODGER);
         if (s == null){
