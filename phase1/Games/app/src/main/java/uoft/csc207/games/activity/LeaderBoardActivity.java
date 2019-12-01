@@ -52,7 +52,13 @@ public class LeaderBoardActivity extends AppCompatActivity {
         return_list.add("Scores Sorted By "+sorted_by);
         for (int i = score_all.size() - 1; i >= 0; i--){
             Score s = score_all.get(i);
-            return_list.add(s.getName() + ": Points - "+s.getPoints()+" Coins Earned - "+s.getMoney() +" Game: "+s.getClassName());
+            String g;
+            if (s.getClassName().split("[.]").length > 0) {
+                g = s.getClassName().split("[.]")[s.getClassName().split("[.]").length - 1];
+            } else{
+                g = s.getClassName();
+            }
+            return_list.add(s.getName() + ": Points - "+s.getPoints()+" Coins Earned - "+s.getMoney() +" Game: "+g);
         }
         return return_list;
     }

@@ -25,10 +25,18 @@ public class TargetChoiceDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
-                            case 0: listener.onOtherPlayerClicked();
-                            case 1: listener.onLeftCardClicked();
-                            case 2: listener.onMiddleCardClicked();
-                            case 3: listener.onRightCardClicked();
+                            case 0:
+                                listener.onOtherPlayerClicked();
+                                break;
+                            case 1:
+                                listener.onLeftCardClicked();
+                                break;
+                            case 2:
+                                listener.onMiddleCardClicked();
+                                break;
+                            case 3:
+                                listener.onRightCardClicked();
+                                break;
                         }
                     }
                 });
