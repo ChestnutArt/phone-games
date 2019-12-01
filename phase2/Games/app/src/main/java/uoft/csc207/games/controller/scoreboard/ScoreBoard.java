@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import uoft.csc207.games.model.Score;
 import uoft.csc207.games.model.dodger.Constants;
 
 

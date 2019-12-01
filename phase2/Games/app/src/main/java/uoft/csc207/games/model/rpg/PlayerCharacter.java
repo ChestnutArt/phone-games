@@ -1,13 +1,10 @@
-package uoft.csc207.games.model.Rpg;
+package uoft.csc207.games.model.rpg;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import uoft.csc207.games.controller.rpg.RPGGameManager;
 
 public class PlayerCharacter extends GameObject{
     private static final int ROW_BOTTOM_TO_TOP = 8;

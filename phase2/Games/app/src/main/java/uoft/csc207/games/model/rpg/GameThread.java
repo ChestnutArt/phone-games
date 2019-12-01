@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.Rpg;
+package uoft.csc207.games.model.rpg;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;

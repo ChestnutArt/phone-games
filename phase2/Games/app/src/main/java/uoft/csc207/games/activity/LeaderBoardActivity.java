@@ -9,7 +9,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import uoft.csc207.games.R;
-import uoft.csc207.games.controller.scoreboard.Score;
+import uoft.csc207.games.model.Score;
 import uoft.csc207.games.controller.scoreboard.ScoreBoard;
 
 public class LeaderBoardActivity extends AppCompatActivity {
