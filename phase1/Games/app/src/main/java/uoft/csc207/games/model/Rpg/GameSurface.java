@@ -31,6 +31,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         rpgGameManager = new RPGGameManager(context, width, height);
         setFocusable(true);
     }
+    
 
     public GameThread getGameThread(){
         return gameThread;
