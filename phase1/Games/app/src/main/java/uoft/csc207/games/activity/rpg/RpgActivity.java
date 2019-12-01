@@ -17,17 +17,20 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.activity.AddScoreActivity;
 import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.activity.TurnDisplayActivity;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.controller.Score;
+import uoft.csc207.games.controller.ScoreBoard;
 import uoft.csc207.games.model.Rpg.GameSurface;
 import uoft.csc207.games.model.Rpg.RpgGameState;
 
 public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 
-   private GameSurface gameSurface;
-   private FrameLayout gameFrame;
-   private RelativeLayout widgetHolder;
+    private GameSurface gameSurface;
+    private FrameLayout gameFrame;
+    private RelativeLayout widgetHolder;
     private Button settingsBtn;
 
     @SuppressLint("ResourceType")
@@ -77,15 +80,17 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
         gameSurface.getGameThread().setRunning(false);
 
-        //Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
         Intent myIntent;
-        if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){
+        /*if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){
             myIntent = new Intent(RpgActivity.this, TurnDisplayActivity.class);
             myIntent.putExtra("SOURCE_ACTIVITY", RpgActivity.class.getName());
             ProfileManager.getProfileManager(this).changeCurrentPlayer();
         } else {
             myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
-        }
+        }*/
+        myIntent = new Intent(RpgActivity.this, AddScoreActivity.class);
+        ScoreBoard.setCurrentScore(new Score("", rpgState.getScore(), rpgState.getGameCurrency(),
+                RpgActivity.class.getName()));
         startActivity(myIntent);
     }
 

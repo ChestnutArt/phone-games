@@ -33,7 +33,7 @@ public class ScrollerActivity extends Activity {
 
     public void finishGame() {
         ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
-        MainThread t = (MainThread)scrollerPanel.getMainThread();
+        MainThread t = (MainThread) scrollerPanel.getMainThread();
         t.setRunning(false);
         Intent myIntent = new Intent(ScrollerActivity.this, AddScoreActivity.class);
         startActivity(myIntent);

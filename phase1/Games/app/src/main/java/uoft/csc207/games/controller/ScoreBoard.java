@@ -23,7 +23,7 @@ public class ScoreBoard implements Serializable {
     private Context context;
     private String NAME_OF_PROFILE_STORE = "Scoreboard";
     private Ranker ranker;
-    public static Score current_score = new Score("", 0 , 0, "");
+    private static Score currentScore = new Score("", 0 , 0, "");
 
     public ScoreBoard(){
         this.context = Constants.CURRENT_CONTEXT;
@@ -32,6 +32,13 @@ public class ScoreBoard implements Serializable {
             loadScores();
         }
         this.ranker = new Ranker(score_board);
+    }
+
+    public static void setCurrentScore(Score s){
+        currentScore = s;
+    }
+    public static Score getCurrentScore(){
+        return currentScore;
     }
 
     public void submitScore(Score submit){
