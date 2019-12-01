@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.CardGame;
+package uoft.csc207.games.model.card;
 
 import uoft.csc207.games.R;
 
@@ -8,7 +8,7 @@ import uoft.csc207.games.R;
 public class CardCollection {
     private Card[] cards;
 
-    static final Card emptyCard = new Card("Empty Slot", R.drawable.square);
+    public static final Card emptyCard = new Card("Empty Slot", R.drawable.square);
 
     /***
      * Initialize a new empty collection with len card slots

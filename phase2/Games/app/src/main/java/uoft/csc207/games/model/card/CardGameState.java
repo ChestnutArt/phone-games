@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.CardGame;
+package uoft.csc207.games.model.card;
 
 
 import android.widget.ImageView;
@@ -23,8 +23,9 @@ public class CardGameState implements CardClicker, SpellEffect {
     private ImageView[] playerBoardView;
     private ImageView[] aiBoardView;
     private ImageView[] aiHandView;
+    private int attackOrigin; // the origin of attack, where on the board is an attack coming from
 
-    CardGameState(ImageView[] playerHandView, ImageView[] playerBoardView, ImageView[] aiHandView,
+    public CardGameState(ImageView[] playerHandView, ImageView[] playerBoardView, ImageView[] aiHandView,
                   ImageView[] aiBoardView, CardGame cardGame, TextView aiLP, TextView playerLP) {
         int handCap = 3;
         int boardCap = 3;
@@ -66,7 +67,7 @@ public class CardGameState implements CardClicker, SpellEffect {
      * @param damage the damage that would be dealt to any of the two parties
      * @param target who should be attacked - assumed to be the player unless "ai" is given
      */
-    void attack(int damage, String target) {
+    public void attack(int damage, String target) {
         if (target.equals("ai")) {
             // don't let anyone's health go below 0
             this.aiHealth = Math.max(this.aiHealth - damage, 0);
@@ -75,7 +76,7 @@ public class CardGameState implements CardClicker, SpellEffect {
         }
     }
 
-    void restoreAttack() {
+    public void restoreAttack() {
         this.attacked[0] = false;
         this.attacked[1] = false;
         this.attacked[2] = false;
@@ -86,11 +87,11 @@ public class CardGameState implements CardClicker, SpellEffect {
 
     // decks
 
-    CardDeck getPlayerDeck() {
+    public CardDeck getPlayerDeck() {
         return playerDeck;
     }
 
-    CardDeck getAiDeck() {
+    public CardDeck getAiDeck() {
         return aiDeck;
     }
 
@@ -104,7 +105,7 @@ public class CardGameState implements CardClicker, SpellEffect {
         this.playerHealth = playerHealth;
     }
 
-    int getAiHealth() {
+    public int getAiHealth() {
         return this.aiHealth;
     }
 
@@ -114,11 +115,11 @@ public class CardGameState implements CardClicker, SpellEffect {
 
     // AI hand
 
-    Card getAiHand(int index) {
+    public Card getAiHand(int index) {
         return aiHand.getCard(index);
     }
 
-    Card setAiHand(int index, Card c) {
+    public Card setAiHand(int index, Card c) {
         return aiHand.setCard(index, c);
     }
 
@@ -134,11 +135,11 @@ public class CardGameState implements CardClicker, SpellEffect {
 
     // player hand
 
-    Card getPlayerHand(int index) {
+    public Card getPlayerHand(int index) {
         return playerHand.getCard(index);
     }
 
-    Card setPlayerHand(int index, Card c) {
+    public Card setPlayerHand(int index, Card c) {
         return playerHand.setCard(index, c);
     }
 
@@ -148,23 +149,23 @@ public class CardGameState implements CardClicker, SpellEffect {
      * @param index the index to check
      * @return whether or not the slot in the player's hand at index is occupied
      */
-    boolean getPlayerHandOccupied(int index) {
+    public boolean getPlayerHandOccupied(int index) {
         return playerHand.isOccupied(index);
     }
 
-    int getPlayerHandSize() {
+    public int getPlayerHandSize() {
         return playerHand.getSize();
     }
 
-    int getAIHandSize() {
+    public int getAIHandSize() {
         return aiHand.getSize();
     }
 
-    Card popPlayerHand(int index) {
+    public Card popPlayerHand(int index) {
         return playerHand.pop(index);
     }
 
-    Card popAiHand(int index) {
+    public Card popAiHand(int index) {
         return aiHand.pop(index);
     }
 
@@ -177,45 +178,45 @@ public class CardGameState implements CardClicker, SpellEffect {
 
     // boards
 
-    CardCollection getFullAiBoard() {
+    public CardCollection getFullAiBoard() {
         return aiBoard;
     }
 
-    CardCollection getFullPlayerBoard() {
+    public CardCollection getFullPlayerBoard() {
         return playerBoard;
     }
 
-    CardCollection getFullAiHand() {
+    public CardCollection getFullAiHand() {
         return aiHand;
     }
 
-    CardCollection getFullPlayerHand() {
+    public CardCollection getFullPlayerHand() {
         return playerHand;
     }
 
-    Card getAiBoard(int index) {
+    public Card getAiBoard(int index) {
         return aiBoard.getCard(index);
     }
 
-    Boolean getAiBoardOccupied(int index) {
+    public Boolean getAiBoardOccupied(int index) {
         return aiBoard.isOccupied(index);
     }
 
-    Card getPlayerBoard(int index) {
+    public Card getPlayerBoard(int index) {
         return playerBoard.getCard(index);
     }
 
-    Card setPlayerBoard(int index, Card c) {
+    public Card setPlayerBoard(int index, Card c) {
         return playerBoard.setCard(index, c);
     }
 
-    boolean getPlayerBoardOccupied(int index) {
+    public boolean getPlayerBoardOccupied(int index) {
         return playerBoard.isOccupied(index);
     }
 
     // attacked
 
-    boolean getAttacked(int index) {
+    public boolean getAttacked(int index) {
         return attacked[index];
     }
 
@@ -225,22 +226,32 @@ public class CardGameState implements CardClicker, SpellEffect {
 
     // summoned
 
-    void setSummoned(boolean summoned) {
+    public void setSummoned(boolean summoned) {
         this.summoned = summoned;
     }
 
-    boolean isSummoned() {
+    public boolean isSummoned() {
         return summoned;
     }
 
     // first turn boolean
 
-    boolean isFirstTurn() {
+    public boolean isFirstTurn() {
         return firstTurn;
     }
 
-    void setFirstTurn(boolean firstTurn) {
+    public void setFirstTurn(boolean firstTurn) {
         this.firstTurn = firstTurn;
+    }
+
+    // attack origin getter and setter
+
+    public int getAttackOrigin() {
+        return attackOrigin;
+    }
+
+    public void setAttackOrigin(int attackOrigin) {
+        this.attackOrigin = attackOrigin;
     }
 
     // CardClicker Methods
@@ -290,12 +301,14 @@ public class CardGameState implements CardClicker, SpellEffect {
 
     @Override
     public void clickDirectAttack(CardGameState cardGameState, int posIndex) {
-
+        int cardAttack = ((MonsterCard) getPlayerBoard(posIndex)).getAttack();
+        attack(cardAttack, "ai");
+        aiLP.setText("LP: " + getAiHealth());
     }
 
     @Override
     public void clickTargetAttack(CardGameState cardGameState, int posIndex) {
-
+        setAttackOrigin(posIndex);
     }
 
     @Override

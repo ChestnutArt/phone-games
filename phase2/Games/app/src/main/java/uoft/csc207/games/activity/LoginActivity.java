@@ -8,12 +8,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
-import uoft.csc207.games.model.dodger.Constants;
 
+/**
+ * Provides interface for the user's login. Consists of EditTexts for the username and password, will
+ * display an appropriate error message for each attempted login/create account error. Also allows for
+ * two players to login at the same time.
+ */
 public class LoginActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
@@ -23,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView errorMsg;
     private ProfileManager profileManager;
     /**
-     * Whether it is the first login of the two player login or not.
+     * Whether it is the first login of the two players that are logging in or not.
      */
     private boolean isFirstLogin;
 
@@ -41,21 +44,21 @@ public class LoginActivity extends AppCompatActivity {
         errorMsg = (TextView) findViewById(R.id.txtErrorMsg);
         isFirstLogin = true;
 
+        //Immediately logs in a use if their entered fields match an existing PlayerProfile
         login.setOnClickListener(new View.OnClickListener(){
            public void onClick(View view){
-               //isFirstLogin = true;
                validate(username.getText().toString(), password.getText().toString());
                profileManager.setIsTwoPlayerMode(false);
            }
         });
-
+        //Creates a PlayerProfile if there doesn't already exist a PlayerProfile with the same username
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createProfile(username.getText().toString(), password.getText().toString());
             }
         });
-
+        //Used for logging in both the first and second user
         doubleLogin.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 profileManager.setIsTwoPlayerMode(true);
@@ -63,8 +66,6 @@ public class LoginActivity extends AppCompatActivity {
                 username.setText("");
                 password.setText("");
                 doubleLogin.setText("2 Player Login (2 of 2)");
-
-
             }
         });
     }
@@ -92,8 +93,19 @@ public class LoginActivity extends AppCompatActivity {
             errorMsg.setText("The password of user: " + userName + " is incorrect!");
             return;
         }
+        executeCorrectLoginAction(tmpProfile);
+    }
 
-
+    /**
+     * Decides and executes the correct course of action if the login attempt satisfies all validation
+     * checks. If it's a single login, the passed PlayerProfile will log in as the currentPlayer. If it's a
+     * double login, depending on whether it is the first or second login, will either log in the
+     * passed PlayerProfile as the currentPlayer and clear the text fields for the second player to
+     * enter their information, or log in the passed PlayerProfile as the secondPlayer and move to
+     * the GameSelectActivity menu
+     * @param tmpProfile The PlayerProfile to be logged in
+     */
+    private void executeCorrectLoginAction(PlayerProfile tmpProfile){
         if(!profileManager.isTwoPlayerMode()){
             moveToGameSelectActivity();
             profileManager.setCurrentPlayer(tmpProfile);
@@ -114,7 +126,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Creates a PlayerProfile and adds it to to ProfileManager's tree map of PlayerProfiles
+     * Creates a PlayerProfile and adds it to to ProfileManager's tree map of PlayerProfiles. If a PlayerProfile
+     * with the same id (username) already exists in the tree map, will reject the createProfile attempt.
+     * Displays the appropriate message depending on the outcome.
      * @param userName Username of the PlayerProfile to be created
      * @param passWord Password of the PlayerProfile to be created
      */

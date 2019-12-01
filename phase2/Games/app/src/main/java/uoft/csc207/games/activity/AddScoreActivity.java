@@ -11,14 +11,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
-import uoft.csc207.games.controller.scoreboard.Score;
+import uoft.csc207.games.model.Score;
 import uoft.csc207.games.controller.scoreboard.ScoreBoard;
 
 public class AddScoreActivity extends AppCompatActivity {
+    /**
+     * Activity to Submit Score
+     *
+     * Fields
+     * submit: Button - button for submitting Score
+     * cancel: Button - button for cancelling submission
+     * gamerTag: EditText - text box for writing the gamer tag
+     * error_msg: TextView - prompt on "No gamer tag"
+     * scoreBoard: ScoreBoard - The SooreBoard to be submit to
+     */
 
     private Button submit;
     private Button cancel;
-    private EditText gamer_tag;
+    private EditText gamerTag;
     private TextView error_msg;
     private ScoreBoard scoreBoard = new ScoreBoard();
 
@@ -26,18 +36,20 @@ public class AddScoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activty_add_score);
-        gamer_tag = (EditText) findViewById(R.id.GamerTag);
+        gamerTag = (EditText) findViewById(R.id.GamerTag);
         submit = (Button) findViewById(R.id.Submit);
         cancel = (Button) findViewById(R.id.Cancel);
         error_msg = (TextView) findViewById(R.id.error_msg);
 
+        //Submits Score
         submit.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Submit(gamer_tag.getText().toString(), ScoreBoard.getCurrentScore());
+                Submit(gamerTag.getText().toString(), ScoreBoard.getCurrentScore());
                 moveToNextActivity();
             }
         });
 
+        // Cancels Submission
         cancel.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 moveToNextActivity();
@@ -46,6 +58,10 @@ public class AddScoreActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * @param name - name of player "Gamer Tag"
+     * @param s - Score to be submitted
+     */
     private void Submit(String name, Score s){
         if (name.equals("") && s.getName().equals("")){
             error_msg.setText("Gamer Tag is required");
@@ -58,6 +74,9 @@ public class AddScoreActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Return to game selection
+     */
     private void moveToNextActivity(){
         Intent myIntent;
         if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){

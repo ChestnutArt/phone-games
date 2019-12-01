@@ -1,17 +1,29 @@
-package uoft.csc207.games.model;
+package uoft.csc207.games.controller.scoreboard;
 
 
 import java.util.ArrayList;
 
-import uoft.csc207.games.controller.scoreboard.Score;
+import uoft.csc207.games.model.Score;
 
-public class Ranker {
-    public ArrayList<Score> scores;
-    public Ranker(ArrayList<Score> scores){
+class Ranker {
+    /**
+     * Sorts and ArrayList of Scores
+     *
+     * Fields:
+     * scores: ArrayList<Score> - Stores the scores to be sorted
+     */
+
+    private ArrayList<Score> scores;
+    Ranker(ArrayList<Score> scores){
         this.scores = scores;
     }
 
-    public void createListByScore(int begin, int end){
+    /**
+     * Sort scores by Points
+     * @param begin: start index
+     * @param end: last index
+     */
+    void createListByScore(int begin, int end){
         if (begin < end) {
             int partitionIndex = partition(scores, begin, end);
 
@@ -20,7 +32,12 @@ public class Ranker {
         }
     }
 
-    public void createListByCurrency(int begin, int end){
+    /**
+     * Sort scores by Money
+     * @param begin: start index
+     * @param end: last index
+     */
+    void createListByCurrency(int begin, int end){
         if (begin < end) {
             int partitionIndex = partition2(scores, begin, end);
 
@@ -29,6 +46,12 @@ public class Ranker {
         }
     }
 
+    /**
+     * Swap two items in ArrayList
+     * @param a: index of item one
+     * @param b: index of item two
+     * @param s: ArrayList with items
+     */
     private void swap(int a, int b, ArrayList s)
     {
         Object temp = s.get(a);
@@ -38,6 +61,13 @@ public class Ranker {
         }
     }
 
+    /**
+     * Helper method for Sortng by Points
+     * @param score_all: ArrayList being sorted
+     * @param begin: start index
+     * @param end: last index
+     * @return - update sub ArraList of Scores
+     */
     private int partition(ArrayList<Score> score_all, int begin, int end) {
 
         Score pivot = score_all.get(end);
@@ -52,6 +82,14 @@ public class Ranker {
         swap(i+1, end, score_all);
         return i+1;
     }
+
+    /**
+     * Helper method for Sortng by Money
+     * @param score_all: ArrayList being sorted
+     * @param begin: start index
+     * @param end: last index
+     * @return - update sub ArraList of Scores
+     */
     private int partition2(ArrayList<Score> score_all, int begin, int end) {
 
         Score pivot = score_all.get(end);
@@ -67,5 +105,10 @@ public class Ranker {
         return i+1;
     }
 
-
+    /**
+     * @return - ArrayList of Scores
+     */
+    ArrayList<Score> getScores() {
+        return scores;
+    }
 }

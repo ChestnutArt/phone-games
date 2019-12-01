@@ -5,21 +5,31 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 public class RectObj implements  GameObject {
-
+    /**
+     * Represents One Rectangular Obstacle in Scroller, implements GameObject
+     *
+     * Fields
+     * color: int - Color of rectangles
+     * x: int - x position of rectangles
+     */
 
     private int color;
     private int x;
-    private int y;
     private Rect rect1;
     private Rect rect2;
 
-    public RectObj (int color, int PlayerHeight){
+    RectObj (int color, int PlayerHeight){
         this.x = Constants.SCREEN_WIDTH - 100;
         int rGap = (int)(Math.random()* Constants.SCREEN_HEIGHT)/2;
         this.rect1 = new Rect(x, 0, x + 100, rGap);
         this.rect2 = new Rect(x, (int)(rGap + 2 * PlayerHeight), x + 100, Constants.SCREEN_HEIGHT);
         this.color = color;
         }
+
+    /**
+     * Draws the obstacle
+     * @param canvas: Canvas to be drawn on
+     */
     public void draw(Canvas canvas){
 
         Paint paint = new Paint();
@@ -28,6 +38,9 @@ public class RectObj implements  GameObject {
         canvas.drawRect(rect2, paint);
     }
 
+    /**
+     * Updates Obstacle Position
+     */
     public void update(){
         if (this.x > 0) {
             this.x -= Constants.SPEED;
@@ -38,16 +51,20 @@ public class RectObj implements  GameObject {
         }
     }
 
-    public boolean Collide(scrollerCharacter s){
+    /**
+     * Collision check with game character
+     * @param s - scrollerCharacter to check collision with
+     * @return true if collided
+     */
+    boolean Collide(scrollerCharacter s){
         Rect pRect = s.getRect();
-        if (rect1.intersect(pRect) || rect2.intersect(pRect)){
-            return true;
-        }
-        return false;
+        return (rect1.intersect(pRect) || rect2.intersect(pRect));
     }
 
-
-    public int getX() {
+    /**
+     * @return x position plus 100
+     */
+    int getX() {
         return x + 100;
     }
 }

@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.CardGame;
+package uoft.csc207.games.model.card;
 
 /***
  * A class for representing individual cards
@@ -12,7 +12,7 @@ public class Card {
         this.cardArt = cardArt;
     }
 
-    int getCardArt() {
+    public int getCardArt() {
         return cardArt;
     }
 

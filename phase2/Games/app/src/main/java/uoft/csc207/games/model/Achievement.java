@@ -2,6 +2,10 @@ package uoft.csc207.games.model;
 
 import java.io.Serializable;
 
+/**
+ * An Achievement object has a name, a description, and is attainable at a certain threshold of score and
+ * currency.
+ */
 public class Achievement implements Serializable {
     private String achievementName;
     private String description;
@@ -19,13 +23,12 @@ public class Achievement implements Serializable {
         this.checkScore = checkScore;
     }
 
-    public String getAchievementName(){
-        return achievementName;
-    }
-    public String getDescription(){
-        return description;
-    }
-
+    /**
+     * Checks if given score and gold values are high enough to attain a given Achievement.
+     * @param score The score to be checked
+     * @param gold The gold to be checked
+     * @return Whether the given gold and score meet the requirements to attain the achievement
+     */
     public boolean isAchieved(int score, int gold){
         boolean achieved = false;
         if (checkScore && !checkGold){
@@ -38,7 +41,11 @@ public class Achievement implements Serializable {
         return achieved;
     }
 
+    /**
+     * Provides a String representation of the achievement for use in displaying a player's achievements
+     * @return The achievement's name followed by its description on the next line
+     */
     public String toString(){
-        return achievementName + ":\n" + description;
+        return achievementName + ":\n\t" + description;
     }
 }

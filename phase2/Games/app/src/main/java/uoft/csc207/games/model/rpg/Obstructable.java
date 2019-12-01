@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.Rpg;
+package uoft.csc207.games.model.rpg;
 
 /**
  * For GameObjects that are capable of blocking the PlayerCharacter. Implemented by objects that extend
