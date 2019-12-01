@@ -13,13 +13,13 @@
         android:layout_width="118dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Change  Sort" />
+        android:text="Sort by" />
 
     <Button
         android:id="@+id/score_exit"
-        android:layout_width="50dp"
+        android:layout_width="70dp"
         android:layout_height="184dp"
         android:layout_weight="1"
-        android:text="Exit" />
+        android:text="Ex" />
 
 </LinearLayout>
