@@ -2,7 +2,6 @@ package uoft.csc207.games.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -12,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 import uoft.csc207.games.R;
-import uoft.csc207.games.controller.Score;
-import uoft.csc207.games.controller.ScoreBoard;
+import uoft.csc207.games.controller.scoreboard.Score;
+import uoft.csc207.games.controller.scoreboard.ScoreBoard;
 
 public class LeaderBoardActivity extends AppCompatActivity {
     private ListView score_view;

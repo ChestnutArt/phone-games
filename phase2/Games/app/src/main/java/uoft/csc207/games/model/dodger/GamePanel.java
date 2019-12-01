@@ -12,8 +12,8 @@ import android.view.SurfaceView;
 import uoft.csc207.games.R;
 import uoft.csc207.games.activity.dodger.ScrollerActivity;
 import uoft.csc207.games.controller.ProfileManager;
-import uoft.csc207.games.controller.Score;
-import uoft.csc207.games.controller.ScoreBoard;
+import uoft.csc207.games.controller.scoreboard.Score;
+import uoft.csc207.games.controller.scoreboard.ScoreBoard;
 import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.model.ScrollerGame;
@@ -31,12 +31,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Boolean male;
     private PlayerProfile playerProfile;
     private ScrollerGame CurrentGame;
-    private boolean start = false;
+    private boolean start;
 
     public GamePanel(Context context){
         super(context);
         scrollerActivity = (ScrollerActivity)context;
         isOver = false;
+        start = false;
         getHolder().addCallback(this);
         thread = new MainThread(getHolder(), this);
         player1 = new scrollerCharacter(BitmapFactory.decodeResource(getResources(),R.drawable.goku));
@@ -115,10 +116,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             CurrentGame.chooseFont("Big");
             po.y = -1;
         }
-        else if (po.y >= 0){
+        else if (po.y >= 0 && po.y < Constants.SCREEN_HEIGHT){
             CurrentGame.chooseFont("Small");
             po.y = -1;
         }
+        po.x = -1;
+        po.y = -1;
     }
     public void startScreen2(Canvas canvas){
         super.draw(canvas);
@@ -131,12 +134,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (po.y >= 0) {
             male = po.y <= Constants.SCREEN_HEIGHT / 2;
             CurrentGame.chooseCharacter("Male");
-            po.y = -1;
         }
+
         if (!male){
             player1 = new scrollerCharacter(BitmapFactory.decodeResource(getResources(),R.drawable.fem));
             CurrentGame.chooseCharacter("Female");
         }
+        po.x = -1;
+        po.y = -1;
     }
 
     private void startScreen3(Canvas canvas){
@@ -149,12 +154,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawText("Red", 0, 2*Constants.SCREEN_HEIGHT/3, p1);
         if ( po.y >= Constants.SCREEN_HEIGHT/2){
             CurrentGame.chooseColor("RED");
-            po.y = -1;
         }
         else if (po.y >= 0){
             CurrentGame.chooseColor("BLUE");
-            po.y = -1;
         }
+        po.x = -1;
+        po.y = -1;
     }
 
     private void startScreen4(Canvas canvas){
@@ -167,38 +172,44 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawText("Regular", 0, 2*Constants.SCREEN_HEIGHT/3, p1);
         if ( po.y >= Constants.SCREEN_HEIGHT/2){
             Constants.SPEED = 1;
-            po.y = -1;
         }
         else if (po.y >= 0){
             Constants.SPEED = 2;
-            po.y = -1;
         }
+        po.x = -1;
+        po.y = -1;
     }
 
     @Override
     public void draw(Canvas canvas){
-        startGame(canvas);
         super.draw(canvas);
         Paint p = new Paint();
         if (isOver) {
             GameOverScreen(canvas, p);
-        } else{
-            p.setColor(Color.BLACK);
-            if (CurrentGame.getFont().equals("Big")) {
-                p.setTextSize(100);
+        } else {
+            if (!start) {
+                startGame(canvas);
             } else {
-                p.setTextSize(50);
+                p.setColor(Color.BLACK);
+
+                if (CurrentGame.getFont().equals("Big")) {
+                    p.setTextSize(100);
+                } else {
+                    p.setTextSize(50);
+                }
+
+                if (CurrentGame.getColor().equals("RED")) {
+                    canvas.drawColor(Color.RED);
+                } else if (CurrentGame.getColor().equals("Blue"))  {
+                    canvas.drawColor(Color.BLUE);
+                }
+
+                Obs.draw(canvas);
+                player1.draw(canvas);
+                coins.draw(canvas);
+                canvas.drawText("Score: " + CurrentGame.getScore(), 100, 50 + p.descent() - p.ascent(), p);
+                canvas.drawText("Money: " + CurrentGame.getCurrency(), 100, 200 + p.descent() - p.ascent(), p);
             }
-            if (CurrentGame.getColor().equals("RED")){
-                canvas.drawColor(Color.RED);
-            } else{
-                canvas.drawColor(Color.BLUE);
-            }
-            Obs.draw(canvas);
-            player1.draw(canvas);
-            coins.draw(canvas);
-            canvas.drawText("Score: " + CurrentGame.getScore(), 100, 50 + p.descent() - p.ascent(), p);
-            canvas.drawText("Money: " + CurrentGame.getCurrency(), 100, 200 + p.descent() - p.ascent(), p);
         }
 
         }

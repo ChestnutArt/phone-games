@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.CardGame;
+package uoft.csc207.games.activity.card;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.CardGame.CardGame;
+import uoft.csc207.games.model.CardGame.CardGameManager;
 import uoft.csc207.games.model.IGameID;
 
 public class CardActivity extends AppCompatActivity {

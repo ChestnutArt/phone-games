@@ -2,9 +2,8 @@ package uoft.csc207.games.model;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
-import uoft.csc207.games.controller.Score;
+import uoft.csc207.games.controller.scoreboard.Score;
 
 public class Ranker {
     public ArrayList<Score> scores;
@@ -66,14 +65,6 @@ public class Ranker {
         }
         swap(i+1, end, score_all);
         return i+1;
-    }
-
-    public void addScore(Score p){
-       scores.add(p);
-    }
-
-    public int getSize(){
-        return scores.size();
     }
 
 

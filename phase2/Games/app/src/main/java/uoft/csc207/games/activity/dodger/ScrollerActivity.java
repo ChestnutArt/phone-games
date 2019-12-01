@@ -9,7 +9,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
 import uoft.csc207.games.R;
@@ -17,8 +16,6 @@ import uoft.csc207.games.activity.AddScoreActivity;
 import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.activity.TurnDisplayActivity;
 import uoft.csc207.games.controller.ProfileManager;
-import uoft.csc207.games.controller.ScoreBoard;
-import uoft.csc207.games.model.ScrollerGame;
 import uoft.csc207.games.model.dodger.Constants;
 import uoft.csc207.games.model.dodger.GamePanel;
 import uoft.csc207.games.model.dodger.MainThread;

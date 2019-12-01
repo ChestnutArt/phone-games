@@ -1,4 +1,4 @@
-package uoft.csc207.games.controller;
+package uoft.csc207.games.controller.scoreboard;
 
 import android.content.Context;
 
@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import uoft.csc207.games.model.Ranker;
 import uoft.csc207.games.model.dodger.Constants;
 

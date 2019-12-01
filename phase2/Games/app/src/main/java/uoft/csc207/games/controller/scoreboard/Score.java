@@ -1,4 +1,4 @@
-package uoft.csc207.games.controller;
+package uoft.csc207.games.controller.scoreboard;
 
 import java.io.Serializable;
 
