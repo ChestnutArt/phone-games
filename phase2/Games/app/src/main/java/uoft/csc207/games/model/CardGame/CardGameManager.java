@@ -330,7 +330,9 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
         if (!cardGameState.getAttacked(posIndex)) {
             cardGameState.clickAttack(cardGameState, posIndex, targetPosIndex);
             //Announces victory
-            endGame();
+            if (cardGameState.getAiHealth() == 0) {
+                endGame();
+            }
         }  else {
             Snackbar attacked =
                     Snackbar.make(findViewById(R.id.toolbar), R.string.attacked,
