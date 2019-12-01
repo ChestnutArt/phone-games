@@ -28,6 +28,7 @@ public class ScrollerActivity extends Activity {
     private FrameLayout gameFrame;
     private RelativeLayout widgetHolder;
     private Button exit;
+    public boolean exited;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class ScrollerActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        exited = false;
         Constants.CURRENT_CONTEXT = this;
         DisplayMetrics d = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(d);
@@ -68,6 +70,7 @@ public class ScrollerActivity extends Activity {
     }
 
     public void  exitGame(){
+        exited = true;
         Intent myIntent;
         if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){
             myIntent = new Intent(ScrollerActivity.this, TurnDisplayActivity.class);
