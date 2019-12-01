@@ -320,10 +320,13 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
     }
 
     public void clickDirectAttack(CardGameState cardGameState, int posIndex) {
-        if (!cardGameState.getAiHandOccupied(0) & !cardGameState.getAiHandOccupied(1) &
-        !cardGameState.getAiHandOccupied(2)) {
-            cardGameState.attack(((MonsterCard)
-                    cardGameState.getPlayerBoard(posIndex)).getAttack(), "ai");
+        if (!cardGameState.getAiHandOccupied(0) & !cardGameState.getAiBoardOccupied(1) &
+        !cardGameState.getAiBoardOccupied(0)) {
+            int cardAttack = ((MonsterCard) cardGameState.getPlayerBoard(posIndex)).getAttack();
+            cardGameState.attack(cardAttack, "ai");
+            TextView ai_lp = findViewById(R.id.ai_lp);
+            newGame.attack(cardAttack, "ai");
+            ai_lp.setText("LP" + newGame.getAiHealth());
         }
         }
 
@@ -412,8 +415,10 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, S
             player_lp.setText("LP" + cardGameState.getPlayerHealth());
             cardGameState.setAttacked(posIndex, true);
             int currentScore = cardGame.getCurrentScore();
-            cardGame.setCurrentScore(currentScore +
-                    ((MonsterCard)cardGameState.getPlayerBoard(posIndex)).getAttack());
+            if (!(damageDifference == 0)) {
+                cardGame.setCurrentScore(currentScore +
+                        ((MonsterCard) cardGameState.getPlayerBoard(posIndex)).getAttack());
+            }
             //Announces victory
             if (cardGameState.getAiHealth() == 0) {
                 int currScore = cardGame.getCurrentScore();

@@ -177,6 +177,8 @@ public class CardGameState {
         return aiBoard.getCard(index);
     }
 
+    Boolean getAiBoardOccupied(int index) { return aiBoard.isOccupied(index); }
+
     Card getPlayerBoard(int index) {
         return playerBoard.getCard(index);
     }
