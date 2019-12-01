@@ -1,6 +1,6 @@
 package uoft.csc207.games.model.card;
 
-public class SpellCard extends Card{
+public class SpellCard extends Card {
 
     private String spellEffect;
     private int effectValue;

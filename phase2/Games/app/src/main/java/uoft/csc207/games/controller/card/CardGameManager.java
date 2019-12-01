@@ -199,18 +199,18 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
                 });
 
         playerHand[1].setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        clickActivate(newGame, 1);
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                clickActivate(newGame, 1);
+            }
+        });
 
         playerHand[2].setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        clickActivate(newGame, 2);
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                clickActivate(newGame, 2);
+            }
+        });
 
 
         /**
@@ -218,18 +218,18 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
          * clickTargetAttack to choose a target to attack with respect to its position
          */
         playerBoard[0].setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        clickTargetAttack(newGame, 0);
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                clickTargetAttack(newGame, 0);
+            }
+        });
 
         playerBoard[1].setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        clickTargetAttack(newGame, 1);
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                clickTargetAttack(newGame, 1);
+            }
+        });
 
         playerBoard[2].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -406,7 +406,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
      * sets the attacker position in cardGameState and opens the dialog to choose an attack target
      */
     public void clickTargetAttack(CardGameState cardGameState, int posIndex) {
-        if (cardGameState.getPlayerBoardOccupied(posIndex)){
+        if (cardGameState.getPlayerBoardOccupied(posIndex)) {
             cardGameState.clickTargetAttack(cardGameState, posIndex);
             openDialog();
         }
@@ -426,7 +426,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
             if (cardGameState.getAiHealth() == 0) {
                 endGame();
             }
-        }  else {
+        } else {
             Snackbar attacked =
                     Snackbar.make(findViewById(R.id.toolbar), R.string.attacked,
                             Snackbar.LENGTH_SHORT);
@@ -457,7 +457,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
     }
 
     @Override
-    public void onMiddleCardClicked(){
+    public void onMiddleCardClicked() {
         if (newGame.getAiBoardOccupied(1)) {
             clickAttack(newGame, newGame.getAttackOrigin(), 1);
         }
@@ -479,8 +479,8 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
         cardGame.setCurrentScore(0);
         score.setText("HIGH SCORE: " + cardGame.getScore());
         cardGame.checkAchievements();
-        cardGame.setCumulativeCurrency(cardGame.getCumulativeCurrency()+cardGame.getGameCurrency());
-        cardGame.setCumulativeScore(cardGame.getCumulativeScore()+cardGame.getScore());
+        cardGame.setCumulativeCurrency(cardGame.getCumulativeCurrency() + cardGame.getGameCurrency());
+        cardGame.setCumulativeScore(cardGame.getCumulativeScore() + cardGame.getScore());
         ScoreBoard.setCurrentScore(new Score("", cardGame.getScore(), cardGame.getGameCurrency(),
                 CardActivity.class.getName()));
         ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();

@@ -26,7 +26,7 @@ public class CardGameState implements CardClicker, SpellEffect {
     private int attackOrigin; // the attacking card's position on player's board
 
     public CardGameState(ImageView[] playerHandView, ImageView[] playerBoardView, ImageView[] aiHandView,
-                  ImageView[] aiBoardView, CardGame cardGame, TextView aiLP, TextView playerLP) {
+                         ImageView[] aiBoardView, CardGame cardGame, TextView aiLP, TextView playerLP) {
         int handCap = 3;
         int boardCap = 3;
 

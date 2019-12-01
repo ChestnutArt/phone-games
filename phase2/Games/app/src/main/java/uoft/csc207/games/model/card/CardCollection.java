@@ -80,7 +80,7 @@ public class CardCollection {
 
     public int getOccupiedSize() {
         int occupiedNumber = 0;
-        for (Card card: cards) {
+        for (Card card : cards) {
             if (!card.equals(emptyCard)) {
                 occupiedNumber++;
             }

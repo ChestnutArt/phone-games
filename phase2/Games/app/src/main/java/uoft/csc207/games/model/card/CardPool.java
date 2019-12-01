@@ -17,7 +17,7 @@ public class CardPool {
     }
 
     public boolean cardExists(String cardName) {
-        for (Card card: cardList) {
+        for (Card card : cardList) {
             if (card.getName().equals(cardName)) {
                 return true;
             }
@@ -26,7 +26,7 @@ public class CardPool {
     }
 
     public Card searchCard(String cardName) {
-        for (Card card: cardList) {
+        for (Card card : cardList) {
             if (card.getName().equals(cardName)) {
                 selectedCard = card;
             }

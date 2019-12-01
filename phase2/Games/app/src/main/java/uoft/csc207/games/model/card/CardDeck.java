@@ -15,7 +15,7 @@ public class CardDeck implements DeckOrganizer {
     public void addThree(String cardName, CardPool cardPool) {
         if (cardPool.cardExists(cardName)) {
             Card selectedCard = cardPool.searchCard(cardName);
-            for (int index: new int[]{1, 2, 3}) {
+            for (int index : new int[]{1, 2, 3}) {
                 if (deck.size() < 20) {
                     deck.add(selectedCard);
                 }
@@ -25,7 +25,7 @@ public class CardDeck implements DeckOrganizer {
 
     @Override
     public void setDeckByList(String[] cardList, CardPool cardPool) {
-        for (String cardName: cardList) {
+        for (String cardName : cardList) {
             addThree(cardName, cardPool);
         }
     }

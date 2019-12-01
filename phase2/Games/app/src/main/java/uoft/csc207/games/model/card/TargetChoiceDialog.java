@@ -45,8 +45,11 @@ public class TargetChoiceDialog extends AppCompatDialogFragment {
 
     public interface TargetChoiceDialogListener {
         void onOtherPlayerClicked();
+
         void onLeftCardClicked();
+
         void onMiddleCardClicked();
+
         void onRightCardClicked();
 
     }
