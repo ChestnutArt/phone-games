@@ -12,10 +12,9 @@ import java.util.List;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
-import uoft.csc207.games.model.CardGame.CardActivity;
 import uoft.csc207.games.activity.rpg.RpgActivity;
 import uoft.csc207.games.activity.dodger.ScrollerActivity;
-import uoft.csc207.games.model.CardGame.DeckSelection;
+import uoft.csc207.games.model.CardGame.CardActivity;
 
 /**
  * All the logic is in TurnDisplayActivity. Each game's activity only needs to check ProfileManager for
@@ -62,7 +61,7 @@ public class TurnDisplayActivity extends AppCompatActivity{
         gameActivities = new ArrayList<>();
         gameActivities.add(RpgActivity.class);
         gameActivities.add(ScrollerActivity.class);
-        gameActivities.add(DeckSelection.class);
+        gameActivities.add(CardActivity.class);
     }
 
     private void goToRandomGame(Class previousGame){

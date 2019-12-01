@@ -13,4 +13,5 @@
     <string name="background_change">Night</string>
     <string name="character_change">Raegan Mode</string>
     <string name="score">Score</string>
+    <string name="last_deck">Use Last Deck</string>
 </resources>

@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import uoft.csc207.games.model.CardGame.DeckSelection;
+import uoft.csc207.games.model.CardGame.CardActivity;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
@@ -80,7 +80,7 @@ public class GameSelectActivity extends AppCompatActivity {
                 /*if (!(currentProfile.containsGame(IGameID.CARD) instanceof CardGame)) {
                     currentProfile.addGame(new CardGame());
                 }*/
-                Intent cardIntent = new Intent(GameSelectActivity.this, DeckSelection.class);
+                Intent cardIntent = new Intent(GameSelectActivity.this, CardActivity.class);
                 startActivity(cardIntent);
             }
         });
