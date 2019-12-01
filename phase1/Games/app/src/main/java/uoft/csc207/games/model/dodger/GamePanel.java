@@ -233,7 +233,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             CurrentGame.checkAchievements();
             CurrentGame.setCumulativeCurrency(CurrentGame.getCumulativeCurrency()+CurrentGame.getCurrency());
             CurrentGame.setCumulativeScore(CurrentGame.getCumulativeScore()+CurrentGame.getScore());
-            ScoreBoard.current_score = new Score("", CurrentGame.getScore(), CurrentGame.getCurrency(), ScrollerActivity.class.getName());
+            ScoreBoard.setCurrentScore(new Score("", CurrentGame.getScore(), CurrentGame.getCurrency(),
+                    ScrollerActivity.class.getName()));
         }
 
 

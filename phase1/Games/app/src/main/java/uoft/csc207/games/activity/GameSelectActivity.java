@@ -8,9 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import uoft.csc207.games.model.CardGame.CardGame;
 import uoft.csc207.games.model.CardGame.DeckSelection;
-import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
@@ -79,9 +77,9 @@ public class GameSelectActivity extends AppCompatActivity {
         cardSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!(currentProfile.containsGame(IGameID.CARD) instanceof CardGame)) {
+                /*if (!(currentProfile.containsGame(IGameID.CARD) instanceof CardGame)) {
                     currentProfile.addGame(new CardGame());
-                }
+                }*/
                 Intent cardIntent = new Intent(GameSelectActivity.this, DeckSelection.class);
                 startActivity(cardIntent);
             }
@@ -96,8 +94,6 @@ public class GameSelectActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
-
-
 
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override

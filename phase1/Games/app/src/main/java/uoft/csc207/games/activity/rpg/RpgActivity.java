@@ -17,25 +17,20 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
 import uoft.csc207.games.R;
+import uoft.csc207.games.activity.AddScoreActivity;
 import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.activity.TurnDisplayActivity;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.controller.Score;
+import uoft.csc207.games.controller.ScoreBoard;
 import uoft.csc207.games.model.Rpg.GameSurface;
 import uoft.csc207.games.model.Rpg.RpgGameState;
 
 public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 
-   private GameSurface gameSurface;
-   private FrameLayout gameFrame;
-   private RelativeLayout widgetHolder;
-
-    /*public TextView getTextView() {
-        return textView;
-    }*/
-    //public TextView getStatsView() { return statsView; }
-
-    //private TextView textView;
-    //private TextView statsView;
+    private GameSurface gameSurface;
+    private FrameLayout gameFrame;
+    private RelativeLayout widgetHolder;
     private Button settingsBtn;
 
     @SuppressLint("ResourceType")
@@ -79,21 +74,16 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
     }
 
     public void finishGame(RpgGameState rpgState, boolean wipeGameStats){
+        ScoreBoard.setCurrentScore(new Score("", rpgState.getScore(), rpgState.getGameCurrency(),
+                RpgActivity.class.getName()));
         if(rpgState != null && wipeGameStats){
             rpgState.restart();
         }
         ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
         gameSurface.getGameThread().setRunning(false);
 
-        //Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
         Intent myIntent;
-        if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){
-            myIntent = new Intent(RpgActivity.this, TurnDisplayActivity.class);
-            myIntent.putExtra("SOURCE_ACTIVITY", RpgActivity.class.getName());
-            ProfileManager.getProfileManager(this).changeCurrentPlayer();
-        } else {
-            myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
-        }
+        myIntent = new Intent(RpgActivity.this, AddScoreActivity.class);
         startActivity(myIntent);
     }
 
@@ -109,7 +99,6 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
             case R.id.black_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseColor("black");
                 gameSurface.getRpgGameManager().getScorePaint().setColor(Color.BLACK);
-                //textView.setBackgroundColor(Color.BLACK);
                 break;
             case R.id.red_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseColor(RpgGameState.FONT_COLOR_RED);
@@ -118,7 +107,6 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
             case R.id.white_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseColor(RpgGameState.FONT_COLOR_WHITE);
                 gameSurface.getRpgGameManager().getScorePaint().setColor(Color.WHITE);
-                //textView.setBackgroundColor(Color.WHITE);
                 break;
             case R.id.monospace_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseFont(RpgGameState.FONT_TYPE_MONOSPACE);
@@ -126,11 +114,11 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
                 break;
             case R.id.sans_serif_item:
                 gameSurface.getRpgGameManager().getCurrentGameState().chooseFont(RpgGameState.FONT_TYPE_SANS_SERIF);
-                gameSurface.getRpgGameManager().getScorePaint().setTypeface(Typeface.SANS_SERIF);
-                //textView.setTypeface(Typeface.SANS_SERIF);
+                gameSurface.getRpgGameManager().getScorePaint().setTypeface(Typeface.SANS_SERIF);;
                 break;
             case R.id.exit_rpg_item:
-                finishGame(null, false);
+                Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
+                startActivity(myIntent);
                 break;
         }
         return false;

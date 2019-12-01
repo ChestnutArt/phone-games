@@ -1,5 +1,6 @@
 package uoft.csc207.games.model.CardGame;
 
+import uoft.csc207.games.R;
 import uoft.csc207.games.model.Achievement;
 import uoft.csc207.games.model.Game;
 import uoft.csc207.games.model.IGameID;
@@ -11,6 +12,7 @@ public class CardGame extends Game {
     private String character;
     private String mode;
     private String cardDeck;
+    private CardPool cardPool;
 
     public CardGame() {
         super();
@@ -18,6 +20,15 @@ public class CardGame extends Game {
         this.character = "Obama";
         this.mode = "Day";
         this.cardDeck = "Ash";
+        this.cardPool = new CardPool();
+
+        //Sets the CardPool
+        cardPool.addNewCard(new MonsterCard(100, 2000, "Ghost Ogre",
+                R.drawable.ghost_ogre));
+        cardPool.addNewCard(new MonsterCard(1800, 0, "Ash",
+                R.drawable.ashblossom));
+        cardPool.addNewCard(new SpellCard("Raigeki", R.drawable.raigeki,
+                "destroyAll", 0));
         initializeAchievements();
     }
 
@@ -43,6 +54,11 @@ public class CardGame extends Game {
     public void updateCurrency(Integer i) {
         cumulativeCurrency += i - gameCurrency;
         gameCurrency = i;
+    }
+
+    @Override
+    public int getGameCurrency() {
+        return super.getGameCurrency();
     }
 
     @Override
@@ -106,5 +122,9 @@ public class CardGame extends Game {
 
     public void setCharacter(String character) {
         this.character = character;
+    }
+
+    public CardPool getCardPool() {
+        return cardPool;
     }
 }

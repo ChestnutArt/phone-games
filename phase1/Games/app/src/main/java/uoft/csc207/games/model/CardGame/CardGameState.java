@@ -1,17 +1,29 @@
 package uoft.csc207.games.model.CardGame;
 
 
+import android.media.Image;
+import android.widget.ImageView;
+
 public class CardGameState {
 
+    private EnemyAI enemyAI; // the enemyAI that will play against the player
     private CardDeck playerDeck, aiDeck; // the cards in the deck
     private int playerHealth, aiHealth;
     private CardCollection aiHand, aiBoard, playerHand, playerBoard; // the cards in the slots
     private boolean[] attacked; // track whether each card has attacked this turn
     private boolean summoned; // track whether the player has summoned this turn
+    private boolean firstTurn; // track whether this is the first turn
+    private ImageView[] playerHandView; // The View objects on the board
+    private ImageView[] playerBoardView;
+    private ImageView[] aiBoardView;
+    private ImageView[] aiHandView;
 
-    CardGameState() {
+    CardGameState(ImageView[] playerHandView, ImageView[] playerBoardView, ImageView[] aiHandView,
+                  ImageView[] aiBoardView) {
         int handCap = 3;
         int boardCap = 3;
+
+        enemyAI = new EnemyAI();
 
         playerDeck = new CardDeck();
         aiDeck = new CardDeck();
@@ -24,8 +36,14 @@ public class CardGameState {
         playerHand = new CardCollection(handCap);
         playerBoard = new CardCollection(boardCap);
 
+        this.playerHandView = playerHandView;
+        this.playerBoardView = playerBoardView;
+        this.aiHandView = aiHandView;
+        this.aiBoardView = aiBoardView;
+
         attacked = new boolean[boardCap];
         summoned = false;
+        firstTurn = true;
 
         for (int i = 2; i >= 0; i--) {
             attacked[i] = false;
@@ -138,6 +156,13 @@ public class CardGameState {
         return aiHand.pop(index);
     }
 
+    // enemyAI
+
+    public EnemyAI getEnemyAI() {
+        return enemyAI;
+    }
+
+
     // boards
 
     CardCollection getFullAiBoard() { return aiBoard; }
@@ -183,4 +208,12 @@ public class CardGameState {
     boolean isSummoned() {
         return summoned;
     }
+
+    // first turn boolean
+
+    boolean isFirstTurn() {
+        return firstTurn;
+    }
+
+    void setFirstTurn(boolean firstTurn) { this.firstTurn = firstTurn; }
 }

@@ -21,9 +21,9 @@ public class DeckSelection extends AppCompatActivity {
         Intent intent = getIntent();
         ImageView ash = findViewById(R.id.imageView);
         ImageView g_ogre = findViewById(R.id.imageView2);
-        if (!(ProfileManager.getProfileManager(getApplicationContext()).getCurrentPlayer().containsGame(IGameID.CARD)
-        instanceof CardGame)){
-            ProfileManager.getProfileManager(getApplicationContext()).getCurrentPlayer().addGame(new CardGame());
+        ProfileManager profileManager = ProfileManager.getProfileManager(getApplicationContext());
+        if (profileManager.getCurrentPlayer().containsGame(IGameID.CARD) == null){
+            profileManager.getCurrentPlayer().addGame(new CardGame());
             ash.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
