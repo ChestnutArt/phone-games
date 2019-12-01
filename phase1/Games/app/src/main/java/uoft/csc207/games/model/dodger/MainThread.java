@@ -64,7 +64,9 @@ public class MainThread extends Thread{
          } catch (Exception e){
              e.printStackTrace();
          }
-         gamePanel.getScrollerActivity().finishGame();
+         if (!gamePanel.getScrollerActivity().exited) {
+             gamePanel.getScrollerActivity().finishGame();
+         }
      }
     public void setRunning(boolean running){
         this.running = running;
