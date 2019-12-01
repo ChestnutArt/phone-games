@@ -1,11 +1,16 @@
 package uoft.csc207.games.model.CardGame;
 
 
-import android.media.Image;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-public class CardGameState {
+import java.util.Random;
 
+import uoft.csc207.games.R;
+
+public class CardGameState implements CardClicker, SpellEffect {
+
+    private CardGame cardGame; // the Game class that is playing this CardGameState
     private EnemyAI enemyAI; // the enemyAI that will play against the player
     private CardDeck playerDeck, aiDeck; // the cards in the deck
     private int playerHealth, aiHealth;
@@ -13,15 +18,20 @@ public class CardGameState {
     private boolean[] attacked; // track whether each card has attacked this turn
     private boolean summoned; // track whether the player has summoned this turn
     private boolean firstTurn; // track whether this is the first turn
+    private TextView aiLP, playerLP; // the View of Life points on board
     private ImageView[] playerHandView; // The View objects on the board
     private ImageView[] playerBoardView;
     private ImageView[] aiBoardView;
     private ImageView[] aiHandView;
 
     CardGameState(ImageView[] playerHandView, ImageView[] playerBoardView, ImageView[] aiHandView,
-                  ImageView[] aiBoardView) {
+                  ImageView[] aiBoardView, CardGame cardGame, TextView aiLP, TextView playerLP) {
         int handCap = 3;
         int boardCap = 3;
+
+        this.cardGame = cardGame;
+        this.aiLP = aiLP;
+        this.playerLP = playerLP;
 
         enemyAI = new EnemyAI();
 
@@ -51,7 +61,7 @@ public class CardGameState {
     }
 
     /**
-     * Directly attack target using card, reducing their health by the card's attack
+     * Attack using the damage given to the target indicated, not allowing for health to go below 0
      *
      * @param damage the damage that would be dealt to any of the two parties
      * @param target who should be attacked - assumed to be the player unless "ai" is given
@@ -98,7 +108,9 @@ public class CardGameState {
         return this.aiHealth;
     }
 
-    void setAiHealth(int aiHealth) { this.aiHealth = aiHealth; }
+    void setAiHealth(int aiHealth) {
+        this.aiHealth = aiHealth;
+    }
 
     // AI hand
 
@@ -165,19 +177,29 @@ public class CardGameState {
 
     // boards
 
-    CardCollection getFullAiBoard() { return aiBoard; }
+    CardCollection getFullAiBoard() {
+        return aiBoard;
+    }
 
-    CardCollection getFullPlayerBoard() { return playerBoard; }
+    CardCollection getFullPlayerBoard() {
+        return playerBoard;
+    }
 
-    CardCollection getFullAiHand() { return aiHand; }
+    CardCollection getFullAiHand() {
+        return aiHand;
+    }
 
-    CardCollection getFullPlayerHand() { return playerHand; }
+    CardCollection getFullPlayerHand() {
+        return playerHand;
+    }
 
     Card getAiBoard(int index) {
         return aiBoard.getCard(index);
     }
 
-    Boolean getAiBoardOccupied(int index) { return aiBoard.isOccupied(index); }
+    Boolean getAiBoardOccupied(int index) {
+        return aiBoard.isOccupied(index);
+    }
 
     Card getPlayerBoard(int index) {
         return playerBoard.getCard(index);
@@ -217,5 +239,127 @@ public class CardGameState {
         return firstTurn;
     }
 
-    void setFirstTurn(boolean firstTurn) { this.firstTurn = firstTurn; }
+    void setFirstTurn(boolean firstTurn) {
+        this.firstTurn = firstTurn;
+    }
+
+    // CardClicker Methods
+
+    @Override
+    public void clickAttack(CardGameState cardGameState, int posIndex, int targetPosIndex) {
+        int damageDifference =
+                ((MonsterCard) getPlayerBoard(posIndex)).getAttack() -
+                        ((MonsterCard) getAiBoard(targetPosIndex)).getAttack();
+        if (damageDifference > 0) {
+            //Destroys ai monster card and deals damage difference to AI
+            getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
+            aiBoardView[targetPosIndex].setImageResource(R.drawable.square);
+            attack(damageDifference, "ai");
+            cardGame.updateCurrency(1 + cardGame.getGameCurrency());
+        } else if (damageDifference < 0) {
+            //Destroys own monster card and deals damage difference to self
+            getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
+            playerBoardView[posIndex].setImageResource(R.drawable.square);
+            attack(damageDifference, "player");
+        } else {
+            //Destroys both monsters
+            getFullPlayerBoard().setCard(posIndex, CardCollection.emptyCard);
+            aiBoardView[targetPosIndex].setImageResource(R.drawable.square);
+            getFullAiBoard().setCard(targetPosIndex, CardCollection.emptyCard);
+            playerBoardView[posIndex].setImageResource(R.drawable.square);
+            cardGame.updateCurrency(1 + cardGame.getGameCurrency());
+        }
+        aiLP.setText("LP: " + cardGameState.getAiHealth());
+        playerLP.setText("LP" + cardGameState.getPlayerHealth());
+        setAttacked(posIndex, true);
+        int currentScore = cardGame.getCurrentScore();
+        if (!(damageDifference == 0)) {
+            cardGame.setCurrentScore(currentScore +
+                    ((MonsterCard) getPlayerBoard(posIndex)).getAttack());
+        }
+    }
+
+    @Override
+    public void clickSummon(CardGameState cardGameState, int posIndex) {
+        MonsterCard next_card = (MonsterCard) popPlayerHand(posIndex);
+        setPlayerBoard(posIndex, next_card);
+        playerBoardView[posIndex].setImageResource(next_card.getCardArt());
+        playerHandView[posIndex].setImageResource(R.drawable.square);
+        setSummoned(true);
+    }
+
+    @Override
+    public void clickDirectAttack(CardGameState cardGameState, int posIndex) {
+
+    }
+
+    @Override
+    public void clickTargetAttack(CardGameState cardGameState, int posIndex) {
+
+    }
+
+    @Override
+    public void clickActivate(CardGameState cardGameState, int posIndex) {
+        SpellCard spell = (SpellCard) popPlayerHand(posIndex);
+        String spellEffect = spell.getSpellEffect();
+        switch (spellEffect) {
+            case "destroyOneRandom":
+                destroyOneRandom();
+                break;
+            case "destroyAll":
+                destroyAll();
+                break;
+            case "increaseHP":
+                increaseHP(spell.getEffectValue());
+                break;
+            case "decreaseHP":
+                decreaseHP(spell.getEffectValue());
+                break;
+            case "attackAgain":
+                attackAgain();
+                break;
+        }
+        playerHandView[posIndex].setImageResource(R.drawable.square);
+    }
+
+    @Override
+    public void destroyAll() {
+        for (int i = 0; i < 3; i++) {
+            if (!getAiBoard(i).equals(CardCollection.emptyCard)) {
+                cardGame.updateCurrency(cardGame.getGameCurrency() + 1);
+            }
+            getFullAiBoard().setCard(i, CardCollection.emptyCard);
+            aiBoardView[i].setImageResource(R.drawable.square);
+        }
+    }
+
+    @Override
+    public void destroyOneRandom() {
+        if (getFullAiBoard().getOccupiedSize() > 0) {
+            Random random = new Random();
+            int posNext = random.nextInt();
+            getFullAiBoard().setCard(posNext, CardCollection.emptyCard);
+            aiBoardView[posNext].setImageResource(R.drawable.square);
+            cardGame.updateCurrency(cardGame.getCurrentScore() + 1);
+        }
+
+    }
+
+    @Override
+    public void increaseHP(int healthPoint) {
+        setPlayerHealth(getPlayerHealth() + healthPoint);
+        playerLP.setText("LP: " + getPlayerHealth());
+
+    }
+
+    @Override
+    public void decreaseHP(int healthPoint) {
+        attack(healthPoint, "ai");
+        aiLP.setText("LP: " + getAiHealth());
+    }
+
+    @Override
+    public void attackAgain() {
+        restoreAttack();
+    }
 }
