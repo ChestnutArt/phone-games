@@ -1,10 +1,9 @@
-package uoft.csc207.games.model.CardGame;
+package uoft.csc207.games.model.card;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.model.Achievement;
 import uoft.csc207.games.model.Game;
 import uoft.csc207.games.model.IGameID;
-import uoft.csc207.games.model.PlayerProfile;
 
 public class CardGame extends Game {
 

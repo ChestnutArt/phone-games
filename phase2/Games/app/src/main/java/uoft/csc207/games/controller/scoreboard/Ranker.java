@@ -3,6 +3,8 @@ package uoft.csc207.games.controller.scoreboard;
 
 import java.util.ArrayList;
 
+import uoft.csc207.games.model.Score;
+
 class Ranker {
     /**
      * Sorts and ArrayList of Scores

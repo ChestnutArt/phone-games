@@ -20,10 +20,10 @@ import uoft.csc207.games.R;
 import uoft.csc207.games.activity.AddScoreActivity;
 import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.controller.ProfileManager;
-import uoft.csc207.games.controller.scoreboard.Score;
+import uoft.csc207.games.model.Score;
 import uoft.csc207.games.controller.scoreboard.ScoreBoard;
-import uoft.csc207.games.model.Rpg.GameSurface;
-import uoft.csc207.games.model.Rpg.RpgGameState;
+import uoft.csc207.games.model.rpg.GameSurface;
+import uoft.csc207.games.model.rpg.RpgGameState;
 
 public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 

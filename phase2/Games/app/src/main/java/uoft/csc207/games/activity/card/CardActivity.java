@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
-import uoft.csc207.games.model.CardGame.CardGame;
+import uoft.csc207.games.model.card.CardGame;
 import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.controller.card.CardGameManager;
 

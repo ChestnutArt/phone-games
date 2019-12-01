@@ -18,12 +18,12 @@ import uoft.csc207.games.R;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
-import uoft.csc207.games.model.Rpg.GameObject;
-import uoft.csc207.games.model.Rpg.NpcCharacter;
-import uoft.csc207.games.model.Rpg.Obstructable;
-import uoft.csc207.games.model.Rpg.PlayerCharacter;
+import uoft.csc207.games.model.rpg.GameObject;
+import uoft.csc207.games.model.rpg.NpcCharacter;
+import uoft.csc207.games.model.rpg.Obstructable;
+import uoft.csc207.games.model.rpg.PlayerCharacter;
 import uoft.csc207.games.activity.rpg.RpgActivity;
-import uoft.csc207.games.model.Rpg.RpgGameState;
+import uoft.csc207.games.model.rpg.RpgGameState;
 
 /**
  * This Class is a main class to manage RPG Game's characters (objects of PlayerCharacter,

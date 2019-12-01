@@ -1,11 +1,8 @@
-package uoft.csc207.games.model.Rpg;
-
-import java.util.ArrayList;
+package uoft.csc207.games.model.rpg;
 
 import uoft.csc207.games.model.Achievement;
 import uoft.csc207.games.model.Game;
 import uoft.csc207.games.model.IGameID;
-import uoft.csc207.games.model.PlayerProfile;
 
 /**
  * Contains the relevant stats of the Rpg game

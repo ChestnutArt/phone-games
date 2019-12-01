@@ -1,9 +1,8 @@
-package uoft.csc207.games.model.Rpg;
+package uoft.csc207.games.model.rpg;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 

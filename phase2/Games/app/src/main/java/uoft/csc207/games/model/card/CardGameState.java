@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.CardGame;
+package uoft.csc207.games.model.card;
 
 
 import android.widget.ImageView;

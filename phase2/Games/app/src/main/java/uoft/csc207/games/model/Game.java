@@ -7,7 +7,8 @@ import java.util.List;
 
 public abstract class Game implements Serializable {
     /**
-     * Abstract Super Class for all games
+     * Abstract Super Class for all games, functions as a container for most if not all relevant game
+     * information
      *
      * Fields
      * gameScore: Integer - Current score of game
