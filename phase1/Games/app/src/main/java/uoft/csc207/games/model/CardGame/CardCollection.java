@@ -87,8 +87,4 @@ public class CardCollection {
         }
         return occupiedNumber;
     }
-
-    public Card[] getCards() {
-        return cards;
-    }
 }

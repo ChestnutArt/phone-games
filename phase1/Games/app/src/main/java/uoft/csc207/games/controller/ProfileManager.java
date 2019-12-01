@@ -67,6 +67,7 @@ public class ProfileManager {
     public void setCurrentPlayer(PlayerProfile currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
+    public PlayerProfile getSecondPlayer(){ return secondPlayer; }
 
     public void setSecondPlayer(PlayerProfile secondPlayer){
         this.secondPlayer = secondPlayer;

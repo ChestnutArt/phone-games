@@ -22,7 +22,7 @@ import uoft.csc207.games.model.Rpg.GameObject;
 import uoft.csc207.games.model.Rpg.NpcCharacter;
 import uoft.csc207.games.model.Rpg.Obstructable;
 import uoft.csc207.games.model.Rpg.PlayerCharacter;
-import uoft.csc207.games.model.Rpg.RpgActivity;
+import uoft.csc207.games.activity.rpg.RpgActivity;
 import uoft.csc207.games.model.Rpg.RpgGameState;
 
 /**
@@ -32,14 +32,17 @@ import uoft.csc207.games.model.Rpg.RpgGameState;
  */
 public class RPGGameManager {
     private PlayerCharacter playerCharacter;
+    /**
+     * Each "screen" is a List of GameObjects and changing which list is the currentScreen being drawn
+     * and interacted with gives the impression of changing screens
+     */
     private List<List<GameObject>> screens = new ArrayList<>();
     private ListIterator<List<GameObject>> screenIterator;
+    /**
+     * The GameObject list representing the current GameObjects being drawn and used for determining
+     * gameplay interactions.
+     */
     private List<GameObject> currentScreen;
-
-    public RpgGameState getCurrentGameState() {
-        return currentGameState;
-    }
-
     private RpgGameState currentGameState;
     private Context currentContext;
     private PlayerProfile currentPlayer;
@@ -51,22 +54,10 @@ public class RPGGameManager {
      * Paint used for the dialogue text
      */
     private Paint dialoguePaint = new Paint();
-    /**
-     * Paint for the outer rectangle
-     */
-    private Paint outerPaint = new Paint();
-    /**
-     * Paint for inner rectangle
-     */
-    private Paint innerPaint = new Paint();
-    /**
-     * Outer rectangle of the dialogue box in the game
-     */
-    private Rect outerRect = new Rect();
-    /**
-     * Inner rectangle of the dialogue box in the game
-     */
-    private Rect innerRect = new Rect();
+    private Paint outerDialogueRectanglePaint = new Paint();
+    private Paint innerDialogueRectanglePaint = new Paint();
+    private Rect outerRectangle = new Rect();
+    private Rect innerRectangle = new Rect();
     /**
      * Represents the current character sprite sheet. Starts as the male.
      */
@@ -118,7 +109,6 @@ public class RPGGameManager {
     public boolean isProcessingText(){
         return isProcessingText;
     }
-
     public PlayerProfile getCurrentPlayer() {
         return currentPlayer;
     }
@@ -154,6 +144,10 @@ public class RPGGameManager {
         return currentScreen;
     }
 
+    public RpgGameState getCurrentGameState() {
+        return currentGameState;
+    }
+
     /**
      * Initialize all required resources for RPGGame to start up
      */
@@ -168,28 +162,44 @@ public class RPGGameManager {
      * Initializes all the game objects
      */
     public void initializeGameObjects(){
+        initializeScreenOne();
+        initializeScreenTwo();
+    }
+
+    /**
+     * Initializes all game objects in the list representing the first "screen"
+     */
+    private void initializeScreenOne(){
         List<GameObject> screen1 = new ArrayList<>();
         List<String> dialogue1 = new ArrayList<>();
-        dialogue1.add("Hi 1.");
-        dialogue1.add("Hi 5.");
-        String talkedToText = "you have talked to me";
+        dialogue1.add("Hey you, you're finally awake.");
+        dialogue1.add("...");
+        dialogue1.add("Where are you?");
+        dialogue1.add("You'll find out soon enough.");
+        String talkedToText = "...";
         NpcCharacter npc1 = new NpcCharacter(BitmapFactory.decodeResource(currentContext.getResources(), hoodedNPCSprites),
                 500, 1200, dialogue1, talkedToText, NpcCharacter.LEFT_ROW);
         screen1.add(npc1);
         screen1.add(playerCharacter);
         screens.add(screen1);
+    }
 
+    /**
+     * Initializes all GameObjects in the List representing the "second screen"
+     */
+    private void initializeScreenTwo(){
         List<GameObject> screen2 = new ArrayList<>();
         List<String> dialogue2 = new ArrayList<>();
-        dialogue2.add("Hi 3.");
-        dialogue2.add("Hi 4.");
-        talkedToText = "you have talked to me 2";
+        dialogue2.add("A new face? It's been a long time.");
+        dialogue2.add("It's better that you leave this place.");
+        dialogue2.add("For your sake. And for ours.");
+        String talkedToText = "You don't have much time left.";
         NpcCharacter npc2 = new NpcCharacter(BitmapFactory.decodeResource(currentContext.getResources(), hoodedNPCSprites),
                 700, 1200, dialogue2, talkedToText, NpcCharacter.DOWN_ROW);
         screen2.add(npc2);
         List<String> dialogue3 = new ArrayList<>();
-        dialogue3.add("hi 7");
-        talkedToText = "talked to me 3";
+        dialogue3.add("Don't talk to me.");
+        talkedToText = "...";
         NpcCharacter npc3 = new NpcCharacter(BitmapFactory.decodeResource(currentContext.getResources(), hoodedNPCSprites),
                 400, backgroundSpace + 300, dialogue3, talkedToText, NpcCharacter.RIGHT_ROW);
         screen2.add(npc3);
@@ -222,6 +232,16 @@ public class RPGGameManager {
      * Customizes the score paint based off of the customization options in th RpgGameState object
      */
     private void initializeScorePaint(){
+        initializeScorePaintColor();
+        initializeScorePaintFont();
+        scorePaint.setTextSize(50);
+        scorePaint.setAntiAlias(true);
+    }
+
+    /**
+     * Configures the Score paint's color depending on the information in the RpgGameSate
+     */
+    private void initializeScorePaintColor(){
         //configure scorePaint
         if(currentGameState.getColor() != null){
             if(currentGameState.getColor().equals(RpgGameState.FONT_COLOR_RED)){
@@ -234,7 +254,12 @@ public class RPGGameManager {
         }else {
             scorePaint.setColor(Color.WHITE);
         }
-        scorePaint.setTextSize(50);
+    }
+
+    /**
+     * Configures the score paint's font depending on the information in RpgGameState
+     */
+    private void initializeScorePaintFont(){
         if(currentGameState.getFont() != null){
             if(currentGameState.getFont().equals(RpgGameState.FONT_TYPE_MONOSPACE)){
                 scorePaint.setTypeface(Typeface.MONOSPACE);
@@ -246,7 +271,6 @@ public class RPGGameManager {
         }else{
             scorePaint.setTypeface(Typeface.DEFAULT_BOLD);
         }
-        scorePaint.setAntiAlias(true);
     }
 
     /**
@@ -265,17 +289,20 @@ public class RPGGameManager {
      */
     private void initializeTextRectanglePaints(){
         //Creating the text box border
-        outerRect.set(0,canvasHeight - TEXT_BOX_HEIGHT, canvasWidth, canvasHeight);
-        outerPaint.setColor(Color.LTGRAY);
-        outerPaint.setStyle(Paint.Style.FILL);
+        outerRectangle.set(0,canvasHeight - TEXT_BOX_HEIGHT, canvasWidth, canvasHeight);
+        outerDialogueRectanglePaint.setColor(Color.LTGRAY);
+        outerDialogueRectanglePaint.setStyle(Paint.Style.FILL);
 
         //Creating the actual text box
-        innerRect.set(OUTER_TO_INNER_OFFSET, canvasHeight - TEXT_BOX_HEIGHT + OUTER_TO_INNER_OFFSET,
+        innerRectangle.set(OUTER_TO_INNER_OFFSET, canvasHeight - TEXT_BOX_HEIGHT + OUTER_TO_INNER_OFFSET,
                 canvasWidth - OUTER_TO_INNER_OFFSET, canvasHeight - OUTER_TO_INNER_OFFSET);
-        innerPaint.setColor(Color.BLACK);
-        innerPaint.setStyle(Paint.Style.FILL);
+        innerDialogueRectanglePaint.setColor(Color.BLACK);
+        innerDialogueRectanglePaint.setStyle(Paint.Style.FILL);
     }
 
+    /**
+     * Initializes the TreeMap with the addresses for all the PlayerCharacter sprite sheets
+     */
     private void initializeCharacterMap(){
         characterMap = new TreeMap<>();
         characterMap.put("male", R.drawable.c1_sprite_sheet);
@@ -302,25 +329,47 @@ public class RPGGameManager {
     public void setPlayerCharacterDestination(int x, int y){
         int movementVectorX = x - playerCharacter.getX();
         int movementVectorY = y - playerCharacter.getY();
+        /*
+            First checks if PlayerCharacter is not blocked in any direction, and then goes through
+            the y direction and x direction cases. Checks if the direction associated with the attempted
+            movement is blocked)
+         */
         if(!playerCharacter.isBotBlocked() && !playerCharacter.isTopBlocked() && !playerCharacter.isRightBlocked()
                 && !playerCharacter.isLeftBlocked()){
             playerCharacter.setMovementVector(movementVectorX, movementVectorY);
             playerCharacter.setDestinationCoordinates(x, y);
-        } else if ((playerCharacter.isRightBlocked() && movementVectorX < 0) || (playerCharacter.isLeftBlocked() &&
-                movementVectorX > 0) || (!playerCharacter.isRightBlocked() && !playerCharacter.isLeftBlocked())){
+        } else if ((!playerCharacter.isLeftBlocked() && movementVectorX < 0) || (!playerCharacter.isRightBlocked() &&
+                movementVectorX > 0)){
             playerCharacter.setMovementVector(movementVectorX, playerCharacter.getMovingVectorY());
             playerCharacter.setDestinationCoordinates(x, playerCharacter.getY());
-        } else if ((playerCharacter.isTopBlocked() && movementVectorY > 0) || (playerCharacter.isBotBlocked() &&
-                movementVectorY < 0) || (!playerCharacter.isTopBlocked() && !playerCharacter.isBotBlocked())){
+        } else if ((!playerCharacter.isBotBlocked() && movementVectorY > 0) || (!playerCharacter.isTopBlocked() &&
+                movementVectorY < 0)){
             playerCharacter.setMovementVector(playerCharacter.getMovingVectorX(), movementVectorY);
             playerCharacter.setDestinationCoordinates(playerCharacter.getX(), y);
         }
-        //playerCharacter.setMovementVector(movementVectorX, movementVectorY);
-        //playerCharacter.setDestinationCoordinates(x, y);
     }
 
+    /**
+     * Updates all the relevant game information based on things like the PlayerCharacter's current position
+     * and the player's current statistics (in currentGameState)
+     */
     public void update(){
         playerCharacter.update();
+        moveScreensIfPossible();
+        checkAndHandleEnvironmentInteractions();
+        //Periodically updates the currency when the player is in the game
+        if(Math.random() < 0.05){
+            currentGameState.updateCurrency(1);
+        }
+        currentGameState.checkAchievements();
+    }
+
+    /**
+     * Checks if a PlayerCharacter is close enough to the left and right borders of the screen, and if
+     * it is, change the current GameObject list representing the current screen to the appropriate next
+     * one.
+     */
+    private void moveScreensIfPossible(){
         if (playerCharacter.getX() < (playerCharacter.getWidth() / 2)){
             if (screenIterator.hasPrevious()){
                 /**
@@ -346,6 +395,14 @@ public class RPGGameManager {
                 ((RpgActivity) currentContext).finishGame(currentGameState, true);
             }
         }
+    }
+
+    /**
+     * Handles PlayerCharacter's interactions with other GameObjects. Designates which directions the
+     * PlayerCharacter is blocked from moving in, and handles Npc interactions accordingly (depending on
+     * if you've already talked to them or have talked to them already)
+     */
+    private void checkAndHandleEnvironmentInteractions(){
         GameObject interceptor = this.findInterceptor();
         if (interceptor != null){
             for(String s: playerCharacter.getBlockedDirections()){
@@ -354,23 +411,9 @@ public class RPGGameManager {
                     break;
                 }
             }
-            //playerCharacter.stopMoving();
             //update score
             if (interceptor instanceof NpcCharacter){
-                NpcCharacter npcInterceptor = (NpcCharacter) interceptor;
-                lastTalkedToNpc = npcInterceptor; //added
-                isProcessingText = true;
-                if (npcInterceptor.hasTalkedToAlready()){
-                    currentText = npcInterceptor.getAfterTalkedToText();
-                    isProcessingText = false;
-                } else {
-                    if(npcInterceptor.hasNextDialogue()){
-                        currentGameState.updateScore(50);
-                        currentText = npcInterceptor.getNextDialogue();
-                    } else {
-                        isProcessingText = false;
-                    }
-                }
+                handleNpcInteraction((NpcCharacter) interceptor);
             }
         } else {
             //If you move away from an NPC you were talking to, sets talkedToAlready to true so the
@@ -380,12 +423,30 @@ public class RPGGameManager {
                 lastTalkedToNpc.setFirstObstruction(true);
             }
             playerCharacter.unblockAllDirections();
-            currentText = "" + canvasWidth + " || " + playerCharacter.getX() + " || " + playerCharacter.getY();
+            currentText = "";
         }
-        if(Math.random() < 0.05){
-            currentGameState.updateCurrency(1);
+    }
+
+    /**
+     * Called when the PlayerCharacter is intercepted by an Npc. Depending on whether the PlayerCharacter
+     * has already talked to the npc, chooses the dialogue and updates the score accordingly.
+     * @param interceptor The npc that the PlayerCharacter is currently interacting with
+     */
+    private void handleNpcInteraction(NpcCharacter interceptor){
+        NpcCharacter npcInterceptor = interceptor;
+        lastTalkedToNpc = npcInterceptor;
+        isProcessingText = true;
+        if (npcInterceptor.hasTalkedToAlready()){
+            currentText = npcInterceptor.getAfterTalkedToText();
+            isProcessingText = false;
+        } else {
+            if(npcInterceptor.hasNextDialogue()){
+                currentGameState.updateScore(50);
+                currentText = npcInterceptor.getNextDialogue();
+            } else {
+                isProcessingText = false;
+            }
         }
-        currentGameState.checkAchievements();
     }
 
     /**
@@ -394,19 +455,17 @@ public class RPGGameManager {
      * @param canvas The Canvas for RPGGameManager to draw on
      */
     public void draw(Canvas canvas){
-       // canvas.drawBitmap(backgroundBitmap, 0, 0, null);
-       // canvas.drawBitmap(forestPathBitMap, 0, canvasHeight - GAME_SPACE - TEXT_BOX_HEIGHT, null);
         canvas.drawBitmap(forestPathBitMap, 0, 0, null);
-        /*sorts each time because the PlayerCharacter may have moved, to make sure the GameObjects
-         *are drawn in the right order (If PlayerCharacter is behind something, meaning it has a smaller
-         *y value, it should be drawn before that GameObject etc.)
+        /*sorts every time because the PlayerCharacter can change. Sorted by their y coordinate so that
+         *GameObjects are drawn in the right order (ex. if PlayerCharacter is behind something, as in higher
+         *on the screen, it should be drawn first)
          */
         Collections.sort(currentScreen);
         for(GameObject gameObject: this.currentScreen){
             (gameObject).draw(canvas);
         }
-        canvas.drawRect(outerRect, outerPaint);
-        canvas.drawRect(innerRect, innerPaint);
+        canvas.drawRect(outerRectangle, outerDialogueRectanglePaint);
+        canvas.drawRect(innerRectangle, innerDialogueRectanglePaint);
         /*
             ((RpgActivity) currentContext).finishGame(0);
         */
@@ -445,7 +504,7 @@ public class RPGGameManager {
     public GameObject findInterceptor(){
         GameObject interceptor = null;
         for (GameObject gameObject: currentScreen)
-            if (gameObject instanceof Obstructable){//!(gameObject instanceof PlayerCharacter)){ //
+            if (gameObject instanceof Obstructable){
                 if ((Math.abs(gameObject.getX() - playerCharacter.getX()) < (gameObject.getWidth() / 2)) &&
                         (Math.abs(gameObject.getY() - playerCharacter.getY()) < (gameObject.getHeight() / 2)) &&
                         interceptor == null) {
@@ -469,7 +528,7 @@ public class RPGGameManager {
         boolean right = playerCharacter.getMovingVectorX() > 0;
         boolean top = playerCharacter.getMovingVectorY() < 0;
         boolean bot = playerCharacter.getMovingVectorY() > 0;
-        //because of how PlayerCharacter handles movement in the x direction first, if the x vector
+        //because the PlayerCharacter handles movement in the x direction first, if the x vector
         //isn't 0, playerCharacter is moving in the x direction
         if(playerCharacter.getMovingVectorX() != 0){
             if (left){

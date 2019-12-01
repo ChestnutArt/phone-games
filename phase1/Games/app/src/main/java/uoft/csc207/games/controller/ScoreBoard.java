@@ -34,8 +34,6 @@ public class ScoreBoard implements Serializable {
         this.ranker = new Ranker(score_board);
     }
 
-
-
     public void submitScore(Score submit){
         score_board.add(submit);
     }

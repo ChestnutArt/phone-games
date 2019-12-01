@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.dodger;
+package uoft.csc207.games.activity.dodger;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,9 +8,10 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import uoft.csc207.games.activity.AddScoreActivity;
-import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.controller.ProfileManager;
-import uoft.csc207.games.model.Rpg.RpgActivity;
+import uoft.csc207.games.model.dodger.Constants;
+import uoft.csc207.games.model.dodger.GamePanel;
+import uoft.csc207.games.model.dodger.MainThread;
 
 public class ScrollerActivity extends Activity {
     private GamePanel scrollerPanel;

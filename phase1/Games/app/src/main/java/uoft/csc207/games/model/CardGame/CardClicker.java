@@ -9,4 +9,6 @@ public interface CardClicker {
     void clickTargetAttack(CardGameState cardGameState, int posIndex);
 
     void clickAttack(CardGameState cardGameState, int posIndex, int targetPosIndex);
+
+    void clickActivate(CardGameState cardGameState, int posIndex);
 }

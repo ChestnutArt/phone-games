@@ -126,8 +126,16 @@ public class CardGameState {
         return playerHand.getSize();
     }
 
+    int getAIHandSize() {
+        return aiHand.getSize();
+    }
+
     Card popPlayerHand(int index) {
         return playerHand.pop(index);
+    }
+
+    Card popAiHand(int index) {
+        return aiHand.pop(index);
     }
 
     // boards
@@ -135,6 +143,10 @@ public class CardGameState {
     CardCollection getFullAiBoard() { return aiBoard; }
 
     CardCollection getFullPlayerBoard() { return playerBoard; }
+
+    CardCollection getFullAiHand() { return aiHand; }
+
+    CardCollection getFullPlayerHand() { return playerHand; }
 
     Card getAiBoard(int index) {
         return aiBoard.getCard(index);

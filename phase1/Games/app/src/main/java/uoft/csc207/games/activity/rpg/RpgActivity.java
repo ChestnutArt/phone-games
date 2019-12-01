@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.Rpg;
+package uoft.csc207.games.activity.rpg;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,14 +15,13 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import uoft.csc207.games.R;
 import uoft.csc207.games.activity.GameSelectActivity;
 import uoft.csc207.games.activity.TurnDisplayActivity;
 import uoft.csc207.games.controller.ProfileManager;
+import uoft.csc207.games.model.Rpg.GameSurface;
+import uoft.csc207.games.model.Rpg.RpgGameState;
 
 public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 

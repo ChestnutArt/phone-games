@@ -10,23 +10,17 @@ import android.widget.TextView;
 
 import uoft.csc207.games.model.CardGame.CardGame;
 import uoft.csc207.games.model.CardGame.DeckSelection;
-import uoft.csc207.games.model.Game;
 import uoft.csc207.games.model.IGameID;
 import uoft.csc207.games.model.PlayerProfile;
 import uoft.csc207.games.controller.ProfileManager;
 import uoft.csc207.games.R;
-import uoft.csc207.games.model.Rpg.RpgActivity;
-import uoft.csc207.games.model.Rpg.RpgGameState;
-import uoft.csc207.games.model.dodger.Constants;
-import uoft.csc207.games.model.dodger.ScrollerActivity;
+import uoft.csc207.games.activity.rpg.RpgActivity;
+import uoft.csc207.games.activity.dodger.ScrollerActivity;
 
 public class GameSelectActivity extends AppCompatActivity {
     private TextView welcome;
     private Button logout;
     private PlayerProfile currentProfile;
-    private PlayerProfile secondProfile;
-    private boolean isTwoPlayer;
-    private boolean isFirstPlayerTurn = true;
 
     private Button scrollerSelect;
     private Button cardSelect;
@@ -47,10 +41,14 @@ public class GameSelectActivity extends AppCompatActivity {
         profileButton = findViewById(R.id.profileBtn);
         leaderBoard = findViewById(R.id.LeaderBoard);
 
-        /*Intent intent = getIntent();
-        currentProfile = (PlayerProfile)intent.getSerializableExtra(ProfileManager.CURRENT_PLAYER);*/
-        currentProfile = ProfileManager.getProfileManager(this).getCurrentPlayer();
-        welcome.setText("Welcome back " + currentProfile.getId() + "!");
+        ProfileManager profileManager = ProfileManager.getProfileManager(getApplicationContext());
+        currentProfile = profileManager.getCurrentPlayer();
+        if (profileManager.isTwoPlayerMode()){
+            welcome.setText("Welcome back " + currentProfile.getId() + " and " + profileManager.
+                    getSecondPlayer().getId() + "!");
+        } else {
+            welcome.setText("Welcome back " + currentProfile.getId() + "!");
+        }
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
