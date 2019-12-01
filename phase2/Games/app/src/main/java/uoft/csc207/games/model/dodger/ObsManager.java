@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 
 import java.util.ArrayList;
 
-public class ObsManager {
+public class ObsManager implements GameObject{
     private ArrayList<RectObj> Obs = new ArrayList<>();
     private int Color;
     private int NumObs;
@@ -20,7 +20,7 @@ public class ObsManager {
         Obs.add(r);
     }
 
-    public boolean update() {
+    public void update() {
         for (RectObj r : Obs) {
             if (r.getX() <= 100) {
                 Obs.remove(r);
@@ -33,7 +33,6 @@ public class ObsManager {
             RectObj r = new RectObj(this.Color, this.PlayerHeight);
             Obs.add(r);
         }
-        return true;
     }
 
     public void draw(Canvas can){

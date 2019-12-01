@@ -8,12 +8,20 @@ import android.graphics.Rect;
 import java.util.ArrayList;
 
 public class Coin implements GameObject{
+    /**
+     * Class for all coins in Scroller game, implements GameObject
+     *
+     * Fields
+     * numCoins: number of coins currently available
+     * coins: ArrayList<Rect> - List of all the coins
+     */
 
     private ArrayList<Rect> coins;
     private int numCoins;
-    public Coin (int numCoins){
+
+    Coin (int numCoins){
         this.numCoins = numCoins;
-        coins = new ArrayList<Rect>();
+        coins = new ArrayList<>();
         for (int i = 0; i < numCoins; i++){
             int x = (int)(Math.random() * Constants.SCREEN_WIDTH - 50);
             int y = 50 + (int)(Math.random() * Constants.SCREEN_HEIGHT - 50);
@@ -21,6 +29,11 @@ public class Coin implements GameObject{
             coins.add(r);
         }
     }
+
+    /**
+     * draw method for coins
+     * @param canvas: Canvas to be drawn on
+     */
     public void draw(Canvas canvas){
 
         Paint paint = new Paint();
@@ -30,6 +43,9 @@ public class Coin implements GameObject{
         }
     }
 
+    /**
+     * update method for coins, removed when coin touches left boundary
+     */
     public void update(){
         for (Rect r: coins){
             if (r.left > 0) {
@@ -50,7 +66,12 @@ public class Coin implements GameObject{
     }
 
 
-    public void CollisionCheck(scrollerCharacter s, ScrollerGame g){
+    /**
+     * Checks for collision with Scroller Character
+     * @param s Character to check collision for
+     * @param g Game for which money must be updated
+     */
+    void CollisionCheck(scrollerCharacter s, ScrollerGame g){
         Rect pRect = s.getRect();
         for (Rect r: coins) {
             if (r.intersect(pRect)) {

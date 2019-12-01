@@ -4,20 +4,33 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 public class MainThread extends Thread{
-    public static final int MAX_FPS = 30;
+    /**
+     * Thread for Scroller Game
+     *
+     * Fields
+     * MAX_FPS: Static int - for frames per second
+     * gamePanel: GamePanel - Surface of Scroller Game
+     * running: Boolean - is game over?
+     * canvas: Canvas - to be drawn on
+     */
+
+    private static final int MAX_FPS = 30;
     private final SurfaceHolder surfaceHolder;
     private GamePanel gamePanel;
     private boolean running;
     public static Canvas canvas;
 
 
-    public MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel){
+    MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel){
         super();
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;
         this.running = true;
     }
 
+    /**
+     * loop for running game
+     */
      @Override
      public void run(){
          long startTime;
@@ -32,8 +45,8 @@ public class MainThread extends Thread{
              try{
                  canvas = this.surfaceHolder.lockCanvas();
                  synchronized (surfaceHolder){
-                     this.gamePanel.update(); //update objects
-                     this.gamePanel.draw(canvas); //draw to screen
+                     this.gamePanel.update();
+                     this.gamePanel.draw(canvas);
                      if (gamePanel.isOver){
                          running = false;
                      }
@@ -68,6 +81,11 @@ public class MainThread extends Thread{
              gamePanel.getScrollerActivity().finishGame();
          }
      }
+
+    /**
+     * Setter for running
+      * @param running Boolean
+     */
     public void setRunning(boolean running){
         this.running = running;
     }

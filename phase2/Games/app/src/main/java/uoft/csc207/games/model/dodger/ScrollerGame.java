@@ -11,7 +11,7 @@ public class ScrollerGame extends Game implements Serializable{
 
 
 
-    public ScrollerGame(){
+    ScrollerGame(){
         super();
         initializeAchievements();
         this.id = IGameID.DODGER;
