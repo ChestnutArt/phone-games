@@ -1,9 +1,10 @@
 package uoft.csc207.games.model.card;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardDeck implements DeckOrganizer {
+public class CardDeck implements DeckOrganizer, Serializable {
 
     private List<Card> deck;
 

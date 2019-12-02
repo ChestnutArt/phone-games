@@ -1,9 +1,11 @@
 package uoft.csc207.games.model.card;
 
+import java.io.Serializable;
+
 /***
  * A class for representing individual cards
  */
-public class Card {
+public class Card implements Serializable {
     private String name;
     private int cardArt;
 

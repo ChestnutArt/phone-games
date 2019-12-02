@@ -1,5 +1,6 @@
 package uoft.csc207.games.model.card;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * This class stores every card that has been added to the game, with no duplicates, like a library
  * of cards, containing a list of every card and a selected card from the card pool
  */
-public class CardPool {
+public class CardPool implements Serializable {
 
     private List<Card> cardList;
     private Card selectedCard;

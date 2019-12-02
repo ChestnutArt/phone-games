@@ -1,11 +1,12 @@
 package uoft.csc207.games.model.card;
 
 import uoft.csc207.games.R;
+import java.io.Serializable;
 
 /***
  * A collection of cards, typically used for a hand
  */
-public class CardCollection {
+public class CardCollection implements Serializable {
     private Card[] cards;
 
     public static final Card emptyCard = new Card("Empty Slot", R.drawable.square);

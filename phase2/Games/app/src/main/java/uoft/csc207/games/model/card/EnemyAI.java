@@ -2,9 +2,11 @@ package uoft.csc207.games.model.card;
 
 import android.widget.ImageView;
 
+import java.io.Serializable;
+
 import uoft.csc207.games.R;
 
-public class EnemyAI implements CardClicker {
+public class EnemyAI implements CardClicker, Serializable {
 
     private CardDeck aiDeck;
     private ImageView[] aiHandView, aiBoardView;
