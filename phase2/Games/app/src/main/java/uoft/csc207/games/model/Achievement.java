@@ -14,6 +14,16 @@ public class Achievement implements Serializable {
     private boolean checkGold;
     private boolean checkScore;
 
+    /**
+     * Creates an Achievement with all the necessary descriptive text and statistic thresholds to
+     * achieve it.
+     * @param name The name of the description
+     * @param description The details of what the achievement is
+     * @param scoreThreshold The minimum score needed to attain the achievement
+     * @param goldThreshold The minimum gold needed to attain the achievement
+     * @param checkScore Whether score is a condition of the achievement
+     * @param checkGold Whether gold is a condition of the achievement
+     */
     public Achievement(String name, String description, int scoreThreshold, int goldThreshold, boolean checkScore, boolean checkGold){
         achievementName = name;
         this.description = description;

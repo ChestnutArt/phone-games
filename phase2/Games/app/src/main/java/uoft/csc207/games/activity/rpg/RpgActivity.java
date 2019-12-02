@@ -25,8 +25,11 @@ import uoft.csc207.games.controller.scoreboard.ScoreBoard;
 import uoft.csc207.games.model.rpg.GameSurface;
 import uoft.csc207.games.model.rpg.RpgGameState;
 
+/**
+ * The activity of the rpg game. Responsible for graphics related features of the rpg game that don't
+ * involve drawing on the canvas.
+ */
 public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
-
     private GameSurface gameSurface;
     private FrameLayout gameFrame;
     private RelativeLayout widgetHolder;
@@ -51,10 +54,7 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
 
         gameFrame.addView(gameSurface);
         gameFrame.addView(widgetHolder);
-        //gameFrame.addView(textViewHolder);
-
         this.setContentView(gameFrame);
-        //this.setContentView(new GameSurface(this));
 
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +63,11 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
             }
         });
     }
+
+    /**
+     * What pops up the popup menu
+     * @param v The view to show the popup menu in
+     */
     public void showPopup(View v){
         PopupMenu popup = new PopupMenu(this, v);
         popup.setOnMenuItemClickListener(this);
@@ -72,6 +77,12 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         popup.show();
     }
 
+    /**
+     * Does all the things necessary to properly finish the rpg game, and then transitions to the
+     * AddScoreActivity to give the player the option of adding their score to the leader board.
+     * @param rpgState The rpgState to reset the current stats of
+     * @param wipeGameStats Whether or not to reset the stats
+     */
     public void finishGame(RpgGameState rpgState, boolean wipeGameStats){
         ScoreBoard.setCurrentScore(new Score("", rpgState.getScore(), rpgState.getGameCurrency(),
                 RpgActivity.class.getName()));
@@ -86,6 +97,12 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         startActivity(myIntent);
     }
 
+    /**
+     * Assigns the function of each of the popup menu's items, consists of the customization items
+     * and the exit button.
+     * @param item The menu item that has been clicked
+     * @return whether the menu item successfully executed its function
+     */
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
@@ -116,6 +133,8 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
                 gameSurface.getRpgGameManager().getScorePaint().setTypeface(Typeface.SANS_SERIF);;
                 break;
             case R.id.exit_rpg_item:
+                gameSurface.getGameThread().setRunning(false);
+                ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
                 Intent myIntent = new Intent(RpgActivity.this, GameSelectActivity.class);
                 startActivity(myIntent);
                 break;
@@ -123,19 +142,24 @@ public class RpgActivity extends Activity implements PopupMenu.OnMenuItemClickLi
         return false;
     }
 
+    /**
+     * Creates a button for the settings popup menu
+     * @param widgetHolder The RelativeLayout the menu button is in
+     * @return The created button
+     */
     private Button createButton(RelativeLayout widgetHolder) {
-        Button pauseResumeBtn = new Button(this);
-        pauseResumeBtn.setText(R.string.rpg_setting);
+        Button settingsBtn = new Button(this);
+        settingsBtn.setText(R.string.rpg_setting);
 
         RelativeLayout.LayoutParams params4Btn = new RelativeLayout.LayoutParams(RelativeLayout.
                 LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams params4Layout = new RelativeLayout.LayoutParams(RelativeLayout.
                 LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         widgetHolder.setLayoutParams(params4Layout);
-        widgetHolder.addView(pauseResumeBtn);
+        widgetHolder.addView(settingsBtn);
         params4Btn.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         params4Btn.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-        pauseResumeBtn.setLayoutParams(params4Btn);
-        return pauseResumeBtn;
+        settingsBtn.setLayoutParams(params4Btn);
+        return settingsBtn;
     }
 }

@@ -5,7 +5,7 @@ import uoft.csc207.games.model.Game;
 import uoft.csc207.games.model.IGameID;
 
 /**
- * Contains the relevant stats of the Rpg game
+ * Contains the relevant game statistics and customization options of the Rpg game
  */
 public class RpgGameState extends Game {
     public final static String FONT_TYPE_MONOSPACE = "monospace";
@@ -14,24 +14,41 @@ public class RpgGameState extends Game {
     public final static String FONT_COLOR_WHITE = "white";
     public final static String FONT_COLOR_RED = "red";
 
+    /**
+     * Initializes a default RpgGameState with an id shared by all RpgGameStates and a set of achievements
+     * specific to the rpg game
+     */
     public RpgGameState(){
         super();
         id = IGameID.RPG;
-        //updateCurrency(1);
         initializeAchievements();
     }
 
     public String getId(){
         return id;
     }
+
+    /**
+     * Updates both the current playthrough's score and the total score
+     * @param i The amount to add to each score variable
+     */
     public void updateScore(Integer i){
         gameScore += i;
         cumulativeScore += i;
     }
+
+    /**
+     * Updates both the current playthrough's currency and the total currency
+     * @param i The amount to add to each currency variable
+     */
     public void updateCurrency(Integer i){
         gameCurrency += i;
         cumulativeCurrency += i;
     }
+
+    /**
+     * Resets the gameCurrency and gameScore to 0, the cumulative stats aren't affected
+     */
     public void restart(){
         gameCurrency = 0;
         gameScore = 0; 

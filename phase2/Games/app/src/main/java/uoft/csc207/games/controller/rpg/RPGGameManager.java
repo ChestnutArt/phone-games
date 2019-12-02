@@ -109,12 +109,6 @@ public class RPGGameManager {
     public boolean isProcessingText(){
         return isProcessingText;
     }
-    public PlayerProfile getCurrentPlayer() {
-        return currentPlayer;
-    }
-    public Paint getDialoguePaint() {
-        return dialoguePaint;
-    }
     public Paint getScorePaint() {
         return scorePaint;
     }
@@ -309,6 +303,9 @@ public class RPGGameManager {
         characterMap.put("female", R.drawable.c2_sprite_sheet);
     }
 
+    /**
+     * Initializes the background bitmaps
+     */
     private void initializeBackground(){
         //initializes forest background
         backgroundBitmap = BitmapFactory.decodeResource(currentContext.getResources(), background);

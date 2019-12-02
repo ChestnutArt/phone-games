@@ -6,6 +6,11 @@ import android.graphics.Canvas;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The image controlled by the player. Contains all the relevant Bitmap images to simulate walk cycles
+ * in all four possible directions, and information relevant to game play such as position, velocity
+ * the character travels at etc.
+ */
 public class PlayerCharacter extends GameObject{
     private static final int ROW_BOTTOM_TO_TOP = 8;
     private static final int ROW_RIGHT_TO_LEFT = 9;
@@ -17,31 +22,51 @@ public class PlayerCharacter extends GameObject{
     private Bitmap[] topToBottomImages;   //top to bottom cycle
     private Bitmap[] leftToRightImages;   //left to right cycle
 
-    // Velocity of game character (pixels/millisecond)
+    /**
+     * Velocity of game character in pixels/millisecond
+     */
+
     public static final float VELOCITY = 0.2f;
 
+    /**
+     * Number of images making up a single walk cycle
+     */
     private static int NUM_MOVEMENTS = 9;
 
+    /**
+     * Determines direction of x movement
+     */
     private int movingVectorX;
+    /**
+     * Determines direction of y movement
+     */
     private int movingVectorY;
 
     private int destinationX;
     private int destinationY;
 
-    private boolean isLeftBlocked = false;
-    private boolean isRightBlocked = false;
-    private boolean isTopBlocked = false;
-    private boolean isBotBlocked = false;
-    private boolean movingRight = false;
-    private boolean movingLeft = false;
-    private boolean movingTop = false;
-    private boolean movingBot = false;
+    private boolean isLeftBlocked = false;  //whether the playerCharacter is blocked from moving left
+    private boolean isRightBlocked = false; //whether the playerCharacter is blocked from moving right
+    private boolean isTopBlocked = false;   //whether the playerCharacter is blocked from moving up
+    private boolean isBotBlocked = false;   //whether the playerCharacter is blocked from moving down
 
-    private int rowUsing;   //sprite sheet row
-    private int colUsing;      //sprite sheet column
-
+    /**
+     * The row of the character sprite sheet currently being used
+     */
+    private int rowUsing;
+    /**
+     * The column of the character sprite sheet currently being used
+     */
+    private int colUsing;
     private long lastDrawNanoTime;
 
+    /**
+     * Initializes a PlayerCharacter and a given set of co-ordinates with an initial sprite sheet
+     * representing all its possible images.
+     * @param image The sprite sheet of the PlayerCharacter
+     * @param x The initial x position of the PlayerCharacter
+     * @param y The initial y position of the PlayerCharacter
+     */
     public PlayerCharacter(Bitmap image, int x, int y){
         super(image,21, 13, x, y);
 
@@ -87,6 +112,11 @@ public class PlayerCharacter extends GameObject{
     public int getMovingVectorX() { return movingVectorX; }
     public int getMovingVectorY() { return movingVectorY; }
 
+    /**
+     * Depending on the current row of the sprite map being used, gets the associated set of images
+     * making up that given direction's walk cycle
+     * @return The Bitmap array representing a given walk cycle direction
+     */
     public Bitmap[] getMoveBitmapImages(){
         Bitmap[] result = null;
         switch (rowUsing){
@@ -106,6 +136,10 @@ public class PlayerCharacter extends GameObject{
         return result;
     }
 
+    /**
+     * @return The specific bitmap image at the current column being used in the array of Bitmaps representing
+     * the entire walk cycle
+     */
     public Bitmap getCurrentMoveBitmap(){
         Bitmap[] bitmaps = this.getMoveBitmapImages();
         return bitmaps[colUsing];
@@ -113,7 +147,7 @@ public class PlayerCharacter extends GameObject{
 
     /**
      * Initializes the set of images representing the walk cycle in each of the four possible directions.
-     * @param newImage
+     * @param newImage The Bitmap representing the entire sprite sheet of which only four rows are being used
      */
     public void setWalkCycleImages(Bitmap newImage){
         this.image = newImage;
@@ -147,26 +181,26 @@ public class PlayerCharacter extends GameObject{
 
         //converting nanoseconds to milliseconds
         int deltaTime = (int)((currentTime - lastDrawNanoTime) / 1000000);
+        //calculates the distance to travel each time update is called based on the velocity constant
         float distance = VELOCITY * deltaTime;
 
-        //if it's reached its x destination, sets x vector to 0
+        //if the PlayerCharacter has reached its x destination, set its x vector to 0 so it no longer moves
         if((this.x >= destinationX && movingVectorX > 0) || (this.x <= destinationX && movingVectorX < 0)){
             movingVectorX = 0;
         } else {
             this.x = x + (int)(distance * movingVectorX / Math.abs(movingVectorX));
         }
-        //only moves in y direction if movement in x direction already finished
+        //Only moves in y direction if all movement in the x direction has finished
         if (movingVectorX == 0){
-            //if it's reached it's y destination, sets y vector to 0
+            //if PlayerCharacter has reached its y destination, sets its y vector to 0 so it no longer moves
             if((this.y >= destinationY && movingVectorY > 0) || (this.y <= destinationY && movingVectorY < 0)){
                 movingVectorY = 0;
             } else {
                 this.y = y + (int)(distance * movingVectorY / Math.abs(movingVectorY));
             }
         }
-        /*
-            Decides which bitmaps to use in the same order movement is decided (x then y)
-         */
+
+        //Decides which bitmaps to use in the same order movement is decided (x then y)
         if(movingVectorX > 0){
             this.rowUsing = ROW_LEFT_TO_RIGHT;
         } else if (movingVectorX < 0){
@@ -243,13 +277,6 @@ public class PlayerCharacter extends GameObject{
         isRightBlocked = false;
         isTopBlocked = false;
         isBotBlocked = false;
-    }
-
-    public void setNotMoving(){
-        movingLeft = false;
-        movingRight = false;
-        movingTop = false;
-        movingBot = false;
     }
 
     /**

@@ -4,21 +4,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+/**
+ * Functions as the "account" of the player. Contains the account's username (id) and password, and
+ * a list of Game objects, each of which contain the information of that player for a particular game.
+ */
 public class PlayerProfile implements Serializable {
     private String id;
     private String password;
     private ArrayList<Game> games;
 
-    /*private Integer playerCurrency;
-    private Integer playerScore;
-    private ArrayList<Achievement> playerAchievements;*/
-
+    /**
+     * Creates a PlayerProfile with a given username and password
+     * @param id The username of the new PlayerProfile
+     * @param password The password of the new PlayerProfile
+     */
     public PlayerProfile(String id, String password) {
         this.id = id;
         this.password = password;
-        /*playerCurrency = 0;
-        playerScore = 0;
-        playerAchievements = new ArrayList<>();*/
         games = new ArrayList<>();
     }
 
@@ -32,10 +34,10 @@ public class PlayerProfile implements Serializable {
         this.id = id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    /**
+     * Calculates the PlayerProfile's currency based on the total currency of each game it has played
+     * @return The sum of the total currency earned in each game
+     */
     public int getCurrency(){
         int totalCurrency = 0;
         for (Game g: games){
@@ -44,6 +46,10 @@ public class PlayerProfile implements Serializable {
         return totalCurrency;
     }
 
+    /**
+     * Calculates the PlayerProfiles score based on the total score earned across each game it has played
+     * @return The sum of the total scores earned in each game
+     */
     public int getScore(){
         int totalScore = 0;
         for (Game g: games){
@@ -67,17 +73,6 @@ public class PlayerProfile implements Serializable {
             }
         }
         return result;
-    }
-
-    public int getNumAchievements(){
-        int i = 0;
-        for (Game g: games){
-            ArrayList<Achievement> achievements = g.getCompletedAchievements();
-            for (Achievement a: achievements){
-                i++;
-            }
-        }
-        return i;
     }
 
     /**
