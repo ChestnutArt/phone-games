@@ -7,22 +7,22 @@ import java.util.List;
 
 public abstract class Game implements Serializable {
     /**
-     * Abstract Super Class for all games, functions as a container for most if not all relevant game
-     * information
+     * Abstract Super Class for all games, functions as a container for most if not all of the
+     * relevant game information (information relevant to the player)
      *
      * Fields
-     * gameScore: Integer - Current score of game
-     * gameCurrency: Integer - Current Money Earned in game
-     * cumulativeScore: Integer - Cumulative Points earned in game
-     * cumulativeCurrency: Integer - Cumulative Money Earned in game
+     * gameScore: Integer - Current score of the game
+     * gameCurrency: Integer - Current currency of the game
+     * cumulativeScore: Integer - Score earned across all playthroughs
+     * cumulativeCurrency: Integer - Currency earned across all playthroughs
      * availableAchievements: ArrayList<availableAchievements> - Collection of all
      *                     achievements that are still available to be achieved in this game.
      * completedAchievements: ArrayList<availableAchievements> - Collection of all
-     *                          achievements that were achieved in this game.
-     * id: String - ID of Game
-     * color: String - Color customisation of Game
-     * character: String - Character customisation of Game
-     * textFont: String - Font customisation of Game
+     *                          achievements that have been achieved .
+     * id: String - ID of the specific type of game (ex. all CardGame's have the same id)
+     * color: String - String representing the color customisation of Game
+     * character: String - String representing the character customisation of Game
+     * textFont: String - String representing the font customisation of Game
      */
 
     protected Integer gameScore;
@@ -36,23 +36,27 @@ public abstract class Game implements Serializable {
     protected String character;
     protected String textFont;
 
+    /**
+     * Creates a Game with all the game statistics being 0 by default.
+     */
     public Game(){
         gameScore = 0;
         gameCurrency = 0;
         cumulativeScore = 0;
-        cumulativeCurrency = 0; 
-        //owner = p;
+        cumulativeCurrency = 0;
         availableAchievements = new ArrayList<>();
         completedAchievements = new ArrayList<>();
     }
 
     /**
-     * @return completedAchievements
+     * @return The list of all attained achievements
      */
     ArrayList<Achievement> getCompletedAchievements() {
-        return (ArrayList<Achievement>)completedAchievements;
+        return (ArrayList<Achievement>) completedAchievements;
     }
-
+    /**
+     * @return The identifier of what type of game it is
+     */
     public abstract String getId();
 
     /**
@@ -68,12 +72,12 @@ public abstract class Game implements Serializable {
     public abstract void updateCurrency(Integer i);
 
     /**
-     * @param i: Cumulative Currency to be set in game
+     * @param i: The new cumulative currency
      */
     public void setCumulativeCurrency(Integer i){ cumulativeCurrency = i; }
 
     /**
-     * @return cumulativeCurrency
+     * @return The total currency earned in the game
      */
     public int getCumulativeCurrency(){ return cumulativeCurrency; }
 
@@ -83,7 +87,7 @@ public abstract class Game implements Serializable {
     public void setCumulativeScore(Integer i){ cumulativeScore = i; }
 
     /**
-     * @return cumulativeScore
+     * @return Gets the score across all playthroughs
      */
     public int getCumulativeScore(){ return cumulativeScore; }
 
@@ -93,7 +97,7 @@ public abstract class Game implements Serializable {
     public abstract void restart();
 
     /**
-     * @param character (String) character to be chosen
+     * @param character The string representation of the character to be chosen
      */
     public abstract void chooseCharacter(String character);
 
@@ -107,40 +111,43 @@ public abstract class Game implements Serializable {
      */
     public abstract void chooseColor(String color);
 
+    /**
+     * @return The score of the current playthrough
+     */
     public int getScore(){
         return gameScore;
     }
 
     /**
-     * @return gameCurrency
+     * @return The currency of the current game playthrough
      */
     public int getGameCurrency(){
         return gameCurrency;
     }
 
     /**
-     * @return character
+     * @return String representation of the character chosen
      */
     public String getCharacter(){
         return character;
     }
 
     /**
-     * @return textFont
+     * @return String representation of the text font customization option
      */
     public String getFont(){
         return textFont;
     }
 
     /**
-     * @return color
+     * @return String representation of the color customization option
      */
     public String getColor(){
         return color;
     }
 
     /**
-     * Initialize all the achievements that can be attained in your game
+     * Initialize all the achievements that can be attained in the game
      */
     public abstract void initializeAchievements();
 

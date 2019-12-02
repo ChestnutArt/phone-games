@@ -66,7 +66,7 @@ public class ScrollerActivity extends Activity {
         startActivity(myIntent);
     }
 
-    public void  exitGame(){
+    public void exitGame(){
         exited = true;
         Intent myIntent;
         if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){
