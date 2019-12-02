@@ -69,13 +69,10 @@ public class ScrollerActivity extends Activity {
     public void exitGame(){
         exited = true;
         Intent myIntent;
-        if(ProfileManager.getProfileManager(this).isTwoPlayerMode()){
-            myIntent = new Intent(ScrollerActivity.this, TurnDisplayActivity.class);
-            myIntent.putExtra("SOURCE_ACTIVITY", ScrollerActivity.class.getName());
-            ProfileManager.getProfileManager(this).changeCurrentPlayer();
-        } else {
-            myIntent = new Intent(ScrollerActivity.this, GameSelectActivity.class);
-        }
+        myIntent = new Intent(ScrollerActivity.this, GameSelectActivity.class);
+        ProfileManager.getProfileManager(getApplicationContext()).saveProfiles();
+        MainThread t = (MainThread) scrollerPanel.getMainThread();
+        t.setRunning(false);
         startActivity(myIntent);
     }
     private Button createButton(RelativeLayout widgetHolder) {
