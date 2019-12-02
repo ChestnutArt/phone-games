@@ -2,22 +2,29 @@ package uoft.csc207.games.model.card;
 
 import android.widget.ImageView;
 
+import uoft.csc207.games.R;
+
 public class EnemyAI implements CardClicker {
 
     private CardDeck aiDeck;
-    private ImageView[] aiHandView;
-    private CardCollection aiBoard, aiHand;
+    private ImageView[] aiHandView, aiBoardView;
 
-    public EnemyAI() {
+    public EnemyAI(ImageView[] aiHandView, ImageView[] aiBoardView) {
         aiDeck = new CardDeck();
+        this.aiHandView = aiHandView;
+        this.aiBoardView = aiBoardView;
     }
 
     @Override
     public void clickSummon(CardGameState cardGameState, int posIndex) {
-        if (!cardGameState.getAiBoardOccupied(posIndex)) {
-            if (cardGameState.getAiHandOccupied(posIndex)) {
-                cardGameState.setAiBoard(posIndex, cardGameState.getAiHand(0));
-                cardGameState.setAiHand(posIndex, CardCollection.emptyCard);
+        if (!cardGameState.getAiBoardOccupied(posIndex) & cardGameState.getAiHandOccupied(posIndex))
+        {
+            MonsterCard nextCard = (MonsterCard) cardGameState.popAiHand(0);
+            cardGameState.setAiBoard(posIndex, nextCard);
+            aiBoardView[posIndex].setImageResource(nextCard.getCardArt());
+            cardGameState.setAiHand(posIndex, CardCollection.emptyCard);
+            for (int i = 0; i < 3; i++) {
+                aiHandView[i].setImageResource(R.drawable.card_back);
             }
         }
     }

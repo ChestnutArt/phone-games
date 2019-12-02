@@ -34,8 +34,6 @@ public class CardGameState implements CardClicker, SpellEffect {
         this.aiLP = aiLP;
         this.playerLP = playerLP;
 
-        enemyAI = new EnemyAI();
-
         playerDeck = new CardDeck();
         aiDeck = new CardDeck();
 
@@ -51,6 +49,8 @@ public class CardGameState implements CardClicker, SpellEffect {
         this.playerBoardView = playerBoardView;
         this.aiHandView = aiHandView;
         this.aiBoardView = aiBoardView;
+
+        enemyAI = new EnemyAI(aiHandView, aiBoardView);
 
         attacked = new boolean[boardCap];
         summoned = false;
@@ -300,7 +300,9 @@ public class CardGameState implements CardClicker, SpellEffect {
     }
 
     @Override
-    //Directly attacks the enemy
+    /**
+     * Directly attacks the enemy, then sets their health
+     */
     public void clickDirectAttack(CardGameState cardGameState, int posIndex) {
         int cardAttack = ((MonsterCard) getPlayerBoard(posIndex)).getAttack();
         attack(cardAttack, "ai");
@@ -308,13 +310,15 @@ public class CardGameState implements CardClicker, SpellEffect {
     }
 
     @Override
-    //Sets the attack origin to be the indicated position
+    /**
+     * Sets the attack origin of the CardGameState object to be the indicated position
+     */
     public void clickTargetAttack(CardGameState cardGameState, int posIndex) {
         setAttackOrigin(posIndex);
     }
 
     @Override
-    /*
+    /**
     Activates a spell effect based on the spellEffect attribute of a SpellCard class object, then
     setting the hand to empty the spell card's card slot
      */
