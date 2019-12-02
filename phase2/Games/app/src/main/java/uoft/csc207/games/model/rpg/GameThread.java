@@ -1,11 +1,11 @@
-package uoft.csc207.games.model.Rpg;
+package uoft.csc207.games.model.rpg;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 public class GameThread extends Thread{
     private boolean running;
-    GameSurface gameSurface;
+    private GameSurface gameSurface;
     private SurfaceHolder surfaceHolder;
 
     public GameThread(GameSurface gS, SurfaceHolder sH){
