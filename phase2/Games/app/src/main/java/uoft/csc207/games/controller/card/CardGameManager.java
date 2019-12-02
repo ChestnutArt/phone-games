@@ -251,7 +251,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
                         TextView score = findViewById(R.id.score);
                         score.setText("HIGH SCORE: " + cardGame.getScore());
 
-                        /*
+                        /**
                         Checks whether the player is going to deck out, and end the game if so
                          */
                         int curr_deck_size = newGame.getPlayerDeck().getDeckSize();
@@ -279,7 +279,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
                                     aiDeck.removeNextCard();
                                 }
                             }
-                            /*
+                            /**
                             If it is the first turn of the game, if so, then Ai cannot move,
                             allowing the player to go first, then if not, Ai will continuously
                             try to summon the left card in its hand.
@@ -287,17 +287,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
                             if (newGame.isFirstTurn()) {
                                 newGame.setFirstTurn(false);
                             } else {
-                                if (!newGame.getAiBoardOccupied(0)) {
-                                    if (newGame.getAiHandOccupied(0)) {
-                                        MonsterCard nextCard = (MonsterCard) newGame.popAiHand(0);
-                                        newGame.setAiBoard(0, nextCard);
-                                        aiBoard[0].setImageResource(nextCard.getCardArt());
-                                        newGame.setAiHand(0, CardCollection.emptyCard);
-                                    }
-                                }
-                                for (int i = 0; i < 3; i++) {
-                                    aiHand[i].setImageResource(R.drawable.card_back);
-                                }
+                                enemyAI.clickSummon(newGame, 0);
                             }
 
                             //Checks if the player's health is 0, if so, end the game
@@ -322,7 +312,7 @@ public class CardGameManager extends AppCompatActivity implements CardClicker, T
                     }
                 });
 
-        /*
+        /**
         The exit button to update the score, currency and achievements, and go back to the game
         selection menu
          */
