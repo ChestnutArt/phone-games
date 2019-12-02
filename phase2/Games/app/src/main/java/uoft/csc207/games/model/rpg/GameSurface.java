@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.rpg;
+package uoft.csc207.games.model.Rpg;
 
 import android.content.Context;
 import android.content.res.Resources;

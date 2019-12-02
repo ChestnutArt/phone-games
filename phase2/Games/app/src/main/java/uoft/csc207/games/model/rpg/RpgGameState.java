@@ -1,4 +1,4 @@
-package uoft.csc207.games.model.rpg;
+package uoft.csc207.games.model.Rpg;
 
 import uoft.csc207.games.model.Achievement;
 import uoft.csc207.games.model.Game;
