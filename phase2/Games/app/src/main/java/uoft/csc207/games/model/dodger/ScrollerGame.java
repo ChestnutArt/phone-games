@@ -28,9 +28,9 @@ public class ScrollerGame extends Game implements Serializable{
      * @param i The amount to add to the score
      */
     public void updateScore(Integer i){
-        if (i - gameScore > 0){
+        /*if (i - gameScore > 0){
             cumulativeScore += i - gameScore;
-        }
+        }*/
 
         this.gameScore = i;
     }
@@ -40,9 +40,9 @@ public class ScrollerGame extends Game implements Serializable{
      * @param i The amount to add to the currency
      */
     public void updateCurrency(Integer i){
-        if (i - gameCurrency > 0){
+        /*if (i - gameCurrency > 0){
             cumulativeCurrency += i - gameCurrency;
-        }
+        }*/
         this.gameCurrency = i;
     }
 

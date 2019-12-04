@@ -99,7 +99,7 @@ public class ProfileManager {
             singletonProfileManager = new ProfileManager();
             singletonProfileManager.init(appContext);
             return singletonProfileManager;
-        }else {
+        } else {
             return singletonProfileManager;
         }
     }

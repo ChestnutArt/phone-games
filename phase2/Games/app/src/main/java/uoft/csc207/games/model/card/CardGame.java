@@ -43,15 +43,15 @@ public class CardGame extends Game {
      * score, and the gameScore is set to be the input as it is the highest
      */
     public void updateScore(Integer i) {
-        if (i > gameScore) {
+        /*if (i > gameScore) {
             cumulativeScore += i - gameScore;
-            super.gameScore = i;
-        }
+        }*/
+        super.gameScore = i;
     }
 
     @Override
     public void updateCurrency(Integer i) {
-        cumulativeCurrency += i - gameCurrency;
+        //cumulativeCurrency += i - gameCurrency;
         gameCurrency = i;
     }
 
